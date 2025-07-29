@@ -1,0 +1,300 @@
+* {
+    overflow-x: hidden;
+}
+.btn-1 {
+    display: flex;
+    justify-content: center;
+    margin: 0 5px;
+    padding: 20px 40px;
+    border: 1.5px solid antiquewhite;
+    border-radius: 20px;
+    background-color: transparent;
+    backdrop-filter: blur(6px);
+    color: antiquewhite;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    overflow: hidden;
+}
+.btn-1:hover {
+    background-color: antiquewhite;
+    color: #545C8C;
+}
+
+
+
+.sec-1 {
+    display: flex;
+    width: 100vw;
+}
+.sec1 {
+    width: 100%;
+    display: flex;
+    height: 90vh;
+    justify-content:center;
+    align-items: center;
+    overflow: hidden;
+}
+.sec1 div.background-image {
+    width: 100vw;
+}
+.background-image img {
+    overflow: hidden;
+    width: 100%;
+    filter: brightness(60%);
+}
+.sec1 div:nth-child(2) {
+    position: absolute;
+    display: flex;
+    padding: 10px 0;
+    flex-direction:  column;
+    align-items: center;
+    justify-content: center;
+    width: 720px;
+    color: antiquewhite;
+    margin-right: 20px;
+}
+.sec1 div:nth-child(2) h1{
+    font-size: 4em;
+    overflow: hidden;
+}
+.sec1 div:nth-child(2) h3{
+    padding: 20px 0;
+    font-size: 1.3rem;
+    overflow: hidden;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.sec1 #poznajNas {
+    font-size: 15px;
+}
+
+@media only screen and (max-width: 1000px) {
+    .sec-1 {
+        background-image: url(kawusiabody.jpg);
+        background-position-x: min(550px,57%);
+        background-position-y: -200px;
+        padding-left: 10px;
+    }
+    
+    .background-image img {
+        display: none;
+    }
+    .sec1{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 50rem;
+    }
+    .sec1 div:nth-child(1){
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 15rem;
+        font-size: 10rem;
+    }
+    .sec1 div:nth-child(1) > button{
+        max-width: 200px;
+        width: 100%;
+        flex-shrink: 0;
+    }
+    .sec1 div:nth-child(1) > h1{
+        font-size: 40px !important;
+        display: flex;
+        justify-content: center;
+    }
+    .sec1 div:nth-child(1) > h3{
+        font-size: 1em;
+        align-items: center;
+        text-align: center;
+    }
+    .sec1 div:nth-child(2) {
+        display:flex;
+    }
+    .sec1 div:nth-child(2) img {
+        display: none;
+    }
+}
+
+
+
+
+.sec-4 {
+    background-color: var(--header-footer-bg);
+    padding: 20px 0 100px;
+    
+}
+.sec4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: antiquewhite;
+    flex-direction: column;
+    transition: all 0.3s ease-in;
+}
+.sec4div {
+    width: 90vw;
+    padding: 10px 0;
+    transition: all 0.3s ease-in;
+}
+.qns {
+    width: 100%;
+    background-color: var(--hover-color);
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: all 0.3s ease-in;
+}
+.qns div:nth-child(1) {
+    padding: 10px 20px;
+}
+.qns div h4 {
+    line-height: 30px;
+    font-size: 1rem;
+}
+
+.qns div p {
+    height: auto;
+    overflow-y: hidden;
+    line-height: 17px;
+    font-size: 0.8rem;
+}
+.qns .add {
+    background-color: #444655;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    padding: 0 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.1s;
+}
+.fa-minus {
+    padding-right: 10px;
+}
+.add.none {
+    background-color: transparent;
+    height: 60px;
+}
+.hide {
+    display: none;
+}
+.fa-plus.hide {
+    display: none;
+}
+.fa-minus.hide {
+    display: none;
+}
+.show {
+    display: block;
+}
+@media only screen and (max-width: 1000px) {
+    .sec4 {
+        margin-bottom: 80px;
+    }
+}
+
+
+
+
+.sec-5 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sec5 {
+    background-color: rgb(9, 10, 43);
+    width: 100%;
+    height: auto;
+    padding: 11em 200px;
+    color: antiquewhite;
+}
+.sec5 h1 {
+    font-size: 2.4rem;
+}
+.sec5 .container {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 25px;
+}
+.sec5 .container > div p {
+    cursor: pointer;
+}
+.sec5 h3 {
+    font-size: 1.1rem;
+    padding: 10px 0;
+    padding-bottom: 5px;
+}
+.sec5 p, .sec5 a {
+    font-size: 0.7rem;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: antiquewhite;
+}
+.sec5 .container div:nth-child(2) {
+    margin-left: 0px;
+    width: 69%;
+}
+.sec5 form {
+    padding: 0 20px;
+}
+.sec5 input {
+    width: 100%;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid antiquewhite;
+    margin: 10px;
+    line-height: 20px;
+    color: antiquewhite;
+    transition: none;
+}
+
+.sec5 textarea {
+    width: 100%;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid antiquewhite;
+    margin: 10px;
+    line-height: 20px;
+    color: antiquewhite;
+    overflow: hidden;
+    resize: none;
+}
+.sec5 input::placeholder, textarea::placeholder {
+    color: rgb(193, 196, 212);
+}
+.sec5 .btn-1 {
+    margin-top: 20px;
+    color: antiquewhite;
+    border: 1px solid antiquewhite;
+}
+.sec5 .btn-1:hover {
+    color: rgb(9, 10, 43);
+}
+.sec5 .container div:nth-child(3) {
+    height: 100px;
+    background-color: transparent;
+    margin: 80px 0;
+}
+.sec5 .container div:nth-child(4) {
+    display: flex;
+    flex-direction:column;
+}
+.sec5 a:hover {
+    background-color: antiquewhite;
+    color: #7782da;
+}
+@media only screen and (max-width: 1000px) {
+    .sec-5 {
+        margin: 0;
+    }
+    .sec5 {
+        padding: 30px 50px;
+    }
+}

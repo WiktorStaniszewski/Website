@@ -1,0 +1,134 @@
+.headContainer {
+    background-color: var(--header-footer-bg);
+    padding: 0px 4vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    overflow: hidden;
+    color: antiquewhite;
+    font-size: calc(5px + 2vmin);    
+}
+.loginCartDiv {
+    position: relative;
+}
+.topHeader {
+    width: 100%;;
+    display: flex;
+    justify-content: space-between;
+    padding: 3rem 0 2rem 0;
+    z-index: 20;
+}
+.headContainer div:nth-child(1) {
+}
+.headContainer div:nth-child(1) img{
+    display: block;
+    padding-top: 0px;
+    width: 250px; 
+    cursor: pointer;
+}
+.hamburgerIcon {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 100%;
+    cursor: pointer;
+    display: none;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+.bar {
+    display: block;
+    width: 30px;
+    height: 3px;
+    margin: 2.5px auto;
+    background-color: antiquewhite;
+    -webkit-transition: all 0.3s ease-in-out;
+}
+.sidebar {
+    list-style-type: none;
+    position: fixed;
+    left: -29vmin;
+    height: 100vh;
+    width: 29vmin;
+    z-index: 10;
+    background-color: var(--header-footer-bg);
+    padding-top: 150px;
+    transition: all 1s ease-out;
+}
+.sidebar.active {
+    left: 0;
+}
+.sidebar ul {
+    list-style-type: none;
+    margin: 0;
+    padding-inline-start: 0;
+}
+.sidebar ul li {
+    cursor: pointer;
+    padding: 20px 15px;
+}
+
+.headerButton {
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    cursor: pointer;
+}
+.login, .cart {
+
+}
+.headContainer div:nth-child(2) {
+    margin: 0;
+}
+.headContainer div:nth-child(2) ul {
+    display: flex;
+    color:whitesmoke;
+}
+.redirectButtons {
+    margin: 0;
+    padding: 0;
+}
+.redirectButtons.active {
+    display: none;
+}
+.headContainer div:nth-child(2) ul li {
+    display: flex;
+    width: 20vmin;
+    padding: 1.3rem 1rem;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.loginCartDiv {
+    display: flex;
+    flex-direction: row;
+}
+.sidebar ul li:hover, .headContainer div:nth-child(2) ul li:hover, .headerButton:hover, .loginButton:hover, .cartButton:hover, .hamburgerIcon:hover{
+    background-color: var(--hover-color);
+}
+ul {
+    margin-block-start: 10px;
+    margin-block-end: 10px;
+}
+
+
+@media(max-width:3000px){
+    .hamburgerIcon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .hamburgerIcon.active .bar:nth-child(2){
+        opacity: 0;
+    }
+    .hamburgerIcon.active .bar:nth-child(1){
+        transform: translateY(8px) rotate(45deg);
+    }
+    .hamburgerIcon.active .bar:nth-child(3){
+        transform: translateY(-8px) rotate(-45deg);
+    }
+}
