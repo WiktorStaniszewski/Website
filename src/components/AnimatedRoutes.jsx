@@ -5,20 +5,24 @@ import About from '../pages/About.jsx'
 import Menu from '../pages/Menu.jsx'
 import Contact from '../pages/Contact.jsx'
 import Shop from '../pages/Shop.jsx'
+import { PageWrapper, LayoutWrapper } from './PageWrappers.jsx';
+import { AnimatePresence } from 'framer-motion';
 
 function AnimatedRoutes() {
   const location = useLocation()
   return (
-      <Routes location={location} key={location.pathname}>
-          <Route path='/' element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="menu" element={<Menu />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="shop" element={<Shop />} />
-          <Route path="*" element={<h1>404 - Page not found</h1>} />
-          </Route>
-      </Routes>
+    <AnimatePresence mode='wait'>
+        <Routes location={location} key={location.pathname}>
+            <Route path='' element={<LayoutWrapper><Layout /></LayoutWrapper>}>
+            <Route index element={<PageWrapper><Home /></PageWrapper>}/>
+            <Route path="about" element={<PageWrapper><About /></PageWrapper>}/>
+            <Route path="menu" element={<PageWrapper><Menu /></PageWrapper>}/>
+            <Route path="contact" element={<PageWrapper><Contact /></PageWrapper>}/>
+            <Route path="shop" element={<PageWrapper><Shop /></PageWrapper>}/>
+            <Route path="*" element={<h1>404 - Page not found</h1>} />
+            </Route>
+        </Routes>
+      </AnimatePresence>
   )
 }
 

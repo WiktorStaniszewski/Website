@@ -1,6 +1,11 @@
 :root {
     --header-footer-bg: #2d2f3a;
-    --header-hover: ;
-    --border-color: whitesmoke;
+    --darker-bg: #444655;
     --hover-color: #545C8C;
+    --medium-shade: #7379ac;
+    --lighter-bg: #888ec2;
+    --light-shade: #9298cd;
+    --lighter-shade: #b3b8ee;
+    --lightest-shade: #d4d9ff;
+    --font-color: antiquewhite;
 }

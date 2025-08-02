@@ -35,15 +35,15 @@ function Navbar() {
                 <div className='cart headerButton'><FiShoppingCart /></div>
             </div>
         </div>
-        <div className={isActive ? 'redirectButtons' : 'redirectButtons navActive'}>
-            <ul>
-                <NavLink to="/" className="current navbarLink"><li>Home</li></NavLink>
-                <NavLink to="about" className="current navbarLink"><li>O nas</li></NavLink>
-                <NavLink to="menu" className="current navbarLink"><li>Menu</li></NavLink>
-                <NavLink to="contact" className="current navbarLink"><li>Kontakt + Praca</li></NavLink>
-                <NavLink to="shop" className="current navbarLink"><li>Sklep</li></NavLink>
-            </ul>
-        </div>
+            <div className={isActive ? 'redirectButtons' : 'redirectButtons navActive'}>
+                <ul>
+                    <NavLink to="/" className="current navbarLink"><li>Home</li></NavLink>
+                    <NavLink to="about" className="current navbarLink"><li>O nas</li></NavLink>
+                    <NavLink to="menu" className="current navbarLink"><li>Menu</li></NavLink>
+                    <NavLink to="contact" className="current navbarLink"><li>Kontakt + Praca</li></NavLink>
+                    <NavLink to="shop" className="current navbarLink"><li>Sklep</li></NavLink>
+                </ul>
+            </div>
         <div className={isActive ? 'sidebar' : 'sidebar navActive'}>
             <ul>
                 <NavLink to="/" className="current sidebarLink"><li><FiHome /> &nbsp;Home</li></NavLink>

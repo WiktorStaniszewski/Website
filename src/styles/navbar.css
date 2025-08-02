@@ -1,22 +1,19 @@
 .headContainer {
     background-color: var(--header-footer-bg);
-    padding: 0px 4vw;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
-    overflow: hidden;
     color: antiquewhite;
-    font-size: calc(5px + 2vmin);    
 }
 .loginCartDiv {
     position: relative;
 }
 .topHeader {
-    width: 100%;;
+    width: 94vw;
     display: flex;
     justify-content: space-between;
-    padding: 3rem 0 2rem 0;
+    margin: 3rem 0;
     z-index: 20;
 }
 .headContainer div:nth-child(1) img{
@@ -34,45 +31,53 @@
     border-radius: 100%;
     cursor: pointer;
 }
-.headContainer div:nth-child(2) {
-    margin: 0;
-}
-.headContainer div:nth-child(2) ul {
-    display: flex;
-    color:whitesmoke;
-}
+
 .redirectButtons {
-    margin: 0;
-    padding: 0;
+    width: 100vw;
+    background-color: var(--header-footer-bg);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
 }
+
+.redirectButtons ul {
+    display: flex;
+}
+
 .redirectButtons.navActive {
     display: none;
 }
+
 .current {
     text-decoration: none;
     color: antiquewhite;
 }
+
 .navbarLink.active::after {
     display: block;
     content: "";
     width: auto;
     border-bottom: solid 1px antiquewhite;
 }
-.headContainer div:nth-child(2) ul li {
+
+.headContainer .redirectButtons ul li {
     display: flex;
-    width: 20vmin;
-    padding: 1.3rem 1rem;
+    width: 14vw;
+    padding: 1rem 1rem;
     align-items: center;
     justify-content: center;
     cursor: pointer;
 }
+
 .loginCartDiv {
     display: flex;
     flex-direction: row;
 }
-.sidebar ul li:hover, .headContainer div:nth-child(2) ul li:hover, .headerButton:hover, .loginButton:hover, .cartButton:hover, .hamburgerIcon:hover{
-    background-color: var(--hover-color);
+
+.sidebar ul li:hover, .headContainer .redirectButtons ul li:hover, .headerButton:hover, .loginButton:hover, .cartButton:hover, .hamburgerIcon:hover{
+    background-color: var(--darker-bg);
 }
+
 ul {
     margin-block-start: 10px;
     margin-block-end: 10px;
@@ -94,7 +99,7 @@ ul {
     height: 3px;
     margin: 2.5px auto;
     background-color: antiquewhite;
-    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s cubic-bezier(0, 0.8, 0, 1);
 }
 .sidebar {
     list-style-type: none;

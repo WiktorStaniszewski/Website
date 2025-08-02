@@ -52,6 +52,7 @@
     justify-content: center;
     width: 720px;
     color: antiquewhite;
+    font-size: 1.8vh;
     margin-right: 20px;
 }
 .sec1 div:nth-child(2) h1{
