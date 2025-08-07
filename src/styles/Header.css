@@ -2,21 +2,26 @@
     background-color: var(--header-footer-bg);
     display: flex;
     align-items: center;
-    justify-content: space-between;
     flex-direction: column;
     color: antiquewhite;
-}
-.loginCartDiv {
-    position: relative;
+    transition: all 500ms ease-in;
+    right: 0;
+    left: 0;
 }
 .topHeader {
     width: 94vw;
     display: flex;
+    align-items: center;
     justify-content: space-between;
     margin: 3rem 0;
     z-index: 20;
 }
+.headContainer div:nth-child(1) a {
+    display: flex;
+    align-items: center;
+}
 .headContainer div:nth-child(1) img{
+    object-position: 40%;
     display: block;
     padding-top: 0px;
     width: 250px; 
@@ -33,8 +38,11 @@
 }
 
 .redirectButtons {
-    width: 100vw;
     background-color: var(--header-footer-bg);
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    width: 100vw;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -60,7 +68,7 @@
     border-bottom: solid 1px antiquewhite;
 }
 
-.headContainer .redirectButtons ul li {
+.redirectButtons ul li {
     display: flex;
     width: 14vw;
     padding: 1rem 1rem;
@@ -74,8 +82,15 @@
     flex-direction: row;
 }
 
-.sidebar ul li:hover, .headContainer .redirectButtons ul li:hover, .headerButton:hover, .loginButton:hover, .cartButton:hover, .hamburgerIcon:hover{
+.redirectButtons ul li:hover, .headerButton:hover, .loginButton:hover, .cartButton:hover, .hamburgerIcon:hover{
     background-color: var(--darker-bg);
+    transition: background-color .3s;
+
+}
+.sidebar ul li:hover {
+    color: rgb(143, 142, 142);
+    transition: background-color .3s;
+    backdrop-filter: blur(100px);
 }
 
 ul {
@@ -99,30 +114,37 @@ ul {
     height: 3px;
     margin: 2.5px auto;
     background-color: antiquewhite;
-    transition: all 0.3s cubic-bezier(0, 0.8, 0, 1);
+    transition: all 0.3s ease-in-out;
 }
 .sidebar {
     list-style-type: none;
-    position: fixed;
-    left: -29vmin;
+    position: absolute;
+    top: -100vh;
     height: 100vh;
-    width: 29vmin;
-    z-index: 10;
-    background-color: var(--header-footer-bg);
-    padding-top: 150px;
-    transition: all 0.5s ease-out;
+    width: 100vw;
+    z-index: 19;
+    backdrop-filter: blur(20px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all 1s ease-in-out;
 }
 .sidebar.navActive {
-    left: 0;
+    top: 0;
 }
 .sidebar ul {
+    padding-top: 4.5rem;
     list-style-type: none;
     margin: 0;
     padding-inline-start: 0;
+    font-size: 3vh;
 }
 .sidebar ul li {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
     cursor: pointer;
-    padding: 20px 15px;
+    padding: 40px 40vw;
 }
 .sidebarLink.active::after {
     content: "";
@@ -134,9 +156,32 @@ ul {
     border-radius: 2px;
 }
 
+.social-links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+
+.social-links > li {
+    text-decoration: none;
+    list-style: none;
+}
 
 
-@media(max-width:3000px){
+@media(max-width:1000px){
+.social-links {
+    display: none;
+}
+    .headContainer {
+        position: sticky;
+        top: 0px;
+        z-index: 20;
+        
+    }
+    .sidebar {
+        display: flex;
+    }
     .hamburgerIcon {
         display: flex;
         justify-content: center;
@@ -151,4 +196,20 @@ ul {
     .hamburgerIcon.navActive .bar:nth-child(3){
         transform: translateY(-8px) rotate(-45deg);
     }
+    .redirectButtons {
+        display: none;
+    }
+    .headContainer div:nth-child(1) img{
+        width: 150px; 
+    }
+    .headerButton {
+        width: 3.5rem;
+        height: 3.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 100%;
+        cursor: pointer;
+    }
+
 }

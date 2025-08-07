@@ -3,16 +3,12 @@ import '../styles/Home.css'
 function Home() {
     return (
     <div className='home'>
-        <div className="sec-1">
-            <div className="sec1">
-                <div className="background-image">
-                    <img src="../public/images/tlo1.jpg" alt="" />
-                </div>
-                <div>
-                    <h1>Body Espresso Bar</h1>
-                    <h3>Kawiarnia z segmentu Specialty Coffee Kreatywnie w temacie kawy! Zero napinki! tylko dobre szoty </h3>
-                    <button id="poznajNas" className="btn-1">Zobacz Menu!</button>
-                </div>
+        <div className="image-wrap">
+            <img src="../images/tlo1.jpg" alt="" />
+            <div className="image-text">
+                <h1>Body Espresso Bar</h1>
+                <h3>Kawiarnia z segmentu Specialty Coffee Kreatywnie w temacie kawy! Zero napinki! tylko dobre szoty </h3>
+                <button id="poznajNas" className="btn-1">Zobacz Menu!</button>
             </div>
         </div>
 

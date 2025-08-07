@@ -3,7 +3,6 @@ function About() {
     return (
         <div>
             <div className="sec-2">
-                <div className="sec2 hidden">
                     <div>
                         <img src="images/BodyLogo.jpg" alt="cup" className="hidden" />
                     </div>
@@ -21,7 +20,6 @@ function About() {
                             // */}
                         </div>
                     </div>
-                </div>
             </div>
         <div className="sec-2-2">
             <div>
