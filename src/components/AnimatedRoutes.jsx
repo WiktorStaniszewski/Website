@@ -2,10 +2,10 @@ import { Routes, Route, useLocation  } from 'react-router-dom';
 import Layout from './Layout.jsx';
 import Home from '../pages/Home.jsx';
 import About from '../pages/About.jsx'
-import Menu from '../pages/Menu.jsx'
+import Menu from '../pages/Menu/Menu.jsx'
 import Contact from '../pages/Contact.jsx'
 import Shop from '../pages/Shop.jsx'
-import { PageWrapper, LayoutWrapper } from './PageWrappers.jsx';
+import { PageWrapper, LayoutWrapper } from './functions/PageWrappers.jsx';
 import { AnimatePresence } from 'framer-motion';
 
 function AnimatedRoutes() {

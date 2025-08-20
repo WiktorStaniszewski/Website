@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import '../styles/Home.css'
+import { FaPlus, FaMinus } from "react-icons/fa";
 
 function Home() {
     return (
@@ -12,55 +14,13 @@ function Home() {
             </div>
         </div>
 
-        <div className="sec-4">
-            <div className="sec4">
-                <h1>Częste Pytania Klientów:</h1>
-                <div className="sec4div">
-                    <div className="qns">
-                        <div>
-                            <h4>Co to jest Premium Shot?</h4>
-                            <p className="hide">
-                                Odkryj espresso w nieoczywistej odsłonie! Nasz PREMIUM SHOT to wyjątkowa selekcja ziaren z przeróżnych krajów, które zachwycają owocowym charakterem, przyjemną kwasowością oraz pełnią aromatu. Jest to espresso dla poszukiwaczy niespotykanych doznań smakowych. Jeśli lubisz kawę, która zaskakuje, to jest Twój wybór!</p>
-                        </div>
-                        <div className="add">
-                            <i className="fa-sharp fa-solid fa-plus"> </i>
-                            <i className="fa-sharp fa-solid fa-minus hide"> </i>
-                        </div>
-                    </div>
-                    <div className="qns">
-                        <div>
-                            <h4>Pytanie2</h4>
-                            <p className="hide">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nisi hic odio impedit iusto voluptate laborum dolorem rerum libero eligendi, aspernatur, sapiente architecto debitis suscipit voluptatem! Alias expedita similique molestias.</p>
-                        </div>
-                        <div className="add">
-                            <i className="fa-sharp fa-solid fa-plus"> </i>
-                            <i className="fa-sharp fa-solid fa-minus hide"> </i>
-                        </div>
-                    </div>
-                    <div className="qns">
-                        <div>
-                            <h4>Pytanie3</h4>
-                            <p className="hide">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nisi hic odio impedit iusto voluptate laborum dolorem rerum libero eligendi, aspernatur, sapiente architecto debitis suscipit voluptatem! Alias expedita similique molestias.</p>
-                        </div>
-                        <div className="add">
-                            <i className="fa-sharp fa-solid fa-plus"> </i>
-                            <i className="fa-sharp fa-solid fa-minus hide"> </i>
-                        </div>
-                    </div>
-                    <div className="qns">
-                        <div>
-                            <h4>Pytanie4</h4>
-                            <p className="hide">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nisi hic odio impedit iusto voluptate laborum dolorem rerum libero eligendi, aspernatur, sapiente architecto debitis suscipit voluptatem! Alias expedita similique molestias.</p>
-                        </div>
-                        <div className="add">
-                            <i className="fa-sharp fa-solid fa-plus"> </i>
-                            <i className="fa-sharp fa-solid fa-minus hide"> </i>
-                        </div>
-                    </div>
-                </div>
+        <div className="sec4">
+            <h1>Częste Pytania Klientów:</h1>
+            <div className="sec4div">
+                {QuestionField("Co to jest Premium Shot?", "Odkryj espresso w nieoczywistej odsłonie! Nasz PREMIUM SHOT to wyjątkowa selekcja ziaren z przeróżnych krajów, które zachwycają owocowym charakterem, przyjemną kwasowością oraz pełnią aromatu. Jest to espresso dla poszukiwaczy niespotykanych doznań smakowych. Jeśli lubisz kawę, która zaskakuje, to jest Twój wybór!")}
+                {QuestionField("Pytanie2", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nisi hic odio impedit iusto voluptate laborum dolorem rerum libero eligendi, aspernatur, sapiente architecto debitis suscipit voluptatem! Alias expedita similique molestias.")}
+                {QuestionField("Pytanie3", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nisi hic odio impedit iusto voluptate laborum dolorem rerum libero eligendi, aspernatur, sapiente architecto debitis suscipit voluptatem! Alias expedita similique molestias.")}
+                {QuestionField("Pytanie4", "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nisi hic odio impedit iusto voluptate laborum dolorem rerum libero eligendi, aspernatur, sapiente architecto debitis suscipit voluptatem! Alias expedita similique molestias.")}
             </div>
         </div>
 
@@ -93,5 +53,23 @@ function Home() {
         </div>
     </div>
 )}
+
+function QuestionField(title, content) {
+    const [activeQuestion, setActiveQuestion] = useState(false);
+    const toggleQuestion = () => {
+        setActiveQuestion((prev) => !prev);
+    }
+    return (
+        <div onClick={toggleQuestion} className="qns">
+            <div>
+                <h4>{title}</h4>
+                <p className={activeQuestion ? "content-active" : "content-active-not"}>{content}</p>
+            </div>
+            <button className="add">
+                {activeQuestion ? <i><FaMinus /></i> : <i><FaPlus /></i>}
+            </button>
+        </div>
+    )
+}
 
 export default Home

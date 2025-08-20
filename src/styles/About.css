@@ -1,58 +1,56 @@
+.general-sec {
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+}
+
 .sec-2 {
-    background-color: rgb(13, 7, 37);
     text-align: center;
     justify-content: center;
     align-items: center;
-}
-.sec2 {
-    color: whitesmoke;
-    width: 100%;
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    margin: 40px 0;
-    transition: all 0.3 ease-in;
+    flex-direction: row;
+    backdrop-filter: brightness(90%);
 }
-.sec2 div:nth-child(1) {
-    width: 700px;
+.first-image {
 }
-.sec2 div:nth-child(1) img {
-    width: 500px;
+.first-image img {
+    width: 30rem;
     margin-left: 40px;
     border-radius: 20px;
-    border: 1px solid whitesmoke;
+    border: 1px solid antiquewhite;
 }
-.sec2 div:nth-child(2) {
+.sec-2 div:nth-child(2) {
     max-width: 600px;
 }
-.sec2 div:nth-child(2) p {
+.sec-2 div:nth-child(2) p {
     font-size: 13px;
     line-height: 25px;
     padding: 0px 0 20px 0;
     text-align: center;
 }
-.sec2 div:nth-child(2) div {
+.sec-2 div:nth-child(2) div {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0px;
 }
-.sec2 div:nth-child(2) h1:after {
+.sec-2 div:nth-child(2) h1:after {
     content: "";
     display: flex;
     position: sticky;
     justify-self: center;
     bottom: 0;
-    border: 1px solid whitesmoke;
+    border: 1px solid antiquewhite;
     margin: 40px 0;
     width: 10%;
 }
-.sec2 div:nth-child(2) div button {
+.sec-2 div:nth-child(2) div button {
     height: 55px;
     border: 1px;
     align-items: center;
 }
-.sec2 div:nth-child(2) .ect {
+.sec-2 div:nth-child(2) .ect {
     width: 24px;
 }
 @media only screen and (max-width: 1000px) {
@@ -81,7 +79,7 @@
         width: 180%; /* Makes the image smaller */
         max-width: 300px; /* Limits its size */
         border-radius: 20px;
-        border: 1px solid whitesmoke;
+        border: 1px solid antiquewhite;
         margin: 40px 0;
         padding: 0;
     }
@@ -109,17 +107,16 @@
 
 
 .sec-2-2{
-    color: whitesmoke;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
     height: 70vh;
+    backdrop-filter: brightness(90%);
 
 }
 .sec-2-2 div:nth-child(1) {
     display: flex;
-    background-color: #1d1b21;
     width: 50%;
     height: 100%;
     justify-content: center;
@@ -135,7 +132,7 @@
     position: sticky;
     justify-self: center;
     bottom: 0;
-    border: 1px solid whitesmoke;
+    border: 1px solid antiquewhite;
     margin: 40px 0;
     width: 70%;
 }
@@ -157,16 +154,16 @@
 
 
 .sec-2-3 {
-    color: whitesmoke;
+    color: antiquewhite;
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-evenly;
     align-items: center;
     height: 70vh;
+    backdrop-filter: brightness(90%);
 }
 .sec-2-3 div:nth-child(1) {
     display: flex;
-    background-color: #1d1b21;
     width: 40%; 
     height: 100%;
     justify-content: center;
@@ -182,7 +179,7 @@
     position: sticky;
     justify-self: center;
     bottom: 0;
-    border: 1px solid whitesmoke;
+    border: 1px solid antiquewhite;
     margin: 40px 0;
     width: 70%;
 }
@@ -246,11 +243,12 @@
 
 .sec3 {
     padding: 0 7vw;
-    margin: 40px 0px;
-    color: whitesmoke;
+    margin: 0;
+    color: antiquewhite;
     display: flex;
     flex-direction: column;
     align-items: center;
+    backdrop-filter: brightness(50%);
 }
 .sec3 h1 {
     font-size: 2.5rem;
@@ -270,7 +268,7 @@
     flex-shrink: none;
     margin-top: 30px;
     background-color: #6F7BD4;
-    border: 0.1px solid whitesmoke;
+    border: 0.1px solid antiquewhite;
     border-radius: 5px;
     height: 320px;
     width: 220px;
@@ -297,7 +295,7 @@
 }
 .sec3 .container div i {
     cursor: pointer;
-    border: 1px solid whitesmoke;
+    border: 1px solid antiquewhite;
     padding: 5px 7px;
     border-radius: 50%;
     margin-bottom: 10px;
@@ -305,14 +303,14 @@
     transition: all 0.2s;
 }
 .sec3 .container div i:hover {
-    background-color: whitesmoke;
+    background-color: antiquewhite;
     color: #7E89D6;
 }
 @media only screen and (max-width: 1000px) {
     .sec3 {
         padding: 0 0vw;
         margin: 40px 0;
-        color: whitesmoke;
+        color: antiquewhite;
     }
     .sec3 h1 {
         font-size: 2.5rem;
@@ -331,7 +329,7 @@
         margin-top: 30px;
         margin: 15px 0px;
         background-color: #7E89D6;
-        border: 0.1px solid whitesmoke;
+        border: 0.1px solid antiquewhite;
         border-radius: 5px;
         height: 320px;
         width: 42vw;

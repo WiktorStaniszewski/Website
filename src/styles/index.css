@@ -1,5 +1,5 @@
 body {
-  background-color: var(--medium-shade);
+  background: url('../images/BodyWallSimulation2.png');
   color: antiquewhite;
   margin: 0;
   font-size: 1.2rem;

@@ -13,7 +13,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 3rem 0;
+    margin: 2rem 0 0.1rem 0;
     z-index: 20;
 }
 .headContainer div:nth-child(1) a {
@@ -50,6 +50,8 @@
 
 .redirectButtons ul {
     display: flex;
+    padding-inline-start: 0;
+    margin: 0.5rem;
 }
 
 .redirectButtons.navActive {
@@ -71,7 +73,7 @@
 .redirectButtons ul li {
     display: flex;
     width: 14vw;
-    padding: 1rem 1rem;
+    height: 3rem;
     align-items: center;
     justify-content: center;
     cursor: pointer;
@@ -177,6 +179,7 @@ ul {
         position: sticky;
         top: 0px;
         z-index: 20;
+        padding-bottom: 1rem;
         
     }
     .sidebar {
