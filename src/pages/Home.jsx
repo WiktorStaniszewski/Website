@@ -10,7 +10,7 @@ function Home() {
             <div className="image-text">
                 <h1>Body Espresso Bar</h1>
                 <h3>Kawiarnia z segmentu Specialty Coffee Kreatywnie w temacie kawy! Zero napinki! tylko dobre szoty </h3>
-                <button id="poznajNas" className="btn-1">Zobacz Menu!</button>
+                <button className="btn-1">Zobacz Menu!</button>
             </div>
         </div>
 
@@ -41,10 +41,10 @@ function Home() {
                     </div>
                     <div>
                         <form method="post">
-                            <input name="imie" type="text" placeholder="Imię" required className="hidden" />
-                            <input name="nazwisko" type="text" placeholder="Nazwisko" required className="hidden" />
-                            <input name="email" type="email" placeholder="Email" required className="hidden" />
-                            <input name="opis_problemu" type="text" rows="4" placeholder="Opis problemu" required className="hidden" />
+                            <input name="imie" type="text" placeholder="Imię" required className="home-input" />
+                            <input name="nazwisko" type="text" placeholder="Nazwisko" required className="home-input" />
+                            <input name="email" type="email" placeholder="Email" required className="home-input" />
+                            <input name="opis_problemu" type="text" rows="4" placeholder="Opis problemu" required className="home-input" />
                             <button type="submit" className="btn-1">Submit Form</button>
                         </form>
                     </div>

@@ -3,19 +3,15 @@
     justify-content: center;
     margin: 0 5px;
     padding: 20px 40px;
-    border: 1.5px solid antiquewhite;
-    border-radius: 20px;
-    background-color: transparent;
-    backdrop-filter: blur(6px);
-    color: antiquewhite;
+    border: 1px solid antiquewhite;
+    backdrop-filter: blur(6px) brightness(110%);
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s;
     overflow: hidden;
 }
 .btn-1:hover {
-    background-color: antiquewhite;
-    color: var(--hover-color);
+    backdrop-filter: blur(6px) brightness(150%);
 }
 
 
@@ -59,9 +55,6 @@
     margin-bottom: 15px;
 }
 
-.image-wrap #poznajNas {
-    font-size: 15px;
-}
 
 @media only screen and (max-width: 1000px) {
     .image-wrap img {
@@ -132,6 +125,7 @@
     line-height: 17px;
     font-size: 0.8rem;
 }
+
 .add {
     display: flex;
     align-items: center;
@@ -141,6 +135,13 @@
     font-size: 1.2rem;
     cursor: pointer;
     transition: 0.1s;
+    box-shadow: none;
+    transform: none;
+}
+
+.add:hover {
+    box-shadow: none;
+    transform: none;
 }
 
 .qns:hover {
@@ -204,9 +205,11 @@
 }
 .sec5 form {
     padding: 0 20px;
+    display: flex;
+    flex-direction: column;
 }
-.sec5 input {
-    width: 100%;
+
+.sec5 .home-input {
     background-color: transparent;
     outline: none;
     border: none;
@@ -217,7 +220,7 @@
     transition: none;
 }
 
-.sec5 textarea {
+.sec5 > textarea {
     width: 100%;
     background-color: transparent;
     outline: none;
@@ -229,7 +232,7 @@
     overflow: hidden;
     resize: none;
 }
-.sec5 input::placeholder, textarea::placeholder {
+.sec5 > input::placeholder, textarea::placeholder {
     color: rgb(193, 196, 212);
 }
 .sec5 .btn-1 {
@@ -239,14 +242,14 @@
     border: 1px solid antiquewhite;
 }
 .sec5 .btn-1:hover {
-    color: rgb(9, 10, 43);
+    transform: scaleX(103%) scaleY(103%);
 }
-.sec5 .container div:nth-child(3) {
+.sec5 > .container div:nth-child(3) {
     height: 100px;
     background-color: transparent;
     margin: 80px 0;
 }
-.sec5 .container div:nth-child(4) {
+.sec5 > .container div:nth-child(4) {
     display: flex;
     flex-direction:column;
 }

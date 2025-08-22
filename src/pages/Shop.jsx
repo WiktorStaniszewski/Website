@@ -1,8 +1,25 @@
 import '../styles/Shop.css'
-import products from '../Shop/Sdb/shopData.jsx'
+import Products from '../Shop/SProducts/Products.jsx'
+import Navigation from '../Shop/SNavigation/Navigation.jsx'
+import Recommended from '../Shop/SRecommended/Recommended.jsx'
+
 function Shop() {
     return (
-        <div className="shop-container">
+       <>
+            <Navigation />
+            <Recommended />
+            <Products />
+       </>
+    )
+}
+export default Shop
+
+
+
+
+
+
+        /*<div className="shop-container">
             <div className="grid-products-container">
                 {products.map((item) => 
                     <div key={item.name} className="shop-item">
@@ -18,6 +35,4 @@ function Shop() {
                     )}
             </div>
         </div>
-    )
-}
-export default Shop
+        */

@@ -1,5 +1,4 @@
 html, body {
-  overflow-x: hidden; /* optional */
   height: 100%;
 }
 ::-webkit-scrollbar {
@@ -15,3 +14,39 @@ html, body {
   background: var(--medium-shade);
 }
 
+button {
+    color: antiquewhite;
+    background: transparent;
+    border: none;
+    backdrop-filter: blur(5px) brightness(90%);
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px var(--darker-bg);
+    transition: all 0.1s ease-in-out;
+}
+
+button:hover {
+    backdrop-filter: blur(5px) brightness(80%);
+    box-shadow: 3px 3px 8px var(--darker-bg);
+    transform: scaleX(104%) scaleY(104%);
+}
+
+input {
+    padding: 0.75rem 1.25rem;
+    border: none;
+    background-color: transparent;
+    color: antiquewhite;
+    backdrop-filter: brightness(80%);
+    outline: none;
+    margin-right: 1.2rem;
+    border-radius: 5px;
+    position: relative;
+    width: 14rem;
+    font-size: 1.2rem;
+}
+
+@media(max-width:1000px){
+  html, body {
+    overflow-x: hidden;
+    height: 100%;
+}
+}

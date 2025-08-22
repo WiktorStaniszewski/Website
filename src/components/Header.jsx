@@ -31,6 +31,17 @@ function Header() {
         };
     }, []);
 
+    // displaying the logo on the navbar when scrolling
+    const [showLogo, setShowLogo] = useState(false);
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowLogo(window.scrollY > 50);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll)
+    }, []);
+
+
     return (
         <>
         <div className="headContainer">
@@ -65,6 +76,7 @@ function Header() {
         </div>
             <div className="redirectButtons">
                 <ul>
+                    <div className={showLogo ? "logo-visible" : "logo-hidden"}><Link to="/"><img className='navigation-logo' src="/images/logo body_biale.png" alt="logo"></img></Link></div>
                     <NavLink to="/" className="current navbarLink"><li>Home</li></NavLink>
                     <NavLink to="about" className="current navbarLink"><li>O nas</li></NavLink>
                     <NavLink to="menu" className="current navbarLink"><li>Menu</li></NavLink>

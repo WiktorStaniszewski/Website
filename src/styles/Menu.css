@@ -6,21 +6,24 @@
 
 .classic-menu, .subs-menu, .special-menu, .summer-menu, .tea-menu {
     padding: 10px 2em;
-    backdrop-filter: blur(3px) brightness(70%);
+    backdrop-filter: blur(5px) brightness(85%);
     border-radius: 10px;
     margin: 30px 0;
+    box-shadow: 2px 3px 3px var(--darker-bg);
+    transition: transform 0.1s ease-in-out;
 }
 
 .classic-menu:hover, .subs-menu:hover, .special-menu:hover, .summer-menu:hover, .tea-menu:hover {
-    backdrop-filter: blur(3px) brightness(60%);
+    backdrop-filter: brightness(75%);
     cursor: pointer;
+    transform: scaleX(101%) scaleY(101%);
 }
 
 .menu-container2 div:nth-child(2), .menu-container2 div:nth-child(4) {
-    backdrop-filter: blur(3px) brightness(50%);
+    backdrop-filter: blur(3px) brightness(70%);
 }
 .menu-container2 div:nth-child(2):hover, .menu-container2 div:nth-child(4):hover {
-    backdrop-filter: blur(3px) brightness(40%);
+    backdrop-filter: blur(3px) brightness(60%);
 }
 
 .item-header {
@@ -83,7 +86,7 @@
     height: 15px;
 }
 
-button {
+.item-header > button {
     font-size: 40px;
     cursor: pointer;
     display: flex;
@@ -95,12 +98,14 @@ button {
     color: antiquewhite;
     background: transparent;
     border: none;
+    transform: none;
+    box-shadow: none;
 }
 
 .item-header > button:hover {
-    backdrop-filter: brightness(50%);
+    transform: none;
+    box-shadow: none;
 }
-
 @media(max-width:1000px) {
     .item-header > button {
         height: 60px;

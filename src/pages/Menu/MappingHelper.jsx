@@ -11,7 +11,7 @@ function MappingHelper(displayedTitle, classTitle, productArray, activeMenu, tog
         <div onClick={() => toggleMenu(classTitle)} className={classTitle+"-menu"}>
             <div className="item-header">
                 <h2>{displayedTitle}:</h2>
-                <button>
+                <button className="qnsButton">
                     {activeMenu === classTitle ? (
                         <RiArrowDropUpLine />
                     ) : (

@@ -1,4 +1,3 @@
-
 const products = 
     [
         {
@@ -8,7 +7,8 @@ const products =
             category:"coffee_beans", 
             type:"espresso", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/gwatemala-meissa.jpg" 
+            image:"gwatemala-meissa.jpg", 
+            shop:"Body"
         },
         {
             name:"product_2", 
@@ -17,7 +17,8 @@ const products =
             category:"coffee_beans", 
             type:"filter", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/kenia_matunda.jpg" 
+            image:"kenia_matunda.jpg", 
+            shop:"Body"
         },
         {
             name:"product_3", 
@@ -26,7 +27,8 @@ const products =
             category:"coffee_beans", 
             type:"espresso", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/Rwanda-Gisanga.jpg" 
+            image:"Rwanda-Gisanga.jpg", 
+            shop:"Body"
         },
         {
             name:"product_4", 
@@ -35,7 +37,9 @@ const products =
             category:"coffee_beans", 
             type:"filter", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/gwatemala-meissa.jpg" },
+            image:"gwatemala-meissa.jpg", 
+            shop:"Body"
+        },
         {
             name:"product_5", 
             price:5, 
@@ -43,7 +47,8 @@ const products =
             category:"coffee_beans", 
             type:"espresso", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/kenia_matunda.jpg" 
+            image:"kenia_matunda.jpg", 
+            shop:"Body"
         },
         {
             name:"product_6", 
@@ -52,7 +57,8 @@ const products =
             category:"coffee_beans", 
             type:"filter", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/Rwanda-Gisanga.jpg" 
+            image:"Rwanda-Gisanga.jpg", 
+            shop:"Body"
         },
         {
             name:"product_7", 
@@ -61,7 +67,8 @@ const products =
             category:"coffee_beans", 
             type:"espresso", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/gwatemala-meissa.jpg" 
+            image:"gwatemala-meissa.jpg", 
+            shop:"Body"
         },
         {
             name:"product_8", 
@@ -70,7 +77,8 @@ const products =
             category:"coffee_beans", 
             type:"filter", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/kenia_matunda.jpg" 
+            image:"kenia_matunda.jpg", 
+            shop:"Body"
         },
         {
             name:"product_9", 
@@ -79,7 +87,8 @@ const products =
             category:"coffee_beans", 
             type:"espresso", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/Rwanda-Gisanga.jpg" 
+            image:"Rwanda-Gisanga.jpg", 
+            shop:"Somnium"
         },
         {
             name:"product_10", 
@@ -88,7 +97,8 @@ const products =
             category:"coffee_beans", 
             type:"filter", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/gwatemala-meissa.jpg" 
+            image:"gwatemala-meissa.jpg", 
+            shop:"Somnium"
         },
         {
             name:"product_11", 
@@ -97,7 +107,8 @@ const products =
             category:"coffee_beans", 
             type:"espresso", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/kenia_matunda.jpg" 
+            image:"kenia_matunda.jpg", 
+            shop:"Somnium"
         },
         {
             name:"product_12", 
@@ -106,7 +117,8 @@ const products =
             category:"coffee_beans", 
             type:"filter", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/Rwanda-Gisanga.jpg" 
+            image:"Rwanda-Gisanga.jpg", 
+            shop:"Somnium"
         },
         {
             name:"product_13", 
@@ -115,7 +127,8 @@ const products =
             category:"coffee_beans", 
             type:"espresso", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/gwatemala-meissa.jpg" 
+            image:"gwatemala-meissa.jpg", 
+            shop:"Somnium"
         },
         {
             name:"product_14", 
@@ -124,7 +137,8 @@ const products =
             category:"coffee_beans", 
             type:"filter", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/kenia_matunda.jpg" 
+            image:"kenia_matunda.jpg", 
+            shop:"Somnium"
         },
         {
             name:"product_15", 
@@ -133,7 +147,8 @@ const products =
             category:"coffee_beans",
             type:"espresso", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/Rwanda-Gisanga.jpg" 
+            image:"Rwanda-Gisanga.jpg", 
+            shop:"Somnium"
         },
         {
             name:"product_16", 
@@ -142,7 +157,8 @@ const products =
             category:"coffee_beans", 
             type:"filter", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/gwatemala-meissa.jpg" 
+            image:"gwatemala-meissa.jpg", 
+            shop:"Somnium"
         },
         {
             name:"product_17", 
@@ -151,7 +167,8 @@ const products =
             category:"coffee_beans", 
             type:"espresso", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/kenia_matunda.jpg"
+            image:"kenia_matunda.jpg",
+            shop:"Somnium"
         },
         {
             name:"product_18", 
@@ -160,7 +177,8 @@ const products =
             category:"coffee_beans", 
             type:"filter", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/Rwanda-Gisanga.jpg" 
+            image:"Rwanda-Gisanga.jpg", 
+            shop:"Somnium"
         },
         {
             name:"product_19", 
@@ -169,7 +187,8 @@ const products =
             category:"coffee_beans", 
             type:"espresso", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/gwatemala-meissa.jpg" 
+            image:"gwatemala-meissa.jpg", 
+            shop:"Somnium"
         },
         {
             name:"product_20", 
@@ -178,7 +197,8 @@ const products =
             category:"coffee_beans", 
             type:"filter", 
             flavours:"red fruits, tangerines, mango",
-            image:"/images/kenia_matunda.jpg" 
+            image:"kenia_matunda.jpg", 
+            shop:"Somnium"
         }
     ]
 

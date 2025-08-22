@@ -2,6 +2,7 @@ import { useState } from "react";
 import '../../styles/Menu.css'
 import MappingHelper from './MappingHelper';
 import { classicMenuArray, summerMenuArray, specialMenuArray, teaMenuArray, subsArray} from './products';
+import ScrollToTop from "react-scroll-to-top";
 
 function Menu() {
     const [activeMenu, setActiveMenu] = useState(null);
