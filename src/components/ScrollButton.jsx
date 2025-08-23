@@ -1,4 +1,4 @@
-import '../styles/ScrollButton.css'
+import 'styles/ScrollButton.css'
 import { RiArrowDropUpLine } from "react-icons/ri";
 import { useState, useEffect } from 'react';
 
@@ -25,8 +25,6 @@ function ScrollButton() {
 		window.scrollTo({
 			top: 0,
 			behavior: "smooth"
-			/* you can also use 'auto' behaviour
-         in place of 'smooth' */
 		});
 	};
 
@@ -41,4 +39,3 @@ function ScrollButton() {
 };
 
 export default ScrollButton
-//+ visible ? '-show' : ''

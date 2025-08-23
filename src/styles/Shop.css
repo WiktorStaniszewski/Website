@@ -2,7 +2,7 @@
 nav {
     display: flex;
     position: sticky;
-    top: 4rem;
+    top: 3.9rem;
     backdrop-filter: blur(5px) brightness(80%);
     border-bottom: 1.2px solid antiquewhite;
     justify-content: space-between;
@@ -18,10 +18,6 @@ nav {
     align-items: center;
     justify-content: space-between;
 
-}
-
-.nav-container {
-    left: 0;
 }
 
 input::placeholder {
@@ -43,9 +39,53 @@ input::placeholder {
 
 @media(max-width:1000px) {
     nav {
-        top: 6.7rem;
+        top: 6.6rem;
+    }
+    .search-right {
+        width: 100vw;
+        padding-left: 11.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+}
+
+
+
+/*---------------------- Sidebar Section ----------------------*/
+.shopSidebar {
+    padding: 0;
+    padding-left: 1rem;
+    width: 13%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: scroll;
+    border-right: 1px solid antiquewhite;
+}
+
+.shopSidebar-title {
+    font-size: 1rem;
+    font-weight: normal;
+    margin-bottom: 1rem;
+}
+
+@media (max-width:769px){
+    .shopSidebar {
+        width: 25%;
     }
 }
+@media (max-width: 450px){
+    .shopSidebar {
+        width: 35%;
+    }   
+}
+
 
 
 /*---------------------- Product Section ----------------------*/
@@ -74,11 +114,17 @@ input::placeholder {
 
 .card-image {
     width: 13rem;
-    margin-bottom: 1rem;
 }
 
 .card-title {
     margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-title > img {
+    height: 30px;
+    width: auto;
 }
 
 .card-reviews {
@@ -106,9 +152,17 @@ input::placeholder {
 }
 
 
+@media(max-width:1000px){
+    .card-container {
+        margin-left: 13rem;
+    }
+}
+
+
 /*---------------------- Recommended Section ----------------------*/
 .recommended-flex {
     display: flex;
+    flex-wrap: wrap;
     margin-left: 20rem;
     gap: 0.5rem;
 }
@@ -119,6 +173,7 @@ input::placeholder {
 }
 
 .rec-btn {
+    width: 9rem;
     color: antiquewhite;
     padding: 1rem 2rem;
     margin-right: 6px;
@@ -133,28 +188,15 @@ input::placeholder {
 }
 
 
-/*---------------------- Sidebar Section ----------------------*/
-.shopSidebar-title {
-    font-size: 1rem;
-    font-weight: normal;
-    margin-bottom: 1rem;
-}
+@media(max-width:1000px){
+    .recommended-title {
+        margin-left: 18rem;
+    }
 
-.shopSidebar {
-    padding: 0;
-    margin: 0;
-    width: 15%;
-    position: fixed;
-    top: 0;
-    left: 2rem;
-    height: 100%;
-    z-index: 3;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow-y: scroll;
+    .recommended-flex {
+        margin-left: 13rem;
+    }
 }
-
 
 /*---------------------- Category Section ----------------------*/
 .categoryDiv {
@@ -163,7 +205,8 @@ input::placeholder {
 
 .shopSidebar-cat-title {
     font-size: 1.3rem;
-    font-weight: normal;
+    font-weight: 500;
+    margin: 0.3rem 0;
 }
 
 .shopSidebar-items {
@@ -171,6 +214,8 @@ input::placeholder {
 }
 
 .shopSidebar-label-container {
+    width: 9.5rem;
+    font-size: 1.1rem;
     display: flex;
     align-items: center;
     position: relative;
@@ -200,8 +245,8 @@ input::placeholder {
     border-radius: 50%;
 }
 
-.category-input {
-    width: 100%;
+.input {
+    width: 80%;
 }
 
 .shopSidebar-label-container:hover > input ~.checkmark {
@@ -212,14 +257,16 @@ input::placeholder {
     background-color: var(--darker-bg);
 }
 
-.checkmark::after {
-    content: "";
-    position: absolute;
-    display: none;
-}
 
-.shopSidebar-label-container > input:checked ~ .checkmark::after {
-    display: block;
+
+@media(max-width:1000px){
+    .shopSidebar-label-container {
+        width: 12rem;
+
+    }
+    .shopSidebar-items {
+        width: 7rem;
+    }
 }
 
 

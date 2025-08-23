@@ -1,8 +1,7 @@
 import { useState } from "react";
-import '../../styles/Menu.css'
+import 'styles/Menu.css'
 import MappingHelper from './MappingHelper';
 import { classicMenuArray, summerMenuArray, specialMenuArray, teaMenuArray, subsArray} from './products';
-import ScrollToTop from "react-scroll-to-top";
 
 function Menu() {
     const [activeMenu, setActiveMenu] = useState(null);
@@ -16,7 +15,7 @@ function Menu() {
                 {MappingHelper("Letnie Menu", "summer", summerMenuArray, activeMenu, toggleMenu)}
                 {MappingHelper("Special Menu", "special", specialMenuArray, activeMenu, toggleMenu)}
                 {MappingHelper("Bezkofeinowe", "tea", teaMenuArray, activeMenu, toggleMenu)}
-                {MappingHelper("Dodatki / Zamienniki:", "subs", subsArray, activeMenu, toggleMenu)}
+                {MappingHelper("Dodatki / Zamienniki", "subs", subsArray, activeMenu, toggleMenu)}
             </div>
         </div>
     )

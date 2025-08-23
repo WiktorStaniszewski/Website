@@ -1,5 +1,5 @@
-import './styles/App.css'
-import AnimatedRoutes from './components/animatedRoutes';
+import 'styles/App.css'
+import AnimatedRoutes from 'components/animatedRoutes';
 
 function App() {
   return <AnimatedRoutes />

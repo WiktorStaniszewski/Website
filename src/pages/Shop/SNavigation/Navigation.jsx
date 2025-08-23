@@ -1,4 +1,4 @@
-import '../../styles/Shop.css'
+import 'styles/Shop.css'
 import Sidebar from '../SSidebar/Sidebar.jsx'
 import { FiHeart} from 'react-icons/fi'
 import { AiOutlineShoppingCart, AiOutlineUserAdd } from 'react-icons/ai'

@@ -1,4 +1,4 @@
-import '../styles/Header.css'
+import 'styles/Header.css'
 import { useState, useEffect } from "react";
 import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -37,8 +37,10 @@ function Header() {
         const handleScroll = () => {
             setShowLogo(window.scrollY > 50);
         };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll)
+        
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll)
     }, []);
 
 

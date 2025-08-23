@@ -1,4 +1,4 @@
-import '../../styles/Shop.css'
+import 'styles/Shop.css'
 
 function Recommended() {
     return (

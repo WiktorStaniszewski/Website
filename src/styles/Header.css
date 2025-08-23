@@ -66,18 +66,26 @@ div.logo-visible {
     transition: all 0.5s ease;
 }
 
+.navigation-logo {
+    width: 100px;
+    height: 30px;
+    transition: all 0.5s ease;
+}
+
 div.logo-hidden {
-    opacity: 0;
     width: 0;
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+div.logo-hidden .navigation-logo {
+    width: 0;
+    height: 0;
+    transition: all 0.5s ease;
 }
 
 div.logo-hidden > a {
     pointer-events: none;
-}
-
-.navigation-logo {
-    width: 100px;
-    height: 30px;
 }
 
 .redirectButtons.navActive {
@@ -230,6 +238,7 @@ ul {
     }
     .headContainer div:nth-child(1) img{
         width: 150px; 
+        height: 40px;
     }
     .headerButton {
         width: 3.5rem;

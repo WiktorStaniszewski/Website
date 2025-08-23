@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../styles/Home.css'
+import 'styles/Home.css'
 import { FaPlus, FaMinus } from "react-icons/fa";
 
 function Home() {

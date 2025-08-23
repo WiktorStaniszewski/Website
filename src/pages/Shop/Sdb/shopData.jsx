@@ -168,7 +168,7 @@ const products =
             type:"espresso", 
             flavours:"red fruits, tangerines, mango",
             image:"kenia_matunda.jpg",
-            shop:"Somnium"
+            shop:"Body"
         },
         {
             name:"product_18", 
@@ -178,7 +178,7 @@ const products =
             type:"filter", 
             flavours:"red fruits, tangerines, mango",
             image:"Rwanda-Gisanga.jpg", 
-            shop:"Somnium"
+            shop:"Body"
         },
         {
             name:"product_19", 
@@ -188,7 +188,7 @@ const products =
             type:"espresso", 
             flavours:"red fruits, tangerines, mango",
             image:"gwatemala-meissa.jpg", 
-            shop:"Somnium"
+            shop:"Body"
         },
         {
             name:"product_20", 
@@ -198,7 +198,7 @@ const products =
             type:"filter", 
             flavours:"red fruits, tangerines, mango",
             image:"kenia_matunda.jpg", 
-            shop:"Somnium"
+            shop:"Body"
         }
     ]
 
