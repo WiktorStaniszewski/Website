@@ -5,17 +5,19 @@ import Price from './Price/Price.jsx';
 import Flavors from './Flavors/Flavors.jsx'
 import Cafe from './SCafe/Cafe.jsx';
 
-function Sidebar() {
+function Sidebar({handleCategoryChange, handlePriceChange, handleFlavorsChange, handleCafeChange}) {
   return (
-    <div>
+    <div className='shopSidebarContainer'>
       <section className="shopSidebar">
         <div className="logo-container">
             <h1><BsShop className='react-icons'/></h1>
         </div>
-        <Category />
-        <Price />
-        <Flavors />
-        <Cafe />
+        <div className="scrollableContainer">
+          <Category handleChange={handleCategoryChange} />
+          <Price handleChange={handlePriceChange} />
+          <Flavors handleChange={handleFlavorsChange} />
+          <Cafe handleChange={handleCafeChange} />
+        </div>
       </section>
     </div>
   )

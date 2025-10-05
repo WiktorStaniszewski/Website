@@ -1,11 +1,18 @@
-function Input(prompt, fName) {
+function Input({ title, value, handleChange,number }) {
     return (
         <label className="shopSidebar-label-container">
-          <input type="radio" name={'test'+fName} className='input'/>
+          <input 
+            onChange={handleChange} 
+            type="radio" 
+            name={'test'+number} 
+            //defaultChecked={title==="Wszystko"}
+            className='input' 
+            value={typeof value === 'string' ? value : JSON.stringify(value)} 
+          />
           <span className="checkmark"></span>
-          <div>{prompt}</div>
+          <div>{title}</div>
         </label>
-    )
+    );
 }
 
-export default Input
+export default Input;

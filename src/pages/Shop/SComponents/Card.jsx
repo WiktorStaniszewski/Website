@@ -1,7 +1,7 @@
 import { AiFillStar } from 'react-icons/ai'
 import { FaCartPlus } from "react-icons/fa";
 
-function Card(product) {
+function Card({product}) {
     return (
         <section className="card">
             <img src={"/images/"+product.image} alt={product.name} className='card-image'/>

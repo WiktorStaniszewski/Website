@@ -54,25 +54,26 @@ input::placeholder {
 
 
 /*---------------------- Sidebar Section ----------------------*/
-.shopSidebar {
+.shopSidebarContainer {
     padding: 0;
     padding-left: 1rem;
     width: 13%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 3;
     display: flex;
+    position: absolute;
+    top: 9rem;
+    left: 0;
     flex-direction: column;
-    height: 100vh;
-    overflow-y: scroll;
-    border-right: 1px solid antiquewhite;
 }
 
 .shopSidebar-title {
     font-size: 1rem;
     font-weight: normal;
     margin-bottom: 1rem;
+}
+
+.logo-container {
+    position: relative;
+    z-index: 4;
 }
 
 @media (max-width:769px){
@@ -89,26 +90,36 @@ input::placeholder {
 
 
 /*---------------------- Product Section ----------------------*/
+.productSection {
+    position: relative;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+
 .card-container {
+    top: 0;
     display: flex;
     flex-wrap: wrap;
     margin-left: 18.9rem;
     margin-top: 2rem;
     z-index: -2;
+    min-height: 100vh;
 }
 
 .card {
-    backdrop-filter: brightness(85%) blur(5px);
+    backdrop-filter: brightness(100%) blur(5px);
     max-width: 300px;
     margin: 1.5rem;
     padding: 1.5rem;
     cursor: pointer;
-    box-shadow: 2px 2px 5px var(--darker-bg);
+    box-shadow: 2px 2px 10px var(--darker-bg);
     transition: all 0.2s ease-in-out;
 }
 
 .card:hover {
-    backdrop-filter: brightness(80%);
+    backdrop-filter: brightness(90%);
     transform: scaleX(102%) scaleY(102%);
 }
 

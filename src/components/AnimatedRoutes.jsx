@@ -5,6 +5,7 @@ import About from '../pages/About.jsx'
 import Menu from '../pages/Menu/Menu.jsx'
 import Contact from '../pages/Contact.jsx'
 import Shop from '../pages/Shop/Shop.jsx'
+import Blog from 'src/pages/Blog.jsx';
 import { PageWrapper, LayoutWrapper } from './functions/PageWrappers.jsx';
 import { AnimatePresence } from 'framer-motion';
 
@@ -19,6 +20,7 @@ function AnimatedRoutes() {
             <Route path="menu" element={<PageWrapper><Menu /></PageWrapper>}/>
             <Route path="contact" element={<PageWrapper><Contact /></PageWrapper>}/>
             <Route path="shop" element={<PageWrapper><Shop /></PageWrapper>}/>
+            <Route path="blog" element={<PageWrapper><Blog /></PageWrapper>}/>
             <Route path="*" element={<h1>404 - Page not found</h1>} />
             </Route>
         </Routes>

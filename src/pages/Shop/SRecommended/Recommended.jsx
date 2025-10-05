@@ -1,16 +1,15 @@
 import 'styles/Shop.css'
 
-function Recommended() {
+function Recommended({handleClick}) {
     return (
         <>
         <div>
             <h2 className='recommended-title'>Recommended</h2>
             <div className="recommended-flex">
-                <button className='rec-btn'>All Products</button>
-                <button className='rec-btn'>Beans</button>
-                <button className='rec-btn'>Brewers</button>
-                <button className='rec-btn'>Accessories</button>
-                <button className='rec-btn'>Drip Bags</button>
+                <button onClick={handleClick} className='rec-btn' value="">All Products</button>
+                <button onClick={handleClick} className='rec-btn' value="beans">Beans</button>
+                <button onClick={handleClick} className='rec-btn' value="brewers">Brewers</button>
+                <button onClick={handleClick} className='rec-btn' value="accessory">Accessories</button>
             </div>
         </div>
         </>

@@ -1,15 +1,35 @@
 import 'styles/Shop.css'
 import Input from 'pages/Shop/SComponents/Input'
 
-function Category() {
+function Category({handleChange}) {
   return (
     <div className='categoryDiv'>
       <h2 className="shopSidebar-cat-title">Kategorie</h2>
       <div>
-        {Input("Wszystko", 1)}
-        {Input("Ziarna", 1)}
-        {Input("Zaparzarki", 1)}
-        {Input("Akcesoria", 1)}
+        <Input 
+          title="Wszystko"
+          value=""
+          handleChange={handleChange}
+          number={1}
+        />
+        <Input 
+          title="Ziarna"
+          value="beans"
+          handleChange={handleChange}
+          number={1}
+        />
+        <Input 
+          title="Zaparzarki"
+          value="brewers"
+          handleChange={handleChange}
+          number={1}
+        />
+        <Input 
+          title="Akcesoria"
+          value="accessory"
+          handleChange={handleChange}
+          number={1}
+        />
       </div>
     </div>
   )

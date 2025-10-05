@@ -52,33 +52,36 @@
     display: flex;
     padding-inline-start: 0;
     margin: 0.5rem;
+    transition: all 0.5s ease;
 }
 
-div.logo-visible {
+.logo-visible {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-right: 5rem;
-    margin-top: 0.3rem;
-    height: 100%;
-    width: auto;
+    margin-top: 0.7rem;
     opacity: 1;
     transition: all 0.5s ease;
 }
 
-.navigation-logo {
-    width: 100px;
-    height: 30px;
-    transition: all 0.5s ease;
-}
-
-div.logo-hidden {
-    width: 0;
+.logo-hidden {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0;
+    margin-top: 0;
     opacity: 0;
     transition: all 0.5s ease;
 }
 
-div.logo-hidden .navigation-logo {
+.logo-visible .navigation-logo {
+    width: 100px;
+    height: 30px;   
+    transition: all 0.5s ease;
+}
+
+.logo-hidden .navigation-logo {
     width: 0;
     height: 0;
     transition: all 0.5s ease;
@@ -86,6 +89,7 @@ div.logo-hidden .navigation-logo {
 
 div.logo-hidden > a {
     pointer-events: none;
+    transition: all 0.5s ease;
 }
 
 .redirectButtons.navActive {
@@ -106,7 +110,7 @@ div.logo-hidden > a {
 
 .redirectButtons ul li {
     display: flex;
-    width: 14vw;
+    width: 12vw;
     height: 3rem;
     align-items: center;
     justify-content: center;
@@ -116,6 +120,57 @@ div.logo-hidden > a {
 .loginCartDiv {
     display: flex;
     flex-direction: row;
+}
+
+.loginButton:hover {
+
+}
+
+.loginHover {
+    display: flex;
+    position: fixed;
+    cursor: default;
+    flex-direction: column;
+    align-items: center;
+    background-color: transparent;
+    backdrop-filter: brightness(70%) blur(5px);
+    height: 20rem;
+    width: 13rem;
+    right: 3.5rem;
+    top: 5.5rem;
+}
+
+.loginHover > p {
+    font-size: 0.8rem;
+}
+
+.passwordField {
+    width: 10rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.passwordField > div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.passwordField > div > input {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nameField {
+    width: 10rem;
+}
+
+.cartButton:hover {
+
 }
 
 .redirectButtons ul li:hover, .headerButton:hover, .loginButton:hover, .cartButton:hover, .hamburgerIcon:hover{

@@ -1,23 +1,46 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
-const scrollPositions = { "/shop": 0 };
+// Load from sessionStorage or fallback to {}
+const getInitialPositions = () => {
+  try {
+    const stored = sessionStorage.getItem("scrollPositions");
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+};
+
+let scrollPositions = getInitialPositions();
 
 export default function ScrollManager({ children }) {
   const location = useLocation();
   const { pathname, key } = location;
 
-  useEffect(() => {
-    let rafId;
+  const rafId = useRef(null); // requestAnimationFrame id
+  const ticking = useRef(false); // throttle flag
 
+  useEffect(() => {
     const saveOnScroll = () => {
-      if (pathname === "/shop") {
-        scrollPositions["/shop"] = window.scrollY;
+      if (!ticking.current) {
+        ticking.current = true;
+        requestAnimationFrame(() => {
+          scrollPositions[pathname] = window.scrollY;
+
+          // Save to sessionStorage
+          try {
+            sessionStorage.setItem("scrollPositions", JSON.stringify(scrollPositions));
+          } catch {
+            /* ignore storage errors */
+          }
+
+          ticking.current = false;
+        });
       }
     };
 
     if (pathname === "/shop") {
-      const targetY = scrollPositions["/shop"] ?? 0;
+      const targetY = scrollPositions[pathname] ?? 0;
 
       const tryRestore = (attempt = 0) => {
         const maxScrollable =
@@ -27,15 +50,16 @@ export default function ScrollManager({ children }) {
           window.scrollTo(0, targetY);
           return;
         }
-        rafId = requestAnimationFrame(() => tryRestore(attempt + 1));
+        rafId.current = requestAnimationFrame(() => tryRestore(attempt + 1));
       };
 
       requestAnimationFrame(() => tryRestore());
 
-      window.addEventListener("scroll", saveOnScroll);
+      window.addEventListener("scroll", saveOnScroll, { passive: true });
+
       return () => {
-        window.removeEventListener("scroll", saveOnScroll);
-        if (rafId) cancelAnimationFrame(rafId);
+        window.removeEventListener("scroll", saveOnScroll, { passive: true });
+        if (rafId.current) cancelAnimationFrame(rafId.current);
       };
     } else {
       window.scrollTo(0, 0);
