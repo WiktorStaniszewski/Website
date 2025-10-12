@@ -1,6 +1,6 @@
 body {
   background: url('../images/BodyWallSimulation2.png');
-  color: antiquewhite;
+  color: var(--font-color);
   margin: 0;
   font-size: 1.2rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

@@ -3,7 +3,7 @@
     justify-content: center;
     margin: 0 5px;
     padding: 20px 40px;
-    border: 1px solid antiquewhite;
+    border: 1px solid var(--font-color);
     backdrop-filter: blur(6px) brightness(110%);
     font-weight: bold;
     cursor: pointer;
@@ -39,7 +39,7 @@
     flex-direction:  column;
     align-items: center;
     justify-content: center;
-    color: antiquewhite;
+    color: var(--font-color);
     font-size: 0.8rem;
 }
 .image-wrap .image-text h1{
@@ -81,7 +81,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: antiquewhite;
+    color: var(--font-color);
     flex-direction: column;
     padding: 1rem 0;
 }
@@ -162,106 +162,3 @@
     }
 }
 
-
-
-
-.sec-5 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.sec5 {
-    backdrop-filter: brightness(50%);
-    width: 100%;
-    padding: 5rem;
-    height: auto;
-    color: antiquewhite;
-}
-.sec5 h1 {
-    font-size: 2.4rem;
-}
-.sec5 .container {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 25px;
-}
-.sec5 .container > div p {
-    cursor: pointer;
-}
-.sec5 h3 {
-    font-size: 1.1rem;
-    padding: 10px 0;
-    padding-bottom: 5px;
-}
-.sec5 p, .sec5 a {
-    font-size: 0.7rem;
-    margin-bottom: 10px;
-    text-decoration: none;
-    color: antiquewhite;
-}
-.sec5 .container div:nth-child(2) {
-    margin-left: 0px;
-    width: 69%;
-}
-.sec5 form {
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.sec5 .home-input {
-    background-color: transparent;
-    outline: none;
-    border: none;
-    border-bottom: 1px solid antiquewhite;
-    margin: 10px;
-    line-height: 20px;
-    color: antiquewhite;
-    transition: none;
-}
-
-.sec5 > textarea {
-    width: 100%;
-    background-color: transparent;
-    outline: none;
-    border: none;
-    border-bottom: 1px solid antiquewhite;
-    margin: 10px;
-    line-height: 20px;
-    color: antiquewhite;
-    overflow: hidden;
-    resize: none;
-}
-.sec5 > input::placeholder, textarea::placeholder {
-    color: rgb(193, 196, 212);
-}
-.sec5 .btn-1 {
-    font-size: 1rem;
-    margin-top: 20px;
-    color: antiquewhite;
-    border: 1px solid antiquewhite;
-}
-.sec5 .btn-1:hover {
-    transform: scaleX(103%) scaleY(103%);
-}
-.sec5 > .container div:nth-child(3) {
-    height: 100px;
-    background-color: transparent;
-    margin: 80px 0;
-}
-.sec5 > .container div:nth-child(4) {
-    display: flex;
-    flex-direction:column;
-}
-.sec5 a:hover {
-    background-color: antiquewhite;
-    color: #7782da;
-}
-@media only screen and (max-width: 1000px) {
-    .sec-5 {
-        margin: 0;
-    }
-    .sec5 {
-        padding: 30px 50px;
-    }
-}

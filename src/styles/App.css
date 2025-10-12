@@ -15,7 +15,7 @@ html, body {
 }
 
 button {
-    color: antiquewhite;
+    color: var(--font-color);
     background: transparent;
     border: none;
     backdrop-filter: blur(5px) brightness(90%);
@@ -30,17 +30,27 @@ button:hover {
     transform: scaleX(104%) scaleY(104%);
 }
 
+/*input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #fdfdfd;
+    box-shadow: transparent;
+    caret-color: var(--font-color);
+    font-size: 1rem;
+}*/
+
 input {
     padding: 0.75rem 1.25rem;
     border: none;
     background-color: transparent;
-    color: antiquewhite;
+    color: var(--font-color);
     backdrop-filter: brightness(80%);
     outline: none;
-    margin-right: 1.2rem;
     border-radius: 5px;
     position: relative;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 @media(max-width:1000px){

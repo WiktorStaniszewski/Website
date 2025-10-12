@@ -14,19 +14,19 @@ function Category({handleChange}) {
         />
         <Input 
           title="Ziarna"
-          value="beans"
+          value="ziarna"
           handleChange={handleChange}
           number={1}
         />
         <Input 
           title="Zaparzarki"
-          value="brewers"
+          value="zaparzarki"
           handleChange={handleChange}
           number={1}
         />
         <Input 
           title="Akcesoria"
-          value="accessory"
+          value="akcesoria"
           handleChange={handleChange}
           number={1}
         />

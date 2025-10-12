@@ -1,0 +1,56 @@
+.loginHover {
+    display: flex;
+    position: fixed;
+    cursor: default;
+    flex-direction: column;
+    align-items: center;
+    background-color: transparent;
+    backdrop-filter: brightness(70%) blur(11px);
+    height: fit-content;
+    width: fit-content;
+    right: 3.5rem;
+    top: 5.5rem;
+    box-shadow: 1px 2px 4px var(--header-footer-bg);
+}
+
+div.loginHover:last-child {
+    padding-bottom: 2rem;
+}
+
+.loginHover > div {
+    padding: 0 1rem;
+}
+
+.loginHover > p {
+    font-size: 0.8rem;
+}
+
+.loginHover > form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login {
+    width: 5rem;
+    margin: 0.3rem;
+}
+
+.logout {
+    width: 5rem;
+    margin-top: 1.2rem;
+}
+
+.manageAccount {
+    width: auto;
+    margin-top: 1rem ;
+}
+
+.passwordField, .nameField {
+    width: 10rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 1rem;
+}

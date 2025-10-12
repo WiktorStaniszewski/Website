@@ -1,5 +1,5 @@
 import 'styles/Header.css'
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { FiShoppingCart } from "react-icons/fi";
@@ -12,29 +12,38 @@ import { AiFillShopping } from "react-icons/ai";
 import { FaInstagram } from "react-icons/fa";
 import { SiGooglemaps } from "react-icons/si";
 import LoginControl from './Login/LoginControl';
-import { debounce } from 'lodash';
+import { useClickAway } from '@uidotdev/usehooks';
+//import { debounce } from 'lodash';
 
 function Header() {
 
     const [isShown, setIsShown] = useState(false);
 
+    const showOnClick = () => {
+        setIsShown(prev => !prev)
+    }
+
+    const ref = useClickAway(() => {
+    setIsShown(false);
+  });
+    /*
     const debouncedShow = useMemo(
         () => debounce(() => setIsShown(true), 300),
         []
     );
-
     const debouncedHide = useMemo(
         () => debounce(() => setIsShown(false), 300),
         []
     );
 
-    // ✅ cleanup on unmount (important with debounce)
+    // cleanup on unmount
     useEffect(() => {
         return () => {
         debouncedShow.cancel();
         debouncedHide.cancel();
         };
     }, [debouncedShow, debouncedHide]);
+    */
 
     // hamburgerIcon/sidebar settings - overflow action and buttons functions
     const toggleScroll = (lockScroll) => {
@@ -85,11 +94,13 @@ function Header() {
                 </div>
                 <Link to="/"><img src="/images/logo body_biale.png" alt="logo"></img></Link>
                 <div className='loginCartDiv'>
-                    <div className='loginButton headerButton' onMouseEnter={debouncedShow} onMouseLeave={debouncedHide}>
-                        <FiUser />
-                        {isShown && (
-                        <LoginControl /> 
-                        )}
+                    <div ref={ref}>
+                        <div className='loginButton headerButton' onClick={showOnClick}>
+                            <FiUser />
+                        </div>
+                            {isShown && (
+                            <LoginControl /> 
+                            )}
                     </div>
                     <div className='cartButton headerButton'>
                         <FiShoppingCart />

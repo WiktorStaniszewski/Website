@@ -1,7 +1,7 @@
 function Input({ title, value, handleChange,number }) {
     return (
         <label className="shopSidebar-label-container">
-          <input 
+          <input
             onChange={handleChange} 
             type="radio" 
             name={'test'+number} 

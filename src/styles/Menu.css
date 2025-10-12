@@ -18,8 +18,7 @@
     margin: 20px 0;
     box-shadow: 3px 5px 7px var(--darker-bg);
     transition: transform 0.1s ease-in-out;
-    max-width: 30rem;
-    min-width: 20rem;
+    width: 80%;
 }
 
 .classic-menu:hover, .subs-menu:hover, .special-menu:hover, .summer-menu:hover, .tea-menu:hover {
@@ -50,7 +49,7 @@
     visibility: 0;
 }
 
-.menu-container2 div ul.menu-active {
+.menu-container2 div ul.menu-list {
     display: block;
     max-height: 1000px;
     opacity: 1;
@@ -58,20 +57,16 @@
     transition: max-height 0ms 0ms, opacity 1500ms 0ms;
 }
 
-.menu-active > .menu-item {
-    width: 100%;
-}
-
 .menu-item {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; 
     align-items: center;
-    gap: 8px;
     position: relative;
     padding-bottom: 4px;
     margin: 10px 0;
     cursor: pointer;
-    width: 0;
+    margin-bottom: 0;
+    width: 100%;
 }
 
 .menu-list {
@@ -82,7 +77,7 @@
     margin-top: 0;
 }
 
-.menu-item::after {
+.menu-item::after, .menu-item-mobile::after {
     content: '';
     position: absolute;
     width: 100%;
@@ -92,14 +87,23 @@
     left: 0;
 }
 
-.menu-name {
-    flex-shrink: 0;
-}
-
 .menu-dots {
     flex: 1;
-    border-bottom: 1px dotted antiquewhite;
+    border-bottom: 1px dotted var(--font-color);
     height: 15px;
+}
+
+.menu-price {
+    text-align: right;
+}
+
+.menu-ingredients {
+    text-wrap: wrap;
+    font-size: 0.8rem;
+    font-style: italic;
+    margin: 0;
+    text-align: left;
+    line-height: 0.1;
 }
 
 .item-header > button {
@@ -111,7 +115,7 @@
     overflow: hidden;
     height: 70px;
     width: 100px;
-    color: antiquewhite;
+    color: var(--font-color);
     background: transparent;
     border: none;
     transform: none;
@@ -122,9 +126,19 @@
     transform: none;
     box-shadow: none;
 }
+
+.menu-item-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    padding-bottom: 4px;
+    margin: 10px 0;
+    cursor: pointer;
+    margin-bottom: 0;
+    width: 100%;
+}
+
 @media(max-width:1000px) {
-    .item-header > button {
-        height: 60px;
-        width: 75px;
-    }
+    
 }

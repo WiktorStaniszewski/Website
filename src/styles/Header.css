@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    color: antiquewhite;
+    color: var(--font-color);
     transition: all 500ms ease-in;
     right: 0;
     left: 0;
@@ -98,14 +98,14 @@ div.logo-hidden > a {
 
 .current {
     text-decoration: none;
-    color: antiquewhite;
+    color: var(--font-color);
 }
 
 .navbarLink.active::after {
     display: block;
     content: "";
     width: auto;
-    border-bottom: solid 1px antiquewhite;
+    border-bottom: solid 1px var(--font-color);
 }
 
 .redirectButtons ul li {
@@ -122,55 +122,8 @@ div.logo-hidden > a {
     flex-direction: row;
 }
 
-.loginButton:hover {
-
-}
-
-.loginHover {
-    display: flex;
-    position: fixed;
-    cursor: default;
-    flex-direction: column;
-    align-items: center;
-    background-color: transparent;
-    backdrop-filter: brightness(70%) blur(5px);
-    height: 20rem;
-    width: 13rem;
-    right: 3.5rem;
-    top: 5.5rem;
-}
-
-.loginHover > p {
-    font-size: 0.8rem;
-}
-
-.passwordField {
-    width: 10rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.passwordField > div {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.passwordField > div > input {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.nameField {
-    width: 10rem;
-}
-
-.cartButton:hover {
-
+.headerButton > svg {
+    padding: 0rem;
 }
 
 .redirectButtons ul li:hover, .headerButton:hover, .loginButton:hover, .cartButton:hover, .hamburgerIcon:hover{
@@ -204,7 +157,7 @@ ul {
     width: 30px;
     height: 3px;
     margin: 2.5px auto;
-    background-color: antiquewhite;
+    background-color: var(--font-color);
     transition: all 0.3s ease-in-out;
 }
 .sidebar {
@@ -243,7 +196,7 @@ ul {
     right: 0;
     height: auto;
     width: 4px;
-    background-color: antiquewhite;
+    background-color: var(--font-color);
     border-radius: 2px;
 }
 

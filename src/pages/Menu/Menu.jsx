@@ -1,24 +1,46 @@
-import { useState } from "react";
-import 'styles/Menu.css'
-import MappingHelper from './MappingHelper';
-import { classicMenuArray, summerMenuArray, specialMenuArray, teaMenuArray, subsArray} from './products';
+import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
+import { useState, useEffect } from "react";
 
-function Menu() {
-    const [activeMenu, setActiveMenu] = useState(null);
-    const toggleMenu = (menuName) => {
-        setActiveMenu(prev => (prev === menuName ? null : menuName));
-    }
+function Menu({displayedTitle, classTitle, productArray, isActive, toggleMenu}) {
+    
+    const [width, setWidth] = useState(window.innerWidth)
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth)
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize)
+    },[]);
+    
+    const listOfItems = isActive 
+    ? productArray.map(item => 
+            <> {width > 1000 ? 
+                <li key={item.name} className={'menu-item'}>
+                    <span className="menu-name">{item.name}</span>
+                    <span className="menu-ingredients">{item.ingredients}</span> 
+                    <span className="menu-price">{item.price}</span>   
+                </li>
+                :
+                <>
+                    <li key={item.name} className={'menu-item-mobile'}>
+                        <span className="menu-name">{item.name}</span>
+                        <span className="menu-price">{item.price}</span>   
+                    </li>
+                    <span className="menu-ingredients">{item.ingredients}</span> 
+                </>
+                }
+            </>
+        ): null;
+
     return (
-        <div className="menu-container1">
-            <div className="menu-container2">
-                {MappingHelper("Klasyczne Menu", "classic", classicMenuArray, activeMenu, toggleMenu)}
-                {MappingHelper("Letnie Menu", "summer", summerMenuArray, activeMenu, toggleMenu)}
-                {MappingHelper("Special Menu", "special", specialMenuArray, activeMenu, toggleMenu)}
-                {MappingHelper("Bezkofeinowe", "tea", teaMenuArray, activeMenu, toggleMenu)}
-                {MappingHelper("Dodatki / Zamienniki", "subs", subsArray, activeMenu, toggleMenu)}
+        <div onClick={() => toggleMenu(classTitle)} className={classTitle+"-menu"}>
+            <div className="item-header">
+                <h2>{displayedTitle}:</h2>
+                <button className="qnsButton">
+                    {isActive ? (<RiArrowDropUpLine />) : (<RiArrowDropDownLine />)}
+                </button>
             </div>
+            {isActive && <ul className={'menu-list'}>{listOfItems}</ul>}
         </div>
     )
 }
 
-export default Menu
+export default Menu;

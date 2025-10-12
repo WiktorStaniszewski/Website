@@ -18,7 +18,7 @@
     width: 30rem;
     margin-left: 40px;
     border-radius: 20px;
-    border: 1px solid antiquewhite;
+    border: 1px solid var(--font-color);
 }
 .sec-2 div:nth-child(2) {
     max-width: 600px;
@@ -41,7 +41,7 @@
     position: sticky;
     justify-self: center;
     bottom: 0;
-    border: 1px solid antiquewhite;
+    border: 1px solid var(--font-color);
     margin: 40px 0;
     width: 10%;
 }
@@ -73,13 +73,13 @@
         border-radius: 20px;
     }
     .sec2 h1::after {
-        border-bottom: 1px solid white;
+        border-bottom: 1px solid var(--font-color);
     }
     .sec2 div:nth-child(1) img {
         width: 180%; /* Makes the image smaller */
         max-width: 300px; /* Limits its size */
         border-radius: 20px;
-        border: 1px solid antiquewhite;
+        border: 1px solid var(--font-color);
         margin: 40px 0;
         padding: 0;
     }
@@ -132,7 +132,7 @@
     position: sticky;
     justify-self: center;
     bottom: 0;
-    border: 1px solid antiquewhite;
+    border: 1px solid var(--font-color);
     margin: 40px 0;
     width: 70%;
 }
@@ -154,7 +154,7 @@
 
 
 .sec-2-3 {
-    color: antiquewhite;
+    color: var(--font-color);
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-evenly;
@@ -179,7 +179,7 @@
     position: sticky;
     justify-self: center;
     bottom: 0;
-    border: 1px solid antiquewhite;
+    border: 1px solid var(--font-color);
     margin: 40px 0;
     width: 70%;
 }
@@ -244,7 +244,7 @@
 .sec3 {
     padding: 0 7vw;
     margin: 0;
-    color: antiquewhite;
+    color: var(--font-color);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -267,8 +267,7 @@
     box-sizing: border-box;
     flex-shrink: none;
     margin-top: 30px;
-    background-color: #6F7BD4;
-    border: 0.1px solid antiquewhite;
+    border: 0.1px solid var(--font-color);
     border-radius: 5px;
     height: 320px;
     width: 220px;
@@ -295,7 +294,7 @@
 }
 .sec3 .container div i {
     cursor: pointer;
-    border: 1px solid antiquewhite;
+    border: 1px solid var(--font-color);
     padding: 5px 7px;
     border-radius: 50%;
     margin-bottom: 10px;
@@ -303,14 +302,13 @@
     transition: all 0.2s;
 }
 .sec3 .container div i:hover {
-    background-color: antiquewhite;
-    color: #7E89D6;
+    background-color: var(--font-color);
 }
 @media only screen and (max-width: 1000px) {
     .sec3 {
         padding: 0 0vw;
         margin: 40px 0;
-        color: antiquewhite;
+        color: var(--font-color);
     }
     .sec3 h1 {
         font-size: 2.5rem;
@@ -328,8 +326,7 @@
         cursor: pointer;
         margin-top: 30px;
         margin: 15px 0px;
-        background-color: #7E89D6;
-        border: 0.1px solid antiquewhite;
+        border: 0.1px solid var(--font-color);
         border-radius: 5px;
         height: 320px;
         width: 42vw;

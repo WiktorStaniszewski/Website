@@ -2,7 +2,7 @@ import { Routes, Route, useLocation  } from 'react-router-dom';
 import Layout from './Layout.jsx';
 import Home from '../pages/Home.jsx';
 import About from '../pages/About.jsx'
-import Menu from '../pages/Menu/Menu.jsx'
+import Menu from '../pages/Menu/Menus.jsx'
 import Contact from '../pages/Contact.jsx'
 import Shop from '../pages/Shop/Shop.jsx'
 import Blog from 'src/pages/Blog.jsx';
