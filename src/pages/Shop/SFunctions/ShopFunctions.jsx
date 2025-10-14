@@ -1,5 +1,6 @@
 import Card from "../SComponents/Card";
-import priceParser from "../SSidebar/Price/PriceParser";
+import priceParser from "../SSidebar/Price/priceParser";
+
 
 export const filterByQuery = (products, query) => {
   if (!query) return products;
@@ -44,14 +45,16 @@ export const filterByAll = (products, { category, price, flavors, cafe }) => {
 export const filteredData = (products, selected, query) => {
   let filteredProducts = filterByQuery(products, query);
   filteredProducts = filterByAll(filteredProducts, selected);
+  
+
 
   return (
-    <section className="card-container">
-      {filteredProducts.map(product => (
-        <div key={product.id || Math.random()}>
-          <Card product={product} />
-        </div>
-      ))}
-    </section>
+      <>
+        {filteredProducts.map(product => (
+          <div key={product.id || Math.random()}>
+            <Card product={product} />
+          </div>
+        ))}
+      </>
   );
 };

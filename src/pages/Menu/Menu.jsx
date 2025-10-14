@@ -1,24 +1,13 @@
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
-import { useState, useEffect } from "react";
+import { useViewport } from "components/hooks/useViewport.jsx";
 
 function Menu({displayedTitle, classTitle, productArray, isActive, toggleMenu}) {
     
-    const [width, setWidth] = useState(window.innerWidth)
-    useEffect(() => {
-        const handleResize = () => setWidth(window.innerWidth)
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize)
-    },[]);
+  const { isMobile } = useViewport();
     
     const listOfItems = isActive 
     ? productArray.map(item => 
-            <> {width > 1000 ? 
-                <li key={item.name} className={'menu-item'}>
-                    <span className="menu-name">{item.name}</span>
-                    <span className="menu-ingredients">{item.ingredients}</span> 
-                    <span className="menu-price">{item.price}</span>   
-                </li>
-                :
+            <> {isMobile ? 
                 <>
                     <li key={item.name} className={'menu-item-mobile'}>
                         <span className="menu-name">{item.name}</span>
@@ -26,6 +15,12 @@ function Menu({displayedTitle, classTitle, productArray, isActive, toggleMenu}) 
                     </li>
                     <span className="menu-ingredients">{item.ingredients}</span> 
                 </>
+                :
+                <li key={item.name} className={'menu-item'}>
+                    <span className="menu-name">{item.name}</span>
+                    <span className="menu-ingredients">{item.ingredients}</span> 
+                    <span className="menu-price">{item.price}</span>   
+                </li>
                 }
             </>
         ): null;

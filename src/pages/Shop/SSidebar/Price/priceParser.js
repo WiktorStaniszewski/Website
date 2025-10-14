@@ -1,7 +1,7 @@
 function priceParser(priceString) {
   if (!priceString || priceString === 'all') return null;
 
-    const parsed = JSON.parse(priceString); // safe for strings created by JSON.stringify
+    const parsed = JSON.parse(priceString);
     if (Array.isArray(parsed)) {
       const [min, max] = parsed;
       return [Number(min), max === null ? Infinity : Number(max)];

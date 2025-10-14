@@ -27,10 +27,10 @@
     transform: scaleX(101%) scaleY(101%);
 }
 
-.menu-container2 div:nth-child(2), .menu-container2 div:nth-child(4) {
+.menu-container2 div:nth-child(even) {
     backdrop-filter: blur(3px) brightness(70%);
 }
-.menu-container2 div:nth-child(2):hover, .menu-container2 div:nth-child(4):hover {
+.menu-container2 div:nth-child(even):hover {
     backdrop-filter: blur(3px) brightness(60%);
 }
 

@@ -1,10 +1,20 @@
 import 'styles/Shop.css'
+import { useViewport } from 'src/components/hooks/useViewport'
 
-function Products({result}) {
+function Products({filteredProducts}) {
+  const { isMobile } = useViewport();
   return (
-      <>
-        {result}
-      </>
+    <>
+    {!isMobile ? 
+      <section className="card-container">
+        {filteredProducts}
+      </section>
+      :
+      <section className="card-container-mobile">
+        {filteredProducts}
+      </section>
+      }
+    </>
   )
 }
 

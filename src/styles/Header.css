@@ -129,6 +129,7 @@ div.logo-hidden > a {
 .redirectButtons ul li:hover, .headerButton:hover, .loginButton:hover, .cartButton:hover, .hamburgerIcon:hover{
     background-color: var(--darker-bg);
     transition: background-color .3s;
+    box-shadow: 1px 1px 1px rgb(13, 12, 12);
 
 }
 .sidebar ul li:hover {
@@ -213,7 +214,7 @@ ul {
 }
 
 
-@media(max-width:1000px){
+@media(max-width:850px){
     .social-links {
         display: none;
     }

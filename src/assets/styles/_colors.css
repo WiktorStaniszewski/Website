@@ -1,13 +1,8 @@
 :root {
-    --header-footer-bg: #2d2f3a;
-    --darker-bg: #444655;
-    --hover-color: #545C8C;
-    --medium-shade: #7379ac;
-    --lighter-bg: #888ec2;
-    --light-shade: #9298cd;
-    --lighter-shade: #b3b8ee;
-    --lightest-shade: #d4d9ff;
-    --grey-fit: #a1a8d7;
+    --header-footer-bg: #24201d;
+    --darker-bg: rgb(71, 60, 50);
+    --hover-color: #594e36;
+    --medium-shade: #8f785d;
+    --accents: ;
     --font-color: antiquewhite;
-    --svg-lighter-background: ;
 }

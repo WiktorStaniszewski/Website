@@ -11,7 +11,7 @@ function Home() {
             <div className="image-text">
                 <h1>Body Espresso Bar</h1>
                 <h3>Kawiarnia z segmentu Specialty Coffee Kreatywnie w temacie kawy! Zero napinki! tylko dobre szoty </h3>
-                <NavLink to="menu" ><button className="btn-1">Zobacz Menu!</button></NavLink>
+                <NavLink style={{textDecoration: 'none'}} to="menu" ><button className="btn-1">Zobacz Menu!</button></NavLink>
             </div>
         </div>
 
