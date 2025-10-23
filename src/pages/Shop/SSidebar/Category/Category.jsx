@@ -3,8 +3,8 @@ import Input from 'pages/Shop/SComponents/Input'
 
 function Category({handleChange}) {
   return (
-    <div className='categoryDiv'>
-      <h2 className="shopSidebar-cat-title">Kategorie</h2>
+    <div className='block'>
+      <h2 className="categoryTitle">Kategorie</h2>
       <div>
         <Input 
           title="Wszystko"

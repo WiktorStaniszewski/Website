@@ -1,8 +1,10 @@
+@import "tailwindcss";
+
 body {
   background: url(images/Somnium-Background2.svg);
   color: var(--font-color);
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -10,7 +12,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  color: var(--font-color);
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+:root {
+    --header-footer-bg: #24201d;
+    --darker-bg: rgb(71, 60, 50);
+    --hover-color: #594e36;
+    --medium-shade: #8f785d;
+    --accents: ;
+    --font-color: antiquewhite;
+
+    /* font sizes*/
+    --font-h3: 18px;
+    --font-h2: 30px;
+    --font-h1: 48px;
 }

@@ -1,17 +1,17 @@
-import 'styles/Footer.css'
+import { Link } from 'react-router-dom'
 
 function Footer() {
     return(
-    <footer>
-        <div className="footersec">
-            <div className="ftr1">
+    <footer className='flex flex-col w-full bottom-0 bg-(--header-footer-bg) overflow-hidden'>
+        <div className='flex flex-row justify-evenly text-center px-[3vw] py-4 border-b'>
+            <div className='max-w-50'>
                 <div>
-                    <img src="/images/logo body_biale.png" alt="" id="body-logo2"></img>
-                    <h4>Body Espresso Bar</h4>
+                    <Link to="/"><img className='cursor-pointer w-50' src="images/logo body_biale.png" alt="logo" /></Link>
+                    <h4>Espresso Bar</h4>
                 </div>
             </div>
         </div>
-        <div className="footersec2">&copy; All Rights Reserved by Wiktor Staniszewski</div>
+        <div className="text-center text-sm">&copy; All Rights Reserved by Wiktor Staniszewski</div>
     </footer>
 )}
 

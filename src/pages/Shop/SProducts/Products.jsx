@@ -6,11 +6,11 @@ function Products({filteredProducts}) {
   return (
     <>
     {!isMobile ? 
-      <section className="card-container">
+      <section className="flex flex-wrap mt-8 z-[-2] min-h-screen">
         {filteredProducts}
       </section>
       :
-      <section className="card-container-mobile">
+      <section className="flex justify-center flex-wrap z-[-2] min-h-screen">
         {filteredProducts}
       </section>
       }

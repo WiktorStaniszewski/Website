@@ -3,7 +3,7 @@ import { ViewportContext } from "./ViewportContext";
 
 export function ViewportProvider({ children }) {
   const [width, setWidth] = useState(window.innerWidth);
-  const isMobile = width <= 850;
+  const isMobile = width <= 1024;
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);

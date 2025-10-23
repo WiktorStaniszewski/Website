@@ -4,7 +4,7 @@ import Input from 'pages/Shop/SComponents/Input'
 function Price({handleChange}) {
   return (
     <div>
-      <h2 className="shopSidebar-cat-title">Cena</h2>
+      <h2 className="categoryTitle">Cena</h2>
       <Input 
         title="Wszystko"
         value=""

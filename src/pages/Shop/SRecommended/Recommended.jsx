@@ -1,16 +1,14 @@
 import 'styles/Shop.css'
-import { useViewport } from 'src/components/hooks/useViewport';
 
 function Recommended({handleClick}) {
-    const { isMobile } = useViewport();
     return (
-        <div className={!isMobile ? 'recommended-section' : 'recommended-section-mobile'}>
-            <h2 className='recommended-title'>Recommended</h2>
-            <div className="recommended-flex">
-                <button onClick={handleClick} className='rec-btn' value="">Wszystko</button>
-                <button onClick={handleClick} className='rec-btn' value="ziarna">Ziarna</button>
-                <button onClick={handleClick} className='rec-btn' value="zaparzarki">Zaparzarki</button>
-                <button onClick={handleClick} className='rec-btn' value="akcesoria">Akcesoria</button>
+        <div className='flex flex-col justify-center items-center recommended-section lg:items-start'>
+            <h2 className='flex justify-center items-center py-6 font-semibold text-2xl mx-5'>Recommended</h2>
+            <div className='grid grid-cols-2 gap-4 justify-center items-center mb-6 px-4 lg:flex lg:flex-row '>
+                <button onClick={handleClick} className='mainButton text-sm border-0' value="">Wszystko</button>
+                <button onClick={handleClick} className='mainButton text-sm' value="ziarna">Ziarna</button>
+                <button onClick={handleClick} className='mainButton text-sm' value="zaparzarki">Zaparzarki</button>
+                <button onClick={handleClick} className='mainButton text-sm' value="akcesoria">Akcesoria</button>
             </div>
         </div>
     )

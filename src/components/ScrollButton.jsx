@@ -1,4 +1,3 @@
-import 'styles/ScrollButton.css'
 import { RiArrowDropUpLine } from "react-icons/ri";
 import { useState, useEffect } from 'react';
 
@@ -28,11 +27,13 @@ function ScrollButton() {
 		});
 	};
 
+  
+
 
   return (
         <button 
           onClick={scrollToTop} 
-          className={`scrollToTopButton ${visible ? 'show' : ''}`}>
+          className={`fixed bottom-10 right-4 md:bottom-20 md:right-14 flex justify-center items-center w-14 h-14 text-3xl bg-transparent backdrop-brightness-80 transition-opacity duration-500 ease rounded-2xl shadow-lg hover:backdrop-brightness-110 ${visible ? 'opacity-100 cursor-pointer' : 'opacity-0 pointer-events-none'}`}>
             <RiArrowDropUpLine />
         </button>
   );

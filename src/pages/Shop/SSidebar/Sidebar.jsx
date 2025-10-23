@@ -11,10 +11,10 @@ function Sidebar({handleCategoryChange, handlePriceChange, handleFlavorsChange, 
   return (
     <>
     {!isMobile ? 
-      <div className='shopSidebarContainer'>
-        <section className="shopSidebar">
-          <div className="logo-container">
-              <h1><BsShop className='react-icons'/></h1>
+      <div className='flex absolute pl-4 w-1/8 mt-5 flex-col'>
+        <section >
+          <div className="z-4 relative mb-13 text-3xl">
+              <h1><BsShop className=''/></h1>
           </div>
           <div className="scrollableContainer">
             <Category handleChange={handleCategoryChange} />
@@ -25,10 +25,10 @@ function Sidebar({handleCategoryChange, handlePriceChange, handleFlavorsChange, 
         </section>
       </div> 
       :
-      <div className='shopSidebarContainer-mobile'>
-        <section className="shopSidebar">
-          <div className="logo-container">
-              <h1><BsShop className='react-icons'/></h1>
+      <div className='hidden'>
+        <section>
+          <div className="z-4 relative">
+              <h1><BsShop className=''/></h1>
           </div>
           <div className="scrollableContainer">
             <Category handleChange={handleCategoryChange} />

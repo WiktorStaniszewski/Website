@@ -6,6 +6,7 @@ import React from 'react';
 import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ScrollManager from './components/ScrollManager.jsx';
+import 'styles/index.css';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>

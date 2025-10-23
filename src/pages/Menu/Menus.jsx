@@ -1,25 +1,25 @@
-import { useState } from "react";
 import 'styles/Menu.css'
 import Menu from './Menu';
-import { classicMenuArray, summerMenuArray, specialMenuArray, teaMenuArray, subsArray} from './products';
+import { useMenus } from 'hooks/Menu/useMenus';
+import { 
+    classicMenuArray, 
+    summerMenuArray, 
+    specialMenuArray, 
+    teaMenuArray, 
+    subsArray
+} from './products';
 
 function Menus() {
-    const [menu, setMenus] = useState({
+    const { menu, toggleMenu } = useMenus({
         classic: false,
         summer: false,
         special: false,
         tea: false,
         subs: false,
     });
-    const toggleMenu = (menuName) => {
-        setMenus(prev => ({
-            ...prev,
-            [menuName]: !prev[menuName],
-        }))
-    }
     return (
-        <div className="menu-container1">
-            <div className="menu-container2">
+        <div className="flex flex-col p-8 min-h-screen">
+            <div className="flex items-center flex-col justify-center flex-wrap menuContainer">
                 <Menu 
                     displayedTitle="Klasyczne Menu" 
                     classTitle="classic" 

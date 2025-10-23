@@ -4,7 +4,7 @@ import Input from 'pages/Shop/SComponents/Input'
 function Flavors({handleChange}) {
   return (
     <div>
-      <h2 className="shopSidebar-cat-title">Nuty Smakowe</h2>
+      <h2 className="categoryTitle">Nuty Smakowe</h2>
       <Input 
           title="Wszystko"
           value=""

@@ -5,7 +5,7 @@ import Input from 'pages/Shop/SComponents/Input'
 function Cafe({handleChange}) {
   return (
     <div>
-      <h2 className="shopSidebar-cat-title">Kawiarnia</h2>
+      <h2 className="categoryTitle">Kawiarnia</h2>
       <Input 
         title="Wszystko"
         value=""
