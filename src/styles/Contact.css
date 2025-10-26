@@ -5,49 +5,54 @@
     }
 }
 
-.form > h1 {
-    font-size: 21px;
-    font-weight: 600;
-}
 
-form {
-    p {
-        font-size: 18px;
-        font-weight: 500;
-        user-select: none;
+
+.form {
+    & > h1 {
+        font-size: 21px;
+        font-weight: 600;
     }
-    input{
-        box-shadow: 2px 4px 8px var(--darker-bg);
-        accent-color: var(--header-footer-bg);
-        margin-right: 4px;
-        &:not([type="radio"]):not([type="checkbox"]) {
-            width: 100%;
+    form {
+        p {
+            font-size: 18px;
+            font-weight: 500;
+            user-select: none;
         }
-    }
-    label {
-        & > p {
-            line-height: 1.5rem;
-            &::before {
-                content: '⭐';
+        input { 
+            color-scheme: light dark;
+            margin-top: 5px;
+            box-shadow: 2px 4px 8px var(--darker-bg);
+            accent-color: var(--medium-shade);
+            margin-right: 4px;
+            &:not([type="radio"]):not([type="checkbox"]) {
+                width: 100%;
             }
         }
-    }
-    
-    & > fieldset {
-        & > legend {
-            line-height: 1.5rem;
-            &::before {
-                content: '⭐';
+        label {
+            & > p {
+                line-height: 1.5rem;
+                &::before {
+                    content: '⭐';
+                }
             }
         }
-        & > label {
-            font-size: 17px;
-            display: flex;
-            align-items: center;
-            flex-direction: row; 
+        
+        & > fieldset {
+            & > legend {
+                line-height: 1.5rem;
+                &::before {
+                    content: '⭐';
+                }
+            }
+            & > label {
+                font-size: 17px;
+                display: flex;
+                align-items: center;
+                flex-direction: row; 
+            }
         }
-    }
-    button:hover {
-        transform: scale(1.03) !important;
+        > button:hover {
+            transform: scale(1.03) !important;
+        }
     }
 }

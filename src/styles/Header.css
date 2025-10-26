@@ -113,7 +113,7 @@ ul {
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    @media(max-width:1024px) {
+    @media( width < 1024px ) {
         & {
             display: flex;
             justify-content: center;
@@ -167,7 +167,7 @@ ul {
         cursor: pointer;
         padding: 40px 40vw;
     };
-    @media (width < 1024px){
+    @media (max-width: 1024px){
         display: flex;
     }
 }

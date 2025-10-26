@@ -58,7 +58,7 @@
     padding: 0;
     text-align: left;
     line-height: 1;
-    @media (width < 1024px) {
+    @media (max-width: 1024px) {
         line-height: 1.2;
         font-size: 0.9rem;
     }
