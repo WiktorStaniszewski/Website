@@ -61,20 +61,6 @@ input::placeholder {
     flex-direction: column;
     z-index: 10;
 }
-.card {
-    backdrop-filter: brightness(85%) blur(7px);
-    border-radius: 10px;
-    max-width: 300px;
-    margin: 1.5rem;
-    padding: 1.5rem;
-    cursor: pointer;
-    box-shadow: 2px 2px 10px var(--darker-bg);
-    transition: all 0.2s ease-in-out;
-    & :hover {
-        backdrop-filter: brightness(75%);
-        transform: scaleX(102%) scaleY(102%);
-    }
-}
 
 
 .card-image {

@@ -1,15 +1,15 @@
 import 'styles/App.css'
 import { Routes, Route, useLocation  } from 'react-router-dom';
-import Layout from 'components/Layout.jsx';
+import Layout from 'components/Layout';
 import { ViewportProvider } from "components/Context/ViewportProvider";
-import Home from 'pages/Home.jsx';
-import About from 'pages/About.jsx'
-import Menus from 'pages/Menu/Menus.jsx'
-import Contact from 'pages/Contact.jsx'
-import Shop from 'pages/Shop/Shop.jsx'
-import Blog from 'src/pages/Blog.jsx';
+import Home from 'pages/Home';
+import About from 'pages/About'
+import Menus from 'pages/Menu/Menus'
+import Recruitment from 'src/pages/Recruitment'
+import Shop from 'src/pages/Shop/Shop'
+import Blog from 'src/pages/Blog';
 import AccountManager from 'pages/AccountManager';
-import { PageWrapper, LayoutWrapper } from 'components/functions/PageWrappers.jsx';
+import { PageWrapper, LayoutWrapper } from 'components/functions/PageWrappers';
 import { AnimatePresence } from 'framer-motion';
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
                 <Route index element={<PageWrapper><Home /></PageWrapper>}/>
                 <Route path="about" element={<PageWrapper><About /></PageWrapper>}/>
                 <Route path="menu" element={<PageWrapper><Menus /></PageWrapper>}/>
-                <Route path="contact" element={<PageWrapper><Contact /></PageWrapper>}/>
+                <Route path="recruitment" element={<PageWrapper><Recruitment /></PageWrapper>}/>
                 <Route path="shop" element={<PageWrapper><Shop /></PageWrapper>}/>
                 <Route path="blog" element={<PageWrapper><Blog /></PageWrapper>}/>
                 <Route path="accManager" element={<PageWrapper><AccountManager /></PageWrapper>}/>

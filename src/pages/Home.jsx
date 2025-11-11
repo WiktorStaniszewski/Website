@@ -2,7 +2,7 @@ import { useToggle } from "@uidotdev/usehooks";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 
-function Home() {
+export default function Home() {
     return (
     <>
         <div className='w-screen relative inline-block h-screen image-wrap' aria-label='Somnium Cafe Bar'>
@@ -38,14 +38,14 @@ function Home() {
     </>
 )}
 
-function QuestionField({title, content}) {
+const QuestionField = ({ title, content }) => {
     const [on, toggle] = useToggle(false);
     return (
         <div onClick={toggle} className='cursor-pointer backdrop-brightness-85 backdrop-blur-sm flex justify-between rounded-3xl mt-2 items-center py-8 px-8 transition-all duration-100 ease-in shadow-[1px_3px_10px_var(--header-footer-bg)] hover:scale-102 lg:hover:backdrop-brightness-75'>
             <div className='m-0 w-full'>
                 <h3 className='font-semibold text-(--font-h3) flex flex-row justify-between items-center'>
                     {title}
-                    <button className='flex items-start h-full'>
+                    <button className='flex items-start h-full cursor-pointer'>
                         {on ? <i><FaMinus /></i> : <i><FaPlus /></i>}
                     </button>
                 </h3>
@@ -54,5 +54,3 @@ function QuestionField({title, content}) {
         </div>
     )
 }
-
-export default Home

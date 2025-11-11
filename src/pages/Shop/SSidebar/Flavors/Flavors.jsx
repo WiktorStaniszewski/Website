@@ -3,27 +3,27 @@ import Input from 'pages/Shop/SComponents/Input'
 
 function Flavors({handleChange}) {
   return (
-    <div>
-      <h2 className="categoryTitle">Nuty Smakowe</h2>
-      <Input 
-          title="Wszystko"
-          value=""
-          handleChange={handleChange}
-          number={3}
-      />
-      <Input 
-          title="Klasyki"
-          value="klasyki"
-          handleChange={handleChange}
-          number={3}
-      />
-      <Input 
-          title="Owocowe"
-          value="owocowe"
-          handleChange={handleChange}
-          number={3}
-      />
-    </div>
+      <fieldset>
+        <legend className="categoryTitle">Nuty Smakowe</legend>
+        <Input 
+            title="Wszystko"
+            value=""
+            handleChange={handleChange}
+            number={3}
+        />
+        <Input 
+            title="Klasyki"
+            value="klasyki"
+            handleChange={handleChange}
+            number={3}
+        />
+        <Input 
+            title="Owocowe"
+            value="owocowe"
+            handleChange={handleChange}
+            number={3}
+        />
+      </fieldset>
   )
 }
 

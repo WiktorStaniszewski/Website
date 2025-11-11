@@ -3,9 +3,11 @@
     "baseUrl": ".",
     "paths": {
       "src/*": ["./src/*"],
+      "styles/*": ["./src/styles/*"],
       "components/*":["./src/components/*"],
-      "assets": ["./src/assets/*"],
-      "pages": ["./src/pages/*"],
-    }
-  }
+      "assets/*": ["./src/assets/*"],
+      "pages/*": ["./src/pages/*"],
+      "hooks/*": ["./src/components/hooks/*"]
+    },
+  },
 }

@@ -8,7 +8,8 @@ const products =
             type:"espresso", 
             flavours:"klasyki",
             image:"gwatemala-meissa.jpg", 
-            shop:"Body"
+            shop:"Body",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_2", 
@@ -18,7 +19,8 @@ const products =
             type:"filter", 
             flavours:"klasyki",
             image:"kenia_matunda.jpg", 
-            shop:"Body"
+            shop:"Body",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_3", 
@@ -28,7 +30,8 @@ const products =
             type:"espresso", 
             flavours:"klasyki",
             image:"Rwanda-Gisanga.jpg", 
-            shop:"Body"
+            shop:"Body",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_4", 
@@ -38,7 +41,8 @@ const products =
             type:"filter", 
             flavours:"owocowe",
             image:"gwatemala-meissa.jpg", 
-            shop:"Body"
+            shop:"Body",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_5", 
@@ -48,7 +52,8 @@ const products =
             type:"espresso", 
             flavours:"owocowe",
             image:"kenia_matunda.jpg", 
-            shop:"Body"
+            shop:"Body",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_6", 
@@ -58,7 +63,8 @@ const products =
             type:"filter", 
             flavours:"owocowe",
             image:"Rwanda-Gisanga.jpg", 
-            shop:"Body"
+            shop:"Body",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_7", 
@@ -68,7 +74,8 @@ const products =
             type:"espresso", 
             flavours:"klasyki",
             image:"gwatemala-meissa.jpg", 
-            shop:"Body"
+            shop:"Body",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_8", 
@@ -78,7 +85,8 @@ const products =
             type:"filter", 
             flavours:"klasyki",
             image:"kenia_matunda.jpg", 
-            shop:"Body"
+            shop:"Body",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_9", 
@@ -88,7 +96,8 @@ const products =
             type:"espresso", 
             flavours:"klasyki",
             image:"Rwanda-Gisanga.jpg", 
-            shop:"Somnium"
+            shop:"Somnium",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_10", 
@@ -98,7 +107,8 @@ const products =
             type:"filter", 
             flavours:"owocowe",
             image:"gwatemala-meissa.jpg", 
-            shop:"Somnium"
+            shop:"Somnium",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_11", 
@@ -108,7 +118,8 @@ const products =
             type:"espresso", 
             flavours:"owocowe",
             image:"kenia_matunda.jpg", 
-            shop:"Somnium"
+            shop:"Somnium",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_12", 
@@ -118,7 +129,8 @@ const products =
             type:"filter", 
             flavours:"owocowe",
             image:"Rwanda-Gisanga.jpg", 
-            shop:"Somnium"
+            shop:"Somnium",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_13", 
@@ -128,7 +140,8 @@ const products =
             type:"espresso", 
             flavours:"owocowe",
             image:"gwatemala-meissa.jpg", 
-            shop:"Somnium"
+            shop:"Somnium",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_14", 
@@ -138,7 +151,8 @@ const products =
             type:"filter", 
             flavours:"owocowe",
             image:"kenia_matunda.jpg", 
-            shop:"Somnium"
+            shop:"Somnium",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_15", 
@@ -148,7 +162,8 @@ const products =
             type:"espresso", 
             flavours:"klasyki",
             image:"Rwanda-Gisanga.jpg", 
-            shop:"Somnium"
+            shop:"Somnium",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_16", 
@@ -158,7 +173,8 @@ const products =
             type:"filter", 
             flavours:"klasyki",
             image:"gwatemala-meissa.jpg", 
-            shop:"Somnium"
+            shop:"Somnium",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_17", 
@@ -168,7 +184,8 @@ const products =
             type:"espresso", 
             flavours:"klasyki",
             image:"kenia_matunda.jpg",
-            shop:"Body"
+            shop:"Body",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_18", 
@@ -178,7 +195,8 @@ const products =
             type:"filter", 
             flavours:"klasyki",
             image:"Rwanda-Gisanga.jpg", 
-            shop:"Body"
+            shop:"Body",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_19", 
@@ -188,7 +206,8 @@ const products =
             type:"espresso", 
             flavours:"klasyki",
             image:"gwatemala-meissa.jpg", 
-            shop:"Body"
+            shop:"Body",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"product_20", 
@@ -198,7 +217,8 @@ const products =
             type:"filter", 
             flavours:"klasyki",
             image:"kenia_matunda.jpg", 
-            shop:"Body"
+            shop:"Body",
+            description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
             name:"Hario V60", 

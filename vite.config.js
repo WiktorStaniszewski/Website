@@ -15,7 +15,7 @@ export default defineConfig({
       components: "/src/components",
       assets: "/src/assets",
       pages: "/src/pages",
-      hooks: "/src/components/hooks/",
+      hooks: "/src/components/hooks",
     },
   },
 })

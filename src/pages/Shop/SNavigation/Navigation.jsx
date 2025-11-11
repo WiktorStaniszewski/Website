@@ -8,7 +8,7 @@ function Navigation({handleInputChange}) {
   const { isMobile } = useViewport();
   return (
     <>
-      <nav className='flex sticky bottom-0 lg:top-16 backdrop-blur-lg backdrop-brightness-60 border-b justify-between items-center px-5 py-3 z-2 lg:pl-[18vw]'>
+      <nav className='flex sticky bottom-4 lg:top-16 backdrop-blur-lg backdrop-brightness-60 border-b justify-between items-center px-5 py-3 z-2 lg:pl-[15vw] rounded-3xl'>
         <div className="w-screen">
           <div className="nav-container">
             <input 

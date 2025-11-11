@@ -47,7 +47,7 @@ function Menu({displayedTitle, classTitle, productArray, isActive, toggleMenu}) 
             min-h-24'
         >
             <div className="flex items-center justify-between text-base">
-                <h1 className='text-2xl font-medium'>{displayedTitle}:</h1>
+                <h1 className='text-xl font-bold'>{displayedTitle}:</h1>
                 <button className="flex items-center justify-end overflow-hidden h-16 w-25 cursor-pointer text-3xl">
                     {isActive ? (<RiArrowDropUpLine />) : (<RiArrowDropDownLine />)}
                 </button>
