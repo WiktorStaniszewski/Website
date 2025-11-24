@@ -1,6 +1,18 @@
 import { motion as Motion} from 'framer-motion'
+import { useLayoutEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
-function LayoutWrapper({ children }) {
+const Wrapper = ({ children }) => {
+  const location = useLocation();
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [location.pathname]);
+
+  return children;
+};
+
+const LayoutWrapper = ({ children }) => {
   return (
     <Motion.div
     initial={{ opacity: 1, y: 0 }}
@@ -12,7 +24,7 @@ function LayoutWrapper({ children }) {
     </Motion.div>
   )
 }
-function PageWrapper({ children }) {
+const PageWrapper = ({ children }) => {
   return (
     <Motion.div
     initial={{ opacity: 0, y: -20 }}
@@ -26,6 +38,7 @@ function PageWrapper({ children }) {
 }
 
 export {
-    PageWrapper,
-    LayoutWrapper
+  Wrapper,
+  PageWrapper,
+  LayoutWrapper
 } 

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useClickAway } from '@uidotdev/usehooks';
 
-function useHeaderLogic() {
+export default function useHeaderLogic() {
   const [isShown, setIsShown] = useState(false);
 
-  const showOnClick = () => {
+  const showOnHover = () => {
     setIsShown(prev => !prev);
   };
 
@@ -47,7 +47,7 @@ function useHeaderLogic() {
 
   return {
     isShown,
-    showOnClick,
+    showOnHover,
     ref,
     isActive,
     toggleClass,
@@ -55,4 +55,3 @@ function useHeaderLogic() {
   };
 }
 
-export default useHeaderLogic;

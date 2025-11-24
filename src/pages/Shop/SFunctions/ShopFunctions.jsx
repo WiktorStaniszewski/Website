@@ -1,4 +1,5 @@
 import Card from "../SComponents/Card";
+
 import priceParser from "../SSidebar/Price/priceParser";
 
 

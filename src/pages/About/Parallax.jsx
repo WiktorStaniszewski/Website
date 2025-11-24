@@ -1,5 +1,4 @@
 function PartnerCard({ name, url }) {
-
     return (
         <a href={url} target="_blank" rel="noopener noreferrer" className="cursor-pointer">
             <div className="flex items-center justify-center flex-col hover:scale-105 hover:brightness-90 transition-all duration-300 ease-in-out">

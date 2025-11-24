@@ -43,15 +43,15 @@
             width: 100%;
             transform: scaleX(0);
             height: 1px;
-            bottom: 0;
+            bottom: -1px;
             left: 0;
             background-color: antiquewhite;
-            transform-origin: bottom center;
+            transform-origin: bottom right;
             transition: transform 0.25s ease-out;
         }
         &:hover::after {
             transform: scaleX(1);
-            transform-origin: bottom center;
+            transform-origin: bottom left;
         }
         }
     }
@@ -64,7 +64,6 @@
     content: "";
     height: 1px;
 }
-
 
 
 .logo-visible {

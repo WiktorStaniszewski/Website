@@ -18,7 +18,7 @@ input::placeholder {
 }
 
 
-@media(max-width:1000px) {
+@media(max-width:1023px) {
     .search-right {
         width: 100vw;
         padding-left: 11.5rem;
