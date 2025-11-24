@@ -47,7 +47,7 @@ function Header() {
               </a>
             </ul>
           </div>
-          <Link to="/"><img className='block pt-0 w-35 lg:w-60 cursor-pointer' src="/images/logo body_biale.png" alt="logo" /></Link>
+          <Link to="/"><img className='block pt-0 w-35 lg:w-60 cursor-pointer' src="images/logo body_biale.png" alt="logo" /></Link>
           <div className='loginCartDiv '>
             <div>
               <div onClick={showOnHover} className='loginButton headerButton'>
@@ -73,7 +73,7 @@ function Header() {
       <div className="redirectButtons hidden lg:flex lg:flex-row lg:justify-evenly bg-(--header-footer-bg) sticky top-0 z-9 w-screen">
         <ul>
           <div className={`flex justify-center items-center transition-all duration-500 animate-[enlarge_1s_ease-in-out_infinite] ${showLogo ? "logo-visible" : "logo-hidden"}`}>
-            <Link to="/"><img className='transition-all duration-500 ease-in-out navigation-logo' src="/images/logo body_biale.png" alt="logo" /></Link>
+            <Link to="/"><img className='transition-all duration-500 ease-in-out navigation-logo' src="images/logo body_biale.png" alt="logo" /></Link>
           </div>
           <NavLink to="/" className="navbarLink"><li>Home</li></NavLink>
           <NavLink to="shop" className="navbarLink"><li>Sklep</li></NavLink>

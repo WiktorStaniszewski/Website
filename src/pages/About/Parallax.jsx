@@ -3,7 +3,7 @@ function PartnerCard({ name, url }) {
         <a href={url} target="_blank" rel="noopener noreferrer" className="cursor-pointer">
             <div className="flex items-center justify-center flex-col hover:scale-105 hover:brightness-90 transition-all duration-300 ease-in-out">
                 <img
-                    src={`/images/Partners/${name.toLowerCase()}.jpg`}
+                    src={`images/Partners/${name.toLowerCase()}.jpg`}
                     alt={name}
                     className="w-50 h-50 object-cover mb-6 shadow-lg rounded-3xl"
                 />
