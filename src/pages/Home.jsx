@@ -6,7 +6,7 @@ export default function Home() {
     return (
     <>
         <div className='w-screen relative inline-block h-screen image-wrap' aria-label='Somnium Cafe Bar'>
-            <img src="../images/tlo1.jpg" alt="" className='w-full h-full filter brightness-50 relative object-cover object-[50%] align-bottom lg:(object-center lg:h-11/12)' />
+            <img src="images/tlo1.jpg" alt="" className='w-full h-full filter brightness-50 relative object-cover object-[50%] align-bottom lg:(object-center lg:h-11/12)' />
             <div className='flex absolute top-50 w-full flex-col items-center justify-center text-center px-4 text-(--font-color) text-xs gap-4'>
                 <h1 className='flex text-5xl overflow-hidden font-semibold p-4'>Somnium Cafe Bar</h1>
                 <h3 className='py-5 text-lg overflow-hidden text-center font-medium mb-'>Kawiarnia z segmentu Specialty Coffee Kreatywnie w temacie kawy! Zero napinki! tylko dobre szoty </h3>
