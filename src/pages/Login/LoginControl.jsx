@@ -32,7 +32,6 @@ export default function LoginControl() {
 
   return (
     <div className="loginHover flex fixed right-5 lg:right-15 cursor-default flex-col items-center bg-transparent backdrop-brightness-70 backdrop-blur-[11px] shadow-[1px_2px_4px_var(--header-footer-bg)] rounded-3xl p-4">
-
       <h2 className="text-2xl pb-4">
         {user ? "Witaj ponownie!" : "Hejka! Zaloguj się :)"}
       </h2>

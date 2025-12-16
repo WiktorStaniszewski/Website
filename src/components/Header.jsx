@@ -29,8 +29,8 @@ function Header() {
 
   return (
     <>
-      <div className="lg:bg-(--header-footer-bg) lg:py-0 flex items-center flex-col transition-all duration-500 ease-in right-0 left-0 sticky top-0 lg:static z-20 lg:pt-2 mb-1 lg:mb-0">
-        <div className={`${isActive ? 'bg-(--header-footer-bg)':''} flex items-center justify-between w-10/10 lg:my-10 px-2 lg:px-20 h-22 lg:h-0 z-20 rounded-3xl not-lg:mt-2 transition-colors delay-500 ease-in-out duration-200`}>
+      <div className="lg:bg-(--header-footer-bg) lg:py-0 flex items-center flex-col transition-all duration-500 ease-in sticky top-0 lg:static z-20 lg:pt-2 mb-1 lg:mb-0">
+        <div className={`${isActive ? 'bg-(--header-footer-bg)':''} flex items-center justify-between w-9/10 lg:my-10 px-2 lg:px-20 h-22 lg:h-0 z-20 rounded-3xl not-lg:mt-2 transition-colors ease-in-out duration-200`}>
           <div>
             <div
               className={isActive ? 'hamburgerIcon' : 'hamburgerIcon navActive'}

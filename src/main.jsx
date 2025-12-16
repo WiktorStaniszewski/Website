@@ -14,7 +14,7 @@ import App from './App';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-      <Router basename="/Website">
+      <Router> {/*basename="/Website"*/}
         <AuthProvider>
           <Wrapper>
             <App />

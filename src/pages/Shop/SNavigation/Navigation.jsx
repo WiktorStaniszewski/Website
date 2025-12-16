@@ -6,19 +6,18 @@ import { RxHamburgerMenu } from "react-icons/rx";
 
 import { useViewport } from 'src/components/hooks/useViewport'
 
-export default function Navigation({query, handleInputChange, toggleFilterMenu}) {
+export default function Navigation({filters, toggleFilterMenu}) {
   const { isMobile } = useViewport();
   
   return (
-    <>
-      <nav className='flex sticky bottom-2 lg:top-16 backdrop-blur-lg backdrop-brightness-60 border-b justify-between items-center px-5 py-3 z-2 lg:pl-[15vw] rounded-3xl'>
+      <nav className='flex bottom-2 lg:top-16 backdrop-blur-lg backdrop-brightness-60 border-b justify-between items-center px-5 py-3 z-2 lg:pl-[15vw] rounded-3xl'>
           <div className="nav-container">
             <input 
-              value={query}
+              value={filters.query}
               type="text" 
               className='pl-0! lg:w-12/10 w-8/10' 
               placeholder='Enter your search' 
-              onChange={handleInputChange}
+              onChange={filters.handleInputChange}
             />
           </div>
           <div className="flex justify-between gap-4">
@@ -34,7 +33,6 @@ export default function Navigation({query, handleInputChange, toggleFilterMenu})
             }
           </div>
       </nav> 
-    </>
   )
 }
 

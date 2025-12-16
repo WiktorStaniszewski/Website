@@ -1,21 +1,10 @@
-import 'styles/Shop.css'
-import { useViewport } from 'src/components/hooks/useViewport'
-
-function Products({filteredProducts}) {
-  const { isMobile } = useViewport();
+export default function Products({filters}) {
   return (
     <>
-    {!isMobile ? 
-      <section className="flex justify-around flex-wrap mt-8 z-[-2] min-h-screen">
-        {filteredProducts}
+      <section className={`flex justify-around flex-wrap lg:mt-8 lg:z-[-2] lg:min-h-screen min-h-screen gap-4`}>
+        {filters.filteredProducts}
       </section>
-      :
-      <section className="flex justify-around flex-wrap z-[-2] min-h-screen gap-4">
-        {filteredProducts}
-      </section>
-      }
     </>
   )
 }
 
-export default Products

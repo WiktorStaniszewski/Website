@@ -5,10 +5,9 @@ const products =
             price:1, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"espresso", 
-            flavours:"klasyki",
+            type:"Pod espresso", 
+            flavours:"Klasyczny ",
             image:"gwatemala-meissa.jpg", 
-            shop:"Body",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -16,10 +15,9 @@ const products =
             price:2, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"filter", 
-            flavours:"klasyki",
+            type:"Do alternatyw", 
+            flavours:"Klasyczny ",
             image:"kenia_matunda.jpg", 
-            shop:"Body",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -27,10 +25,9 @@ const products =
             price:50, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"espresso", 
-            flavours:"klasyki",
+            type:"Pod espresso", 
+            flavours:"Klasyczny ",
             image:"Rwanda-Gisanga.jpg", 
-            shop:"Body",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -38,10 +35,9 @@ const products =
             price:4, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"filter", 
-            flavours:"owocowe",
+            type:"Do alternatyw", 
+            flavours:"Owocowy ",
             image:"gwatemala-meissa.jpg", 
-            shop:"Body",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -49,10 +45,9 @@ const products =
             price:5, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"espresso", 
-            flavours:"owocowe",
+            type:"Pod espresso", 
+            flavours:"Owocowy ",
             image:"kenia_matunda.jpg", 
-            shop:"Body",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -60,10 +55,9 @@ const products =
             price:90, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"filter", 
-            flavours:"owocowe",
+            type:"Do alternatyw", 
+            flavours:"Owocowy ",
             image:"Rwanda-Gisanga.jpg", 
-            shop:"Body",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -71,10 +65,9 @@ const products =
             price:72, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"espresso", 
-            flavours:"klasyki",
+            type:"Pod espresso", 
+            flavours:"Klasyczny ",
             image:"gwatemala-meissa.jpg", 
-            shop:"Body",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -82,10 +75,9 @@ const products =
             price:72, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"filter", 
-            flavours:"klasyki",
+            type:"Do alternatyw", 
+            flavours:"Klasyczny ",
             image:"kenia_matunda.jpg", 
-            shop:"Body",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -93,10 +85,9 @@ const products =
             price:72, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"espresso", 
-            flavours:"klasyki",
+            type:"Pod espresso", 
+            flavours:"Klasyczny ",
             image:"Rwanda-Gisanga.jpg", 
-            shop:"Somnium",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -104,10 +95,9 @@ const products =
             price:45, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"filter", 
-            flavours:"owocowe",
+            type:"Do alternatyw", 
+            flavours:"Owocowy ",
             image:"gwatemala-meissa.jpg", 
-            shop:"Somnium",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -115,10 +105,9 @@ const products =
             price:110, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"espresso", 
-            flavours:"owocowe",
+            type:"Pod espresso", 
+            flavours:"Owocowy ",
             image:"kenia_matunda.jpg", 
-            shop:"Somnium",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -126,10 +115,9 @@ const products =
             price:123, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"filter", 
-            flavours:"owocowe",
+            type:"Do alternatyw", 
+            flavours:"Owocowy ",
             image:"Rwanda-Gisanga.jpg", 
-            shop:"Somnium",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -137,10 +125,9 @@ const products =
             price:121, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"espresso", 
-            flavours:"owocowe",
+            type:"Pod espresso", 
+            flavours:"Owocowy ",
             image:"gwatemala-meissa.jpg", 
-            shop:"Somnium",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -148,10 +135,9 @@ const products =
             price:120, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"filter", 
-            flavours:"owocowe",
+            type:"Do alternatyw", 
+            flavours:"Owocowy ",
             image:"kenia_matunda.jpg", 
-            shop:"Somnium",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -159,10 +145,9 @@ const products =
             price:71, 
             company:"PalomaRoastery", 
             category:"ziarna",
-            type:"espresso", 
-            flavours:"klasyki",
+            type:"Pod espresso", 
+            flavours:"Klasyczny ",
             image:"Rwanda-Gisanga.jpg", 
-            shop:"Somnium",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -170,10 +155,9 @@ const products =
             price:70, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"filter", 
-            flavours:"klasyki",
+            type:"Do alternatyw", 
+            flavours:"Klasyczny ",
             image:"gwatemala-meissa.jpg", 
-            shop:"Somnium",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -181,10 +165,9 @@ const products =
             price:70, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"espresso", 
-            flavours:"klasyki",
+            type:"Pod espresso", 
+            flavours:"Klasyczny ",
             image:"kenia_matunda.jpg",
-            shop:"Body",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -192,10 +175,9 @@ const products =
             price:100, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"filter", 
-            flavours:"klasyki",
+            type:"Do alternatyw", 
+            flavours:"Klasyczny ",
             image:"Rwanda-Gisanga.jpg", 
-            shop:"Body",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -203,10 +185,9 @@ const products =
             price:132, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"espresso", 
-            flavours:"klasyki",
+            type:"Pod espresso", 
+            flavours:"Klasyczny ",
             image:"gwatemala-meissa.jpg", 
-            shop:"Body",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -214,10 +195,9 @@ const products =
             price:104, 
             company:"PalomaRoastery", 
             category:"ziarna", 
-            type:"filter", 
-            flavours:"klasyki",
+            type:"Do alternatyw", 
+            flavours:"Klasyczny ",
             image:"kenia_matunda.jpg", 
-            shop:"Body",
             description:"lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
         {
@@ -225,7 +205,7 @@ const products =
             price:35, 
             company:"PalomaRoastery", 
             category:"zaparzarki", 
-            type:"filter", 
+            type:"Do alternatyw", 
             flavours:"",
             image:"V60-01-clear.jpg", 
             shop:"Body"

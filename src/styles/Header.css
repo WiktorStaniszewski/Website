@@ -157,7 +157,7 @@ ul {
 }
 .sidebar {
     list-style-type: none;
-    position: absolute;
+    position: fixed;
     top: -100vh;
     height: 100vh;
     width: 100vw;
