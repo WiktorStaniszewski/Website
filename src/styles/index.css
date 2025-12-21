@@ -23,7 +23,11 @@ code {
 
 :root {
     --header-footer-bg: #24201d;
-    --darker-bg: rgb(71, 60, 50);
+    --90-shade: #3f352c;
+    --80-shade: #382f27;
+    --input-bg: #382f27;
+    --button-hover-bg: #312922;
+    --darker-bg: #473c32;
     --hover-color: #594e36;
     --medium-shade: #8f785d;
     --accents: ;

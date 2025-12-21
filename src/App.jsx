@@ -20,6 +20,7 @@ import Blog from 'pages/Blog';
 import AccountManager from 'pages/AccountManager';
 import { PageWrapper, LayoutWrapper } from 'components/functions/PageWrappers';
 import ProtectedRoute from './components/functions/ProtectedRoute';
+import LoginPage from './pages/Login/LoginPage';
 
 
 function Layout() {
@@ -42,6 +43,7 @@ export default function App() {
         <Routes location={location} key={location.pathname}>
           <Route path="" element={<LayoutWrapper><Layout /></LayoutWrapper>}>
             <Route index element={<PageWrapper><Home /></PageWrapper>} />
+            <Route path="login" element={<PageWrapper><LoginPage /></PageWrapper>} />
             <Route path="about" element={<PageWrapper><About /></PageWrapper>} />
             <Route path="menu" element={<PageWrapper><Menus /></PageWrapper>} />
             <Route path="recruitment" element={<PageWrapper><Recruitment /></PageWrapper>} />

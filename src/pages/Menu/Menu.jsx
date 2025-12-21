@@ -28,7 +28,7 @@ function Menu({displayedTitle, classTitle, productArray, isActive, toggleMenu}) 
     return (
         <div onClick={() => toggleMenu(classTitle)} 
         className='
-            w-full 
+            w-9/10 
             py-3 
             px-[2em] 
             backdrop-blur-sm 

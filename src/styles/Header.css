@@ -182,7 +182,7 @@ ul {
         justify-content: space-evenly;
         align-items: center;
         cursor: pointer;
-        padding: 40px 40vw;
+        padding: 30px 40vw;
     };
     @media (max-width: 1024px){
         display: flex;
@@ -198,4 +198,12 @@ ul {
     width: 4px;
     background-color: var(--font-color);
     border-radius: 2px;
+}
+
+.loginInput {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 8px;
+    background-color: var(--90-shade);
+    color: var(--font-color);
 }

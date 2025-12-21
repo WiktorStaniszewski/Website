@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "components/Context/Login/AuthProvider";
 
-export default function LoginControl() {
+export default function AuthCard({ onSuccess }) {
   const [serverError, setServerError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -18,16 +18,16 @@ export default function LoginControl() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          username: data.username, // API expects 'username', not email
+          username: data.username,
           password: data.password,
-          // expiresInMins: 60, // Optional: if you want to extend session
         }),
       });
 
       const result = await res.json();
 
       if (res.ok) {
-        login(result); 
+        login(result);
+        if (onSuccess) onSuccess(); // Close popup if provided
       } else {
         setServerError(result.message || "Błędne dane logowania");
       }
@@ -40,22 +40,22 @@ export default function LoginControl() {
   };
 
   return (
-    <div className="loginHover flex lg:fixed absolute right-5 lg:right-15 cursor-default flex-col items-center backdrop-brightness-70 bg-(--darker-bg) shadow-[1px_2px_4px_var(--header-footer-bg)] rounded-2xl p-4 min-w-[300px]">
-      <h2 className="text-2xl pb-4 text-center">
-        {user ? `Witaj, ${user.firstName || user.username || 'ponownie'}!` : "Hejka! Zaloguj się :)"}
+    <div className="flex flex-col items-center w-full">
+      <h2 className="text-2xl pb-4 text-center text-(--font-color)">
+        {user ? `Witaj, ${user.firstName || user.username}!` : "Hejka! Zaloguj się :)"}
       </h2>
 
       {user ? (
         <div className="flex flex-col items-center gap-4 w-full">
-          <div className='px-4 font-medium text-center break-all'>
+          <div className='px-4 font-medium text-center break-all text-(--font-color)'>
             {user.email || user.username}
           </div>
           {user.image && (
-             <img src={user.image} alt="avatar" className="w-12 h-12 rounded-full bg-white/10" />
+             <img src={user.image} alt="avatar" className="w-16 h-16 rounded-full bg-white/10" />
           )}
           <button 
             onClick={logout} 
-            className="w-full bg-red-500/20 hover:bg-red-500/40 p-2 rounded-xl transition-colors"
+            className="w-full bg-red-500/20 hover:bg-red-500/40 text-red-200 p-2 rounded-xl transition-colors cursor-pointer"
           >
             Wyloguj się
           </button>
@@ -66,12 +66,12 @@ export default function LoginControl() {
             onSubmit={handleSubmit(onSubmit)}
             className='flex justify-center flex-col items-center gap-3 w-full'
           >
-            {/* Username Input */}
+            {/* Username */}
             <div className="w-full">
               <input
                 {...register("username", { required: "Nazwa użytkownika jest wymagana" })}
                 type="text"
-                placeholder="Nazwa użytkownika (np. emilys)"
+                placeholder="Nazwa użytkownika"
                 className={`loginInput w-full ${errors.username ? 'border-red-500 ring-1 ring-red-500' : ''}`}
               />
               {errors.username && (
@@ -79,7 +79,7 @@ export default function LoginControl() {
               )}
             </div>
             
-            {/* Password Input */}
+            {/* Password */}
             <div className="w-full">
               <input
                 {...register("password", { required: "Hasło jest wymagane" })}
@@ -93,7 +93,7 @@ export default function LoginControl() {
             </div>
 
             {/* Remember Me */}
-            <div className="flex items-center gap-2 self-start ml-2 text-sm">
+            <div className="flex items-center gap-2 self-start ml-2 text-sm text-(--font-color)">
               <input 
                 {...register("rememberMe")} 
                 type="checkbox" 
@@ -103,7 +103,6 @@ export default function LoginControl() {
               <label htmlFor="rememberMe" className="cursor-pointer select-none">Zapamiętaj mnie</label>
             </div>
 
-            {/* Server Error Display */}
             {serverError && (
               <div className="w-full bg-red-500/20 text-red-200 text-sm p-2 rounded text-center border border-red-500/30">
                 {serverError}
@@ -113,13 +112,13 @@ export default function LoginControl() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-2 cursor-pointer bg-(--80-shade) hover:bg-(--button-hover-bg) text-(--font-color) p-3 rounded-3xl transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full mt-2 cursor-pointer bg-(--80-shade) hover:bg-(--button-hover-bg) text-(--font-color) p-3 rounded-3xl transition-colors duration-300 disabled:opacity-50"
             >
               {isLoading ? "Logowanie..." : "Zaloguj się"}
             </button>
           </form>
         
-          <div className="mt-4 flex flex-row gap-2 text-sm">
+          <div className="mt-4 flex flex-row gap-2 text-sm text-(--font-color)">
             <p>Nie masz konta?</p>
             <button className="cursor-pointer underline font-bold hover:text-(--button-hover-bg) transition-colors">
               Zarejestruj się

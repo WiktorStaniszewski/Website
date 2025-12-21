@@ -19,14 +19,14 @@ function Card({product}) {
     
     return (
         <>
-            <section className="backdrop-blur-sm backdrop-brightness-85 lg:mx-6 my-6 p-6 max-w-75 cursor-pointer rounded-3xl flex flex-col items-center card-hover-effect shadow-lg transition-all duration-200 ease-in-out hover:backdrop-brightness-75 hover:scale-102
+            <section className="backdrop-blur-sm backdrop-brightness-85 my-6 max-w-60 cursor-pointer rounded-3xl flex flex-col items-center card-hover-effect shadow-lg transition-all duration-200 ease-in-out hover:backdrop-brightness-75 hover:scale-102
             z-30"
             onClick={() => {
                 toggleClass();
                 toggle();
             }}>
-                    <img src={"images/tempProducts/"+product.image} alt={product.name} className='w-52 pb-4 rounded-xl'/>
-                <div className="flex flex-col justify-center w-full ">
+                    <img src={"images/tempProducts/"+product.image} alt={product.name} className='w-60 p-2 rounded-3xl rounded-b-none'/>
+                <div className="flex flex-col justify-evenly px-2">
                     <h3 className="card-title">
                         {product.name} 
                         <section className="card-reviews flex items-center">
@@ -38,12 +38,12 @@ function Card({product}) {
                             <span className="total-reviews">5</span>
                         </section>
                     </h3>
-                    {product.price}PLN
                     <section className="card-price">
                         <div className="price">
                         <p>Smak: {product.flavours}</p>
                         </div>
                     </section>
+                    <p>{product.price}PLN</p>
                     <AddToCartButton />
                 </div>
             </section>

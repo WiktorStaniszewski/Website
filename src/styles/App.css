@@ -40,19 +40,13 @@ html, body {
 input {
     padding: 0.75rem 1.25rem;
     border: none;
-    background-color: transparent;
     color: var(--font-color);
-    backdrop-filter: brightness(80%);
+    backdrop-filter: brightness(90%);
     outline: none;
-    border-radius: 5px;
-    position: relative;
     font-size: 1.1rem;
 }
 
 @media(max-width:1024px){
-  html, body {
-    height: 100%;
-}
   div #root {
     min-height: 100vw;
   }
