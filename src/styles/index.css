@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 body {
-  background: url(images/Somnium/Somnium-Background2.svg);
+  background: url(/images/Somnium/Somnium-Background2.svg);
   color: var(--font-color);
   margin: 0;
   font-size: 1.1rem;

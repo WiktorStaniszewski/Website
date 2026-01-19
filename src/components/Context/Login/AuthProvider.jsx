@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
             const savedUser = localStorage.getItem("somnium_user");
             if (savedUser) {
                const parsedUser = JSON.parse(savedUser);
-               // validate JWT normally here if needed
+               // validate JWT normally here 
                setUser(parsedUser);
             }
          } catch (error) {
@@ -27,8 +27,15 @@ export function AuthProvider({ children }) {
    }, []);
 
    const login = useCallback((userData) => {
-      setUser(userData);
-      localStorage.setItem("somnium_user", JSON.stringify(userData));
+      const adminUsernames = ['emilys'];
+
+      const userWithRole = {
+         ...userData,
+         role: adminUsernames.includes(userData.username) ? 'admin' : 'customer'
+      };
+
+      setUser(userWithRole);
+      localStorage.setItem("somnium_user", JSON.stringify(userWithRole));
    }, []);
 
    const logout = useCallback(() => {
@@ -41,7 +48,8 @@ export function AuthProvider({ children }) {
       isAuthenticated: !!user,
       login,
       logout,
-      loading
+      loading,
+      isAdmin: user?.role === 'admin',
    };
 
    return (

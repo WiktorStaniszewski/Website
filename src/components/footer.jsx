@@ -6,7 +6,7 @@ function Footer() {
         <div className='flex flex-row justify-evenly text-center px-[3vw] py-4 border-b'>
             <div className='max-w-50'>
                 <div>
-                    <Link to="/"><img className='cursor-pointer w-50' src="images/logo body_biale.png" alt="logo" /></Link>
+                    <Link to="/"><img className='cursor-pointer w-50' src="/images/logo body_biale.png" alt="logo" /></Link>
                     <h4>Espresso Bar</h4>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "components/Context/Login/AuthProvider";
+import { Link } from "react-router-dom";
 
 export default function AuthCard({ onSuccess }) {
   const [serverError, setServerError] = useState(null);
@@ -27,7 +28,7 @@ export default function AuthCard({ onSuccess }) {
 
       if (res.ok) {
         login(result);
-        if (onSuccess) onSuccess(); // Close popup if provided
+        if (onSuccess) onSuccess();
       } else {
         setServerError(result.message || "Błędne dane logowania");
       }
@@ -46,16 +47,35 @@ export default function AuthCard({ onSuccess }) {
       </h2>
 
       {user ? (
-        <div className="flex flex-col items-center gap-4 w-full">
-          <div className='px-4 font-medium text-center break-all text-(--font-color)'>
-            {user.email || user.username}
+        <div className="flex flex-col items-center gap-2 w-full">
+          <div className="flex flex-col items-center mb-2">
+            {user.image && (
+              <img src={user.image} alt="avatar" className="w-12 h-12 rounded-full mb-2 bg-white/10" />
+            )}
+            <div className='font-medium text-(--font-color)'>@{user.username}</div>
           </div>
-          {user.image && (
-             <img src={user.image} alt="avatar" className="w-16 h-16 rounded-full bg-white/10" />
-          )}
+
+          {/* Quick Links for Popup */}
+          <nav className="flex flex-col w-full gap-1 border-t border-white/10 pt-3 mb-3">
+            <Link 
+              to="/account?tab=history" 
+              onClick={onSuccess}
+              className="text-sm p-2 hover:bg-white/5 rounded-lg transition-colors text-(--font-color)"
+            >
+              📦 Historia zamówień
+            </Link>
+            <Link 
+              to="/account?tab=profile" 
+              onClick={onSuccess} 
+              className="text-sm p-2 hover:bg-white/5 rounded-lg transition-colors text-(--font-color)"
+            >
+              ⚙️ Ustawienia konta
+            </Link>
+          </nav>
+
           <button 
             onClick={logout} 
-            className="w-full bg-red-500/20 hover:bg-red-500/40 text-red-200 p-2 rounded-xl transition-colors cursor-pointer"
+            className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm p-2 rounded-xl transition-colors cursor-pointer"
           >
             Wyloguj się
           </button>

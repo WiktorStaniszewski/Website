@@ -21,6 +21,13 @@ import AccountManager from 'pages/AccountManager';
 import { PageWrapper, LayoutWrapper } from 'components/functions/PageWrappers';
 import ProtectedRoute from './components/functions/ProtectedRoute';
 import LoginPage from './pages/Login/LoginPage';
+import Cart from './pages/Cart/Cart';
+import AdminLayout from "pages/Admin/Components/AdminLayout";
+import Dashboard from "pages/Admin/Dashboard";
+import Products from "pages/Admin//Products";
+import { useAuth } from 'components/Context/Login/AuthProvider';
+import { Navigate } from 'react-router-dom';
+
 
 
 function Layout() {
@@ -33,6 +40,13 @@ function Layout() {
     </>
   );
 }
+
+const AdminRoute = ({ children }) => {
+  const { user, isAdmin, loading } = useAuth();
+  if (loading) return null;
+  if (!user || !isAdmin) return <Navigate to="/login" />;
+  return children;
+};
 
 export default function App() {
   const location = useLocation();
@@ -49,7 +63,18 @@ export default function App() {
             <Route path="recruitment" element={<PageWrapper><Recruitment /></PageWrapper>} />
             <Route path="shop" element={<PageWrapper><Shop /></PageWrapper>} />
             <Route path="blog" element={<PageWrapper><Blog /></PageWrapper>} />
-            <Route path="accManager" element={<ProtectedRoute><PageWrapper><AccountManager /></PageWrapper></ProtectedRoute>} />
+            <Route path="cart" element={<PageWrapper><Cart /></PageWrapper>} />
+            <Route path="/admin" element={
+              <AdminRoute>
+                <PageWrapper>
+                  <AdminLayout />
+                </PageWrapper>
+              </AdminRoute>
+            }>
+              <Route index element={<PageWrapper><Dashboard /></PageWrapper>} />
+              <Route path="products" element={<PageWrapper><Products /></PageWrapper>} />
+            </Route>
+            <Route path="account" element={<ProtectedRoute><PageWrapper><AccountManager /></PageWrapper></ProtectedRoute>} />
             <Route path="*" element={<h1>404 - Page not found</h1>} />
           </Route>
         </Routes>

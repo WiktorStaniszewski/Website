@@ -11,11 +11,11 @@ import {
 
 function Menus() {
     const { menu, toggleMenu } = useMenus({
-        classic: false,
-        summer: false,
-        special: false,
-        tea: false,
-        subs: false,
+        classic: true,
+        summer: true,
+        special: true,
+        tea: true,
+        subs: true,
     });
     return (
         <div className="flex flex-col p-8 min-h-screen">

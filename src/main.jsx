@@ -10,15 +10,18 @@ import { Wrapper } from 'components/functions/PageWrappers';
 import { AuthProvider } from 'components/Context/Login/AuthProvider';
 
 import App from './App';
+import { CartProvider } from './components/Context/Cart/CartProvider';
 
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
       <Router> {/*basename="/Website"*/}
         <AuthProvider>
-          <Wrapper>
-            <App />
-          </Wrapper>
+          <CartProvider>
+            <Wrapper>
+              <App />
+            </Wrapper>
+          </CartProvider>
         </AuthProvider>
       </Router>
   </React.StrictMode>

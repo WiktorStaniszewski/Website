@@ -6,7 +6,7 @@ export default function Home() {
     return (
     <>
         <div className='w-screen relative inline-block h-screen image-wrap' aria-label='Somnium Cafe Bar'>
-            <img src="images/tlo1.jpg" alt="" className='w-full h-full filter brightness-50 relative object-cover object-[50%] align-bottom lg:(object-center lg:h-11/12)' />
+            <img src="images/tlo1.jpg" alt="" className='w-full h-full filter brightness-50 relative object-cover object-[50%] align-bottom lg:(object-center lg:h-11/12) rounded-b-3xl' />
             <div className='flex absolute top-50 w-full flex-col items-center justify-center text-center px-4 text-(--font-color) text-xs gap-4'>
                 <h1 className='flex text-5xl overflow-hidden font-semibold p-4'>Somnium Cafe Bar</h1>
                 <h3 className='py-5 text-lg overflow-hidden text-center font-medium mb-'>Kawiarnia z segmentu Specialty Coffee Kreatywnie w temacie kawy! Zero napinki! tylko dobre szoty </h3>
@@ -39,7 +39,7 @@ export default function Home() {
 )}
 
 const QuestionField = ({ title, content }) => {
-    const [on, toggle] = useToggle(false);
+    const [on, toggle] = useToggle(true);
     return (
         <div onClick={toggle} className='cursor-pointer backdrop-brightness-85 backdrop-blur-sm flex justify-between rounded-3xl mt-2 items-center py-8 px-8 transition-all duration-100 ease-in shadow-[1px_3px_10px_var(--header-footer-bg)] hover:scale-102 lg:hover:backdrop-brightness-75'>
             <div className='m-0 w-full'>

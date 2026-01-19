@@ -13,18 +13,21 @@ import { AiFillShopping } from "react-icons/ai";
 import { FaInstagram } from "react-icons/fa";
 import { SiGooglemaps } from "react-icons/si";
 
+import { useCart } from 'components/Context/Cart/CartProvider';
 import LoginWidget from 'components/Login/LoginWidget'; 
 import { useAuth } from 'components/Context/Login/AuthProvider';
 import useHeaderLogic from 'hooks/Header/useHeaderLogic';
 
 export default function Header() {
   const { user } = useAuth(); 
+  const { cartCount } = useCart();
 
   const {
     isActive,
     toggleClass,
     showLogo,
   } = useHeaderLogic();
+
 
   return (
     <>
@@ -57,7 +60,7 @@ export default function Header() {
           {/* 2. Center Side - The Logo */}
           <div className="flex justify-center shrink-0">
             <Link to="/">
-              <img className='block pt-0 w-35 lg:w-60 cursor-pointer' src="images/logo body_biale.png" alt="logo" />
+              <img className='block pt-0 w-35 lg:w-60 cursor-pointer' src="/images/logo body_biale.png" alt="logo" />
             </Link>
           </div>
 
@@ -73,9 +76,16 @@ export default function Header() {
               <LoginWidget />
             </div>
 
-            <div className='cartButton headerButton'>
-              <FiShoppingCart />
-            </div>
+            <Link to="/cart">
+              <div className='cartButton headerButton relative'>
+                <FiShoppingCart />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </div>
+            </Link>
           </div>
         </div>
 
@@ -87,6 +97,14 @@ export default function Header() {
             <NavLink to="menu" className="sidebarLink" onClick={toggleClass}><li><RiDrinks2Fill /> &nbsp;Menu</li></NavLink>
             <NavLink to="recruitment" className="sidebarLink" onClick={toggleClass}><li><FiSmartphone /> &nbsp;Rekrutacja</li></NavLink>
             <NavLink to="about" className="sidebarLink" onClick={toggleClass}><li><GoPersonFill /> &nbsp;O nas</li></NavLink>
+            {user?.role === 'admin' && (
+              <NavLink 
+                to="/admin" 
+                className="navbarLink transition-all"
+              >
+                <li>Panel Admina</li>
+              </NavLink>
+            )}
             
             {/* Mobile-only Login/Profile Link */}
             <div className="mt-4 border-t border-white/10 lg:hidden">
@@ -108,13 +126,21 @@ export default function Header() {
       <div className="redirectButtons hidden lg:flex lg:flex-row lg:justify-evenly bg-(--header-footer-bg) sticky top-0 z-10 w-screen shadow-md">
         <ul>
           <div className={`flex justify-center items-center transition-all duration-500 animate-[enlarge_1s_ease-in-out_infinite] ${showLogo ? "logo-visible" : "logo-hidden"}`}>
-            <Link to="/"><img className='transition-all duration-500 ease-in-out navigation-logo' src="images/logo body_biale.png" alt="logo" /></Link>
+            <Link to="/"><img className='transition-all duration-500 ease-in-out navigation-logo' src="/images/logo body_biale.png" alt="logo" /></Link>
           </div>
           <NavLink to="/" className="navbarLink"><li>Home</li></NavLink>
           <NavLink to="shop" className="navbarLink"><li>Sklep</li></NavLink>
           <NavLink to="menu" className="navbarLink"><li>Menu</li></NavLink>
           <NavLink to="recruitment" className="navbarLink"><li>Rekrutacja</li></NavLink>
           <NavLink to="about" className="navbarLink"><li>O nas</li></NavLink>
+          {user?.role === 'admin' && (
+            <NavLink 
+              to="/admin" 
+              className="navbarLink transition-all"
+            >
+              <li>Panel Admina</li>
+            </NavLink>
+          )}
         </ul>
       </div>
     </>
