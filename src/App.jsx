@@ -6,10 +6,10 @@ import 'assets/styles/_animations.css';
 import { Routes, Route, useLocation, Outlet } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
-import { ViewportProvider } from 'components/context/Viewport/ViewportProvider';
-import Footer from './components/Footer';
-import Header from './components/Header';
-import ScrollButton from './components/ScrollButton';
+import { ViewportProvider } from 'src/context/Viewport/ViewportProvider';
+import Footer from './components/layout/Footer';
+import Header from './components/layout/Header';
+import ScrollButton from './components/ui/ScrollButton';
 
 import Home from 'pages/Home';
 import About from 'src/pages/About/About';
@@ -18,14 +18,16 @@ import Recruitment from 'pages/Recruitment';
 import Shop from 'pages/Shop/Shop';
 import Blog from 'pages/Blog';
 import AccountManager from 'pages/AccountManager';
-import { PageWrapper, LayoutWrapper } from 'components/functions/PageWrappers';
-import ProtectedRoute from './components/functions/ProtectedRoute';
+import { PageWrapper, LayoutWrapper } from 'components/layout/PageWrappers';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 import LoginPage from './pages/Login/LoginPage';
 import Cart from './pages/Cart/Cart';
+import Checkout from 'pages/Checkout/Checkout';
+import OrderSuccess from 'pages/Checkout/OrderSuccess';
 import AdminLayout from "pages/Admin/Components/AdminLayout";
 import Dashboard from "pages/Admin/Dashboard";
 import Products from "pages/Admin//Products";
-import { useAuth } from 'components/Context/Login/AuthProvider';
+import { useAuth } from 'src/context/AuthProvider';
 import { Navigate } from 'react-router-dom';
 
 
@@ -64,6 +66,8 @@ export default function App() {
             <Route path="shop" element={<PageWrapper><Shop /></PageWrapper>} />
             <Route path="blog" element={<PageWrapper><Blog /></PageWrapper>} />
             <Route path="cart" element={<PageWrapper><Cart /></PageWrapper>} />
+            <Route path="checkout" element={<ProtectedRoute><PageWrapper><Checkout /></PageWrapper></ProtectedRoute>} />
+            <Route path="order-success" element={<PageWrapper><OrderSuccess /></PageWrapper>} />
             <Route path="/admin" element={
               <AdminRoute>
                 <PageWrapper>
@@ -74,7 +78,13 @@ export default function App() {
               <Route index element={<PageWrapper><Dashboard /></PageWrapper>} />
               <Route path="products" element={<PageWrapper><Products /></PageWrapper>} />
             </Route>
-            <Route path="account" element={<ProtectedRoute><PageWrapper><AccountManager /></PageWrapper></ProtectedRoute>} />
+            <Route path="account" element={
+              <ProtectedRoute>
+                <PageWrapper>
+                  <AccountManager />
+                </PageWrapper>
+              </ProtectedRoute>
+            } />
             <Route path="*" element={<h1>404 - Page not found</h1>} />
           </Route>
         </Routes>

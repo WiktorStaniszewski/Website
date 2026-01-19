@@ -7,7 +7,7 @@ import {
     specialMenuArray, 
     teaMenuArray, 
     subsArray
-} from './products';
+} from './Products';
 
 function Menus() {
     const { menu, toggleMenu } = useMenus({
@@ -17,47 +17,32 @@ function Menus() {
         tea: true,
         subs: true,
     });
+
+    const menuItems = [
+        { title: "Klasyczne Menu", key: "classic", data: classicMenuArray },
+        { title: "Letnie Menu", key: "summer", data: summerMenuArray },
+        { title: "Special Menu", key: "special", data: specialMenuArray },
+        { title: "Bezkofeinowe", key: "tea", data: teaMenuArray },
+        { title: "Dodatki / Zamienniki", key: "subs", data: subsArray },
+    ];
+
     return (
-        <div className="flex flex-col p-8 min-h-screen">
-            <div className="flex items-center flex-col justify-center flex-wrap menuContainer">
-                <Menu 
-                    displayedTitle="Klasyczne Menu" 
-                    classTitle="classic" 
-                    productArray={classicMenuArray} 
-                    isActive={menu.classic} 
-                    toggleMenu={toggleMenu} 
-                />
-                <Menu 
-                    displayedTitle="Letnie Menu" 
-                    classTitle="summer" 
-                    productArray={summerMenuArray} 
-                    isActive={menu.summer} 
-                    toggleMenu={toggleMenu} 
-                />
-                <Menu 
-                    displayedTitle="Special Menu" 
-                    classTitle="special" 
-                    productArray={specialMenuArray} 
-                    isActive={menu.special} 
-                    toggleMenu={toggleMenu} 
-                />
-                <Menu 
-                    displayedTitle="Bezkofeinowe" 
-                    classTitle="tea" 
-                    productArray={teaMenuArray} 
-                    isActive={menu.tea} 
-                    toggleMenu={toggleMenu} 
-                />
-                <Menu 
-                    displayedTitle="Dodatki / Zamienniki" 
-                    classTitle="subs" 
-                    productArray={subsArray} 
-                    isActive={menu.subs} 
-                    toggleMenu={toggleMenu} 
-                />
+        <div className="flex flex-col p-4 lg:p-8 min-h-screen pt-24">
+            <div className="flex flex-col items-center justify-center gap-6 w-full">
+                {menuItems.map((item, index) => (
+                    <Menu 
+                        key={item.key}
+                        index={index} // Pass index for alternating styling
+                        displayedTitle={item.title} 
+                        classTitle={item.key} 
+                        productArray={item.data} 
+                        isActive={menu[item.key]} 
+                        toggleMenu={toggleMenu} 
+                    />
+                ))}
             </div>
         </div>
     )
 }
 
-export default Menus
+export default Menus;

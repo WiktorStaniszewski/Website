@@ -1,11 +1,25 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { useCart } from 'components/Context/Cart/CartProvider';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from 'src/context/CartProvider';
+
 import { FiTrash2, FiMinus, FiPlus, FiArrowLeft } from "react-icons/fi";
+import { FaSpinner } from "react-icons/fa";
 
 export default function Cart() {
-  const { cartItems, removeFromCart, updateQuantity, cartTotal } = useCart();
+  // Added 'loading' from context
+  const { cartItems, removeFromCart, updateQuantity, cartTotal, loading } = useCart();
 
+  // 1. Loading State
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen text-center gap-4">
+        <FaSpinner className="animate-spin text-4xl text-gray-400" />
+        <p className="text-gray-500">Ładowanie koszyka...</p>
+      </div>
+    );
+  }
+
+  // 2. Empty State
   if (cartItems.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-center gap-4">
@@ -18,6 +32,7 @@ export default function Cart() {
     );
   }
 
+  // 3. Cart Content
   return (
     <div className="w-screen flex justify-center lg:mt-10 mb-20">
       <div className="w-9/10 lg:w-8/10 flex flex-col lg:flex-row gap-8">
@@ -35,12 +50,12 @@ export default function Cart() {
               <div key={item.id} className="flex flex-col sm:flex-row items-center gap-4 border-b border-gray-100 pb-6 last:border-0">
                 {/* Image */}
                 <div className="w-24 h-24 shrink-0 bg-gray-100 rounded-lg overflow-hidden">
-                  <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
+                  <img src={item.image ? `images/tempProducts/${item.image}` : item.img} alt={item.name || item.title} className="w-full h-full object-cover" />
                 </div>
 
                 {/* Details */}
                 <div className="flex-1 text-center sm:text-left">
-                  <h3 className="font-bold text-lg">{item.title}</h3>
+                  <h3 className="font-bold text-lg">{item.name || item.title}</h3>
                   <p className="text-gray-500 text-sm">{item.price} PLN</p>
                 </div>
 
@@ -99,9 +114,12 @@ export default function Cart() {
               <span>{cartTotal.toFixed(2)} zł</span>
             </div>
 
-            <button className="w-full bg-black text-white py-4 rounded-xl font-bold hover:scale-105 transition-transform duration-300 cursor-pointer">
+            <Link 
+              to="/checkout"
+              className="w-full bg-black text-white py-4 rounded-xl font-bold hover:scale-105 transition-transform duration-300 cursor-pointer block text-center"
+            >
               Przejdź do kasy
-            </button>
+            </Link>
           </div>
         </div>
 

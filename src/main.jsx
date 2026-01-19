@@ -6,11 +6,11 @@ import 'styles/index.css';
 import React from 'react';
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom';
-import { Wrapper } from 'components/functions/PageWrappers';
-import { AuthProvider } from 'components/Context/Login/AuthProvider';
+import { Wrapper } from 'components/layout/PageWrappers';
+import { AuthProvider } from 'src/context/AuthProvider';
 
 import App from './App';
-import { CartProvider } from './components/Context/Cart/CartProvider';
+import { CartProvider } from 'src/context/CartProvider';
 
 
 createRoot(document.getElementById('root')).render(

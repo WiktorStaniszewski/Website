@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "components/Context/Login/AuthProvider";
+import { useAuth } from "src/context/AuthProvider";
 import { FiGrid, FiBox, FiLogOut } from "react-icons/fi";
 
 export default function AdminLayout() {

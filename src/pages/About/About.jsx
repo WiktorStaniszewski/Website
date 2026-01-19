@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useViewport } from 'src/components/hooks/useViewport';
+import { useViewport } from 'hooks/useViewport';
 
 import Parallax from 'src/pages/About/Parallax';
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import 'styles/Contact.css'
-import Form from 'components/functions/Form/Form';
+import Form from 'components/ui/Form';
 
 export default function Recruitment() {
   return (

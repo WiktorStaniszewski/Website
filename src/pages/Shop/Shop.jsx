@@ -1,11 +1,11 @@
 import 'styles/Shop.css'
 
-import Products from '../Shop/SProducts/Products'
-import Navigation from '../Shop/SNavigation/Navigation'
-import Recommended from '../Shop/SRecommended/Recommended'
-import Sidebar from './SSidebar/Sidebar'
+import Products from 'pages/shop/components/ProductCard'
+import Navigation from 'pages/shop/components/ShopNavigation'
+import Recommended from 'pages/shop/components/RecommendedSection'
+import Sidebar from 'pages/shop/components/Sidebar/Sidebar'
 
-import { useShopFilters } from 'src/components/hooks/Shop/useShopFilters'
+import { useShopFilters } from 'pages/shop/hooks/useShopFilters'
 import { useToggle } from '@uidotdev/usehooks'
 
 export default function Shop() {

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import AuthCard from "./AuthCard";
-import { useAuth } from "components/Context/Login/AuthProvider";
+import AuthCard from "pages/Auth/AuthCard";
+import { useAuth } from "src/context/AuthProvider";
 import { FaUserAstronaut } from "react-icons/fa";
 
 export default function LoginWidget() {
