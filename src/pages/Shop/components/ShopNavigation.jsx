@@ -1,38 +1,41 @@
 import 'styles/Shop.css'
-
-import { FiHeart} from 'react-icons/fi'
-import { AiOutlineShoppingCart } from 'react-icons/ai'
+import { FiHeart } from 'react-icons/fi'
+import { AiOutlineShoppingCart } from 'react-icons/ai' // Optional if unused
 import { RxHamburgerMenu } from "react-icons/rx";
-
 import { useViewport } from 'hooks/useViewport'
+
+// Import the new component
+import SearchInput from './SearchInput';
 
 export default function Navigation({filters, toggleFilterMenu}) {
   const { isMobile } = useViewport();
   
   return (
-      <nav className='flex bottom-2 lg:top-16 backdrop-blur-lg backdrop-brightness-60 border-b justify-between items-center px-5 py-3 z-2 lg:pl-[15vw] rounded-3xl'>
-          <div className="nav-container">
-            <input 
-              value={filters.query}
-              type="text" 
-              className='pl-0! lg:w-12/10 w-8/10' 
-              placeholder='Enter your search' 
-              onChange={filters.handleInputChange}
+      <nav className='bg-[#24201d]/60 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3 flex items-center justify-between shadow-lg sticky top-24 z-20'>
+          
+          {/* Replaced raw input with SearchInput Component */}
+          <div className="flex-1 max-w-lg">
+            <SearchInput 
+                value={filters.query}
+                onChange={filters.handleInputChange}
             />
           </div>
-          <div className="flex justify-between gap-4">
-            <a href='#'><FiHeart className='nav-icons'/></a>
-            {!isMobile ? 
-            <>
-              <a href='#'><AiOutlineShoppingCart className='nav-icons lg:flex'/></a>
-            </> :
-            <a className='cursor-pointer' 
-            onClick={() => {
-            toggleFilterMenu();
-            }}><RxHamburgerMenu className='nav-icons'/></a>
-            }
+
+          {/* Actions */}
+          <div className="flex items-center gap-2 ml-4">
+            <button className='p-3 rounded-xl hover:bg-white/10 text-white/80 hover:text-(--medium-shade) transition-colors'>
+                <FiHeart className='text-xl'/>
+            </button>
+            
+            {isMobile && (
+                <button 
+                    className='p-3 rounded-xl bg-white/5 hover:bg-(--medium-shade) hover:text-[#24201d] transition-colors border border-white/10'
+                    onClick={toggleFilterMenu}
+                >
+                    <RxHamburgerMenu className='text-xl'/>
+                </button>
+            )}
           </div>
       </nav> 
   )
 }
-

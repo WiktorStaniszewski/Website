@@ -1,5 +1,5 @@
 import 'src/styles/Shop.css'
-import Input from '../SearchInput'
+import Input from '../SearchRadio'
 
 function Price({handleChange}) {
   return (

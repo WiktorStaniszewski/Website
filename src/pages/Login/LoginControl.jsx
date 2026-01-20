@@ -20,7 +20,6 @@ export default function LoginControl() {
         body: JSON.stringify({
           username: data.username,
           password: data.password,
-          // w przyszlosci dodac expires i rememberMe handler
         }),
       });
 

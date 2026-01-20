@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from 'src/context/AuthProvider';
-// If you have a CartContext, import it here. Assuming standard context usage:
 import { useCart } from 'src/context/CartProvider'; 
 
 import { FaBars, FaTimes, FaShoppingBag, FaUser, FaSignInAlt, FaCog } from "react-icons/fa";
@@ -11,13 +10,11 @@ export default function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { user, isAuthenticated } = useAuth();
     
-    // Safety check for cart context in case it's not ready
     const cartContext = useCart ? useCart() : { cartItems: [] };
     const cartCount = cartContext?.cartItems?.length || 0;
 
     const location = useLocation();
 
-    // Handle Scroll Effect
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 50);
@@ -26,7 +23,18 @@ export default function Header() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Close mobile menu on route change
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isMobileMenuOpen]);
+
     useEffect(() => {
         setIsMobileMenuOpen(false);
     }, [location]);
@@ -36,7 +44,7 @@ export default function Header() {
         { name: "Menu", path: "/menu" },
         { name: "Sklep", path: "/shop" },
         { name: "O nas", path: "/about" },
-        { name: "Blog", path: "/blog" },
+        //{ name: "Blog", path: "/blog" },
         { name: "Kontakt", path: "/recruitment" },
     ];
 
@@ -51,8 +59,8 @@ export default function Header() {
                     isScrolled 
                     ? "bg-[#24201d]/80 backdrop-blur-md py-3 border-white/10 shadow-lg" 
                     : "bg-transparent py-6 border-transparent"
-                }`}
-            >
+                }
+                ${isMobileMenuOpen ? "overflow-hidden" : ""}`}>
                 <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
                     
                     {/* --- Logo --- */}
@@ -134,7 +142,7 @@ export default function Header() {
                             key={link.name} 
                             to={link.path}
                             className="text-3xl font-serif font-bold text-(--font-color) hover:text-(--medium-shade) transition-colors"
-                            style={{ transitionDelay: `${idx * 50}ms` }} // Stagger animation
+                            style={{ transitionDelay: `${idx * 50}ms` }} 
                         >
                             {link.name}
                         </NavLink>

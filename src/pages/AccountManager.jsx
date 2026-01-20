@@ -7,7 +7,6 @@ import {
     FaSpinner, FaSearch, FaCheck, FaExclamationCircle, FaChevronRight 
 } from "react-icons/fa";
 
-// --- Internal Components for Tabs ---
 
 const ProfileTab = ({ user }) => (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -104,17 +103,15 @@ const HistoryTab = ({ orders, loading }) => (
 
 const SecurityTab = ({ user }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [status, setStatus] = useState(null); // 'success' | 'error' | null
+    const [status, setStatus] = useState(null); 
 
     const handleUpdatePassword = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         setStatus(null);
         
-        // Simulate API call
         setTimeout(async () => {
             try {
-                // In real app: await api.put('user/password', { ... })
                 setIsLoading(false);
                 setStatus('success');
             } catch (err) {
@@ -136,7 +133,7 @@ const SecurityTab = ({ user }) => {
                         <input 
                             type="password" 
                             required
-                            className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-(--medium-shade) transition-colors"
+                            className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pr-4 focus:outline-none focus:border-(--medium-shade) transition-colors pl-10!"
                             placeholder="••••••••"
                         />
                     </div>
@@ -149,7 +146,7 @@ const SecurityTab = ({ user }) => {
                         <input 
                             type="password" 
                             required
-                            className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-(--medium-shade) transition-colors"
+                            className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pr-4 focus:outline-none focus:border-(--medium-shade) transition-colors pl-10!"
                             placeholder="••••••••"
                         />
                     </div>
@@ -264,7 +261,6 @@ const StatusTab = () => {
     );
 };
 
-// --- Main Component ---
 
 export default function AccountManager() {
   const { user, logout } = useAuth();
@@ -272,17 +268,14 @@ export default function AccountManager() {
   const navigate = useNavigate();
   const activeTab = searchParams.get("tab") || "profile";
 
-  // State for History
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
 
-  // Logout Handler
   const handleLogout = () => {
       logout();
-      navigate("/"); // Redirect to home
+      navigate("/"); 
   };
 
-  // Fetch Orders Logic
   useEffect(() => {
     if (activeTab === "history") {
       const fetchOrders = async () => {

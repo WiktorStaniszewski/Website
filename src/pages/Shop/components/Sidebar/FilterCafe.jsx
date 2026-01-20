@@ -1,5 +1,5 @@
 import 'styles/Shop.css'
-import Input from '../SearchInput'
+import Input from '../SearchRadio'
 
 
 function Cafe({handleChange}) {

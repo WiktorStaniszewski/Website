@@ -3,7 +3,6 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 
 function Menu({ displayedTitle, productArray, isActive, toggleMenu, classTitle, index }) {
 
-  // --- Animation Variants ---
   const containerVariants = {
     collapsed: { 
       opacity: 0, 
@@ -16,8 +15,8 @@ function Menu({ displayedTitle, productArray, isActive, toggleMenu, classTitle, 
       transition: { 
         duration: 0.4, 
         ease: [0.04, 0.62, 0.23, 0.98],
-        when: "beforeChildren", // Open first, then show items
-        staggerChildren: 0.05   // Stagger items by 50ms
+        when: "beforeChildren", 
+        staggerChildren: 0.05   
       } 
     }
   };
@@ -27,10 +26,9 @@ function Menu({ displayedTitle, productArray, isActive, toggleMenu, classTitle, 
     expanded: { opacity: 1, x: 0 }
   };
 
-  // Alternate styles based on index (Simulating your old CSS nth-child logic but better)
   const isEven = index % 2 === 0;
   const cardStyle = isEven 
-    ? "bg-black/5 border-white/10 hover:bg-black/10" 
+    ? "bg-black/15 border-white/10 hover:bg-black/20" 
     : "bg-black/20 border-white/5 hover:bg-black/30";
 
   return (

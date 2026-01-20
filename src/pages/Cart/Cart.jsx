@@ -6,10 +6,8 @@ import { FiTrash2, FiMinus, FiPlus, FiArrowLeft } from "react-icons/fi";
 import { FaSpinner } from "react-icons/fa";
 
 export default function Cart() {
-  // Added 'loading' from context
   const { cartItems, removeFromCart, updateQuantity, cartTotal, loading } = useCart();
 
-  // 1. Loading State
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-center gap-4">
@@ -19,7 +17,6 @@ export default function Cart() {
     );
   }
 
-  // 2. Empty State
   if (cartItems.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-center gap-4">
@@ -32,9 +29,8 @@ export default function Cart() {
     );
   }
 
-  // 3. Cart Content
   return (
-    <div className="w-screen flex justify-center lg:mt-10 mb-20">
+    <div className="w-screen flex justify-center lg:mt-10 mb-20 pt-25">
       <div className="w-9/10 lg:w-8/10 flex flex-col lg:flex-row gap-8">
         
         {/* Left Side: Cart Items */}

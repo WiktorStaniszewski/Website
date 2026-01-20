@@ -2,8 +2,6 @@ import React from 'react';
 import Parallax from 'src/pages/About/Parallax';
 import { FaCoffee, FaHeart, FaLightbulb } from 'react-icons/fa';
 
-// --- Section Components ---
-
 const AboutHero = () => (
     <section className="relative min-h-[60vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
         <div className="relative z-10 max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
@@ -23,7 +21,6 @@ const AboutHero = () => (
 );
 
 const StorySection = () => (
-    // Changed: Removed dark bg, added subtle backdrop brightness for readability
     <section className="relative py-20 px-4 md:px-8 backdrop-brightness-90 border-y border-white/5">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
             {/* Image Card */}
@@ -62,7 +59,6 @@ const StorySection = () => (
 );
 
 const FeaturesSection = () => (
-    // Changed: Removed solid bg-[#24201d], allowing body SVG to show
     <section className="py-24 px-4">
         <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -120,11 +116,9 @@ const PartnersSection = () => (
     </section>
 );
 
-// --- Main Page Component ---
 
 export default function About() {
     return (
-        // Removed global bg-color, allowing index.css body background to show
         <main className="w-full min-h-screen overflow-x-hidden pt-20">
             <AboutHero />
             <StorySection />

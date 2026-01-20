@@ -32,7 +32,7 @@ function Menus() {
                 {menuItems.map((item, index) => (
                     <Menu 
                         key={item.key}
-                        index={index} // Pass index for alternating styling
+                        index={index}
                         displayedTitle={item.title} 
                         classTitle={item.key} 
                         productArray={item.data} 

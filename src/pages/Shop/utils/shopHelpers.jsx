@@ -1,7 +1,5 @@
 import Card from "../components/ProductCard";
-
 import priceParser from "./priceParser";
-
 
 export const filterByQuery = (products, query) => {
   if (!query) return products;
@@ -44,16 +42,13 @@ export const filterByAll = (products, { category, price, flavors, cafe }) => {
 };
 
 export const filteredData = (products, selected, query) => {
-  if (!products) return [];
-
   let filteredProducts = filterByQuery(products, query);
   filteredProducts = filterByAll(filteredProducts, selected);
   
 
-
-  return filteredProducts.map((item) => (
+  return filteredProducts.map((item, index) => (
     <Card
-      key={item.id}
+      key={item.id || index} 
       product={item}
     />
   ));

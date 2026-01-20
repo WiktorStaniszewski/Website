@@ -23,7 +23,7 @@ function Card({ product }) {
     return (
         <>
             <section 
-                className="group relative backdrop-blur-md bg-white/1 border border-white/10 hover:border-(--medium-shade)/50 rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-2 max-w-60 w-full flex flex-col"
+                className="group relative h-fit backdrop-blur-md bg-white/5 border border-white/10 hover:border-(--medium-shade)/50 rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-2 max-w-60 w-full flex flex-col"
                 onClick={handleCardClick}
             >
                 <div className="relative w-full h-64 overflow-hidden bg-white/5">
@@ -53,7 +53,6 @@ function Card({ product }) {
                     <div className="mt-auto pt-4 flex items-center justify-between border-t border-white/5">
                         <p className="font-bold text-lg text-(--font-color)">{product.price} PLN</p>
                         
-                        {/* Compact Button Used Here */}
                         <div className="transform translate-y-0 opacity-100 transition-all duration-300">
                              <AddToCartButton product={product} compact={true} />
                         </div>

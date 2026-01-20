@@ -2,8 +2,6 @@ import { AddToCartButton } from "./ShopButtons";
 import { FiX } from "react-icons/fi";
 import { createPortal } from 'react-dom';
 
-// Using React Portal ensures the modal is rendered at the top level of the DOM (usually document.body),
-// preventing it from being affected by parent transforms or overflow:hidden.
 export const ProductDetails = ({ product, on, toggle, toggleClass, ref }) => {
   
   const modalContent = (
@@ -14,11 +12,11 @@ export const ProductDetails = ({ product, on, toggle, toggleClass, ref }) => {
         flex gap-6 relative overflow-hidden flex-col lg:flex-row items-start transition-transform ease-out duration-500 rounded-3xl shadow-2xl
         ${on ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}
         ref={ref}
-        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+        onClick={(e) => e.stopPropagation()} 
       >
           {/* Close Button Mobile - Floating */}
           <button 
-             className='absolute top-4 right-4 z-20 lg:hidden p-2 bg-black/40 rounded-full text-white'
+             className='absolute top-4 right-4 z-20 lg:hidden p-2 cursor-pointer bg-black/40 rounded-full text-white'
              onClick={(e) => {
                  e.stopPropagation();
                  toggleClass();

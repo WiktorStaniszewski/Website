@@ -7,7 +7,7 @@ import api from 'src/services/api';
 import { FiArrowLeft, FiTruck, FiCreditCard, FiCheckCircle } from "react-icons/fi";
 
 export default function Checkout() {
-  const { cartItems, cartTotal, loading: cartLoading, setCartItems } = useCart(); // Assuming setCartItems is exposed or we clear via a method
+  const { cartItems, cartTotal, loading: cartLoading, setCartItems } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { register, handleSubmit, watch, formState: { errors } } = useForm({
@@ -24,14 +24,12 @@ export default function Checkout() {
   const [shippingMethod, setShippingMethod] = useState('courier');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Redirect if cart is empty
   useEffect(() => {
     if (!cartLoading && cartItems.length === 0) {
       navigate('/shop');
     }
   }, [cartItems, cartLoading, navigate]);
 
-  // Shipping Costs
   const shippingOptions = {
     courier: { price: 15, label: "Kurier InPost", time: "1-2 dni" },
     locker: { price: 12, label: "Paczkomaty InPost", time: "1-2 dni" },
@@ -59,17 +57,12 @@ export default function Checkout() {
     };
 
     try {
-      // 1. Send Order to Backend
       await api.post('orders', orderPayload);
       
-      // 2. Clear Cart (You might need to expose a clearCart function in CartProvider, 
-      //    for now we simulate it or manually set empty if exposed, 
-      //    otherwise relying on localStorage clearing in the next step)
       localStorage.removeItem('somnium_cart'); 
-      window.dispatchEvent(new Event("storage")); // Trigger update if CartProvider listens to storage
+      window.dispatchEvent(new Event("storage")); 
       
-      // 3. Navigate to Success
-      navigate('/order-success', { state: { orderId: Date.now() } }); // Mock ID
+      navigate('/order-success', { state: { orderId: Date.now() } });
     } catch (error) {
       console.error("Order failed", error);
       alert("Wystąpił błąd podczas składania zamówienia.");

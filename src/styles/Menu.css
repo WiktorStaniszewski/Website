@@ -1,3 +1,4 @@
+/*
 .menuContainer{
     & > div:nth-child(even) {
         backdrop-filter: blur(3px) brightness(70%);

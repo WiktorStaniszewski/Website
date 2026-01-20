@@ -16,14 +16,11 @@ export default function AuthCard({ onSuccess }) {
     setServerError(null);
 
     try {
-      // Using our new API structure
       const response = await api.post("login", {
         username: data.username,
         password: data.password,
       });
 
-      // API Wrapper usually returns { data: ... }, but check your wrapper return type
-      // Based on provided api.js: mockDatabase returns { status: 200, data: ... }
       if (response && response.data) {
         login(response.data);
         if (onSuccess) onSuccess();
@@ -32,7 +29,6 @@ export default function AuthCard({ onSuccess }) {
       }
 
     } catch (err) {
-      // If api.js/mockDatabase throws an error (reject)
       console.error("Login error:", err);
       setServerError(err.message || "Błąd logowania.");
     } finally {
@@ -138,9 +134,12 @@ export default function AuthCard({ onSuccess }) {
         
           <div className="mt-4 flex flex-row gap-2 text-sm text-(--font-color)">
             <p>Nie masz konta?</p>
-            <button className="cursor-pointer underline font-bold hover:text-(--button-hover-bg) transition-colors">
+            <Link 
+              to="/register" 
+              className="cursor-pointer underline font-bold hover:text-(--button-hover-bg) transition-colors"
+            >
               Zarejestruj się
-            </button>
+            </Link>
           </div>
         </>
       )}
