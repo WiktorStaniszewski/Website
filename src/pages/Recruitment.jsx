@@ -1,29 +1,81 @@
 import React from 'react'
-import 'styles/Contact.css'
 import Form from 'components/ui/Form';
+import { FaCoffee, FaStar, FaUserFriends, FaRegCheckCircle } from 'react-icons/fa';
 
 export default function Recruitment() {
   return (
-    <>
-      <div className='min-h-screen flex justify-top flex-col'>        
-          <div className='flex justify-center flex-col my-10 lg:mb-10 p-5 rounded-3xl shadow-[1px_3px_10px_var(--header-footer-bg)] backdrop-blur-sm backdrop-brightness-85 gap-1 w-9/10 lg:w-6/10 self-center cursor-default lg:hover:scale-102 lg:hover:backdrop-brightness-75 transition-all duration-200 ease-in-out disclaimer'>
-            <h1 className='font-semibold text-center text-3xl mb-4'>Somnium Rekrutacja - Barista</h1> 
-            <p>Cześć, tu Somnium Cafe Bar! Jesteśmy kawiarnią specialty z Krakowa i poszukujemy kawowych bohaterów! </p><br />
-            <p>Chcielibyśmy zatrudnić baristów:</p>
-            <p>⭐️ W pełnym wymiarze godzin, oraz tych poszukujących pracy w weekendy;</p>
-            <p>⭐️ Stawiających na rozwój - w Somnium nie będą Ci obce szkolenia sensoryczne, latte art, espresso, sprzedażowe oraz częste wewnętrzne cuppingi kaw z naszej oferty;</p>
-            <p>⭐️ Profesjonalnych - pracujących z pozytywną energią i uśmiechem za barem;</p>
-            <p>⭐️ Którzy uwielbiają rozmowy o kawie, ale w czasie przysłowiowej tabaki dzielnie dzierżą kolbę w dłoni;</p>
-            <p>⭐️ Dla których dobra organizacja i komunikacja w pracy oraz wysoka kultura osobista to podstawa;</p>
-            <p>⭐️ Sumiennych i obowiązkowych, czyli dbających o swoje stanowisko pracy, klimat i estetykę lokalu, szanujących czas pracy;</p>
-            <p>⭐️ Z opanowaną  sztuką dobrego hospitality.</p>
-            <p>⭐Podczas obecnej rekrutacji poszukujemy baristów z doświadczeniem, na minimum pół etatu (ok. 80h w miesiącu) z gotowością do pracy przede wszystkim w weekendy.</p>
-            <h3 className='mt-10 leading-6 text-lg'><strong>UWAGA!</strong> Nie szukamy osób na sezon. Wychodzimy z założenia, że to ludzie tworzą kawiarnie, dlatego jeśli posiadasz powyższe kompetencje i chcesz zostać z nami na dłużej, to wypełnij ankietę poniżej.</h3>
-            <h3 className='leading-6 text-lg'><strong>PAMIĘTAJ!</strong> Ważne, aby odpowiedzieć zgodnie ze stanem faktycznym. Poszukujemy ludzi na różnym poziomie wiedzy, ale chcących w pełni zaangażować się w rozwój naszych kawowych miejsc.</h3>
+    <div className='min-h-screen pt-32 pb-20 px-4 md:px-8 flex flex-col items-center relative overflow-hidden'>
+       {/* Background Ambience */}
+       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-(--medium-shade)/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+       <section className='max-w-4xl w-full animate-in fade-in slide-in-from-bottom-8 duration-700'>
+          {/* Header Card */}
+          <div className='bg-[#24201d]/60 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl mb-12 relative overflow-hidden'>
+            <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-(--medium-shade) to-transparent opacity-50"></div>
+            
+            <div className="text-center mb-10">
+                <span className="text-(--medium-shade) uppercase tracking-[0.3em] text-xs font-bold">Kariera</span>
+                <h1 className='font-serif font-bold text-4xl md:text-5xl mt-3 mb-6 text-(--font-color)'>
+                  Dołącz do <span className="italic text-white/90">Somnium</span>
+                </h1>
+                <p className='text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed'>
+                  Jesteśmy kawiarnią specialty z Krakowa i poszukujemy kawowych bohaterów! 
+                  Tworzymy miejsce, gdzie pasja do kawy spotyka się z doskonałą obsługą.
+                </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-(--font-color)/90">
+                <div className="space-y-6">
+                    <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/10 pb-2">
+                        <FaUserFriends className="text-(--medium-shade)"/> Kogo szukamy?
+                    </h3>
+                    <ul className="space-y-4">
+                        {[
+                            "Osób profesjonalnych, pracujących z uśmiechem",
+                            "Miłośników kawy (zarówno parzenia, jak i picia!)",
+                            "Osób z wysoką kulturą osobistą",
+                            "Graczy zespołowych ceniących komunikację"
+                        ].map((item, i) => (
+                            <li key={i} className="flex gap-3 text-sm md:text-base leading-relaxed">
+                                <FaRegCheckCircle className="mt-1 text-(--medium-shade) shrink-0" />
+                                <span>{item}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <div className="space-y-6">
+                    <h3 className="text-xl font-bold flex items-center gap-2 border-b border-white/10 pb-2">
+                        <FaStar className="text-(--medium-shade)"/> Co oferujemy?
+                    </h3>
+                    <ul className="space-y-4">
+                        {[
+                            "Szkolenia sensoryczne i techniczne (Latte Art, Espresso)",
+                            "Pracę na sprzęcie najwyższej klasy",
+                            "Wewnętrzne cuppingi i rozwój wiedzy",
+                            "Elastyczny grafik (pełny etat lub weekendy)"
+                        ].map((item, i) => (
+                            <li key={i} className="flex gap-3 text-sm md:text-base leading-relaxed">
+                                <FaCoffee className="mt-1 text-(--medium-shade) shrink-0" />
+                                <span>{item}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+
+            <div className="mt-10 p-6 bg-(--medium-shade)/10 border border-(--medium-shade)/20 rounded-2xl text-center">
+                <h3 className='text-lg font-bold text-(--medium-shade) mb-2'>Ważna informacja</h3>
+                <p className="text-sm md:text-base opacity-90">
+                   Nie szukamy osób na sezon. Wychodzimy z założenia, że to ludzie tworzą kawiarnie. 
+                   Jeśli chcesz zostać z nami na dłużej i rozwijać swoje umiejętności – wypełnij formularz poniżej.
+                </p>
+            </div>
           </div> 
+          
+          {/* Application Form Component */}
           <Form />
-      </div>
-    </>
+      </section>
+    </div>
   )
 }
-

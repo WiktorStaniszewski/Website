@@ -6,18 +6,15 @@ import useHeaderLogic from 'src/hooks/Header/useHeaderLogic';
 
 function Card({ product }) {
     const [on, toggle] = useToggle(false);
-    
     const { toggleClass } = useHeaderLogic();
     
-    // Fixed: Logic to close modal and reset header style
     const ref = useClickAway(() => {
         if (on) {
             toggle(false);
-            toggleClass(false); // Assuming false resets the header z-index/style
+            toggleClass(false);
         }
     });
 
-    // Wrapper to handle opening modal
     const handleCardClick = () => {
         toggleClass(); 
         toggle();
@@ -26,37 +23,40 @@ function Card({ product }) {
     return (
         <>
             <section 
-                className="backdrop-blur-sm backdrop-brightness-85 my-6 max-w-60 cursor-pointer rounded-3xl flex flex-col items-center card-hover-effect shadow-lg transition-all duration-200 ease-in-out hover:backdrop-brightness-75 hover:scale-102 z-30"
+                className="group relative backdrop-blur-md bg-white/1 border border-white/10 hover:border-(--medium-shade)/50 rounded-3xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-2 max-w-60 w-full flex flex-col"
                 onClick={handleCardClick}
             >
-                <img 
-                    src={"images/tempProducts/" + product.image} 
-                    alt={product.name} 
-                    className='w-60 p-2 rounded-3xl rounded-b-none'
-                />
+                <div className="relative w-full h-64 overflow-hidden bg-white/5">
+                    <img 
+                        src={"images/tempProducts/" + product.image} 
+                        alt={product.name} 
+                        className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-110'
+                    />
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
+                </div>
                 
-                <div className="flex flex-col justify-evenly px-2 w-full pb-4">
-                    <h3 className="card-title">
-                        {product.name}
-                        <section className="card-reviews flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                                <AiFillStar key={i} className='rating-stars' />
-                            ))}
-                            <span className="total-reviews ml-1">5</span>
-                        </section>
-                    </h3>
-                    
-                    <section className="card-price my-2">
-                        <div className="price text-sm text-gray-600">
-                            <p>Smak: {product.flavours}</p>
+                <div className="p-5 flex flex-col gap-3 flex-1">
+                    <div className="flex justify-between items-start">
+                        <h3 className="font-serif font-bold text-xl leading-tight text-(--font-color)">
+                            {product.name}
+                        </h3>
+                        <div className="flex items-center gap-1 bg-black/20 px-2 py-1 rounded-full">
+                            <AiFillStar className='text-(--medium-shade) text-sm' />
+                            <span className="text-xs font-bold text-white/90">5.0</span>
                         </div>
-                    </section>
+                    </div>
                     
-                    <p className="font-bold text-lg mb-3">{product.price} PLN</p>
+                    <div className="text-sm text-white/60 line-clamp-2 min-h-[2.5em]">
+                        <span className="font-semibold text-(--medium-shade)">Nuty:</span> {product.flavours}
+                    </div>
                     
-                    {/* PASSED PRODUCT PROP HERE */}
-                    <div className="w-full flex justify-center">
-                        <AddToCartButton product={product} />
+                    <div className="mt-auto pt-4 flex items-center justify-between border-t border-white/5">
+                        <p className="font-bold text-lg text-(--font-color)">{product.price} PLN</p>
+                        
+                        {/* Compact Button Used Here */}
+                        <div className="transform translate-y-0 opacity-100 transition-all duration-300">
+                             <AddToCartButton product={product} compact={true} />
+                        </div>
                     </div>
                 </div>
             </section>

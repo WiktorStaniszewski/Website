@@ -1,9 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { RiArrowDropDownLine } from "react-icons/ri";
-import { useViewport } from "hooks/useViewport.jsx";
 
 function Menu({ displayedTitle, productArray, isActive, toggleMenu, classTitle, index }) {
-  const { isMobile } = useViewport();
 
   // --- Animation Variants ---
   const containerVariants = {
@@ -32,7 +30,7 @@ function Menu({ displayedTitle, productArray, isActive, toggleMenu, classTitle, 
   // Alternate styles based on index (Simulating your old CSS nth-child logic but better)
   const isEven = index % 2 === 0;
   const cardStyle = isEven 
-    ? "bg-white/1 border-white/10 hover:bg-white/5" 
+    ? "bg-black/5 border-white/10 hover:bg-black/10" 
     : "bg-black/20 border-white/5 hover:bg-black/30";
 
   return (
@@ -43,6 +41,7 @@ function Menu({ displayedTitle, productArray, isActive, toggleMenu, classTitle, 
         rounded-3xl border backdrop-blur-md shadow-xl overflow-hidden
         transition-colors duration-300
         ${cardStyle}
+        ${index === 0 ? 'lg:mt-20' : ''}
       `}
     >
       {/* Header / Trigger */}

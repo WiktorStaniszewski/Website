@@ -1,148 +1,171 @@
-import 'styles/Header.css';
-import { NavLink, Link } from 'react-router-dom';
-import {
-  FiShoppingCart,
-  FiHome,
-  FiSmartphone,
-  FiLogIn,   
-  FiUserCheck
-} from "react-icons/fi";
-import { RiDrinks2Fill } from "react-icons/ri";
-import { GoPersonFill } from "react-icons/go";
-import { AiFillShopping } from "react-icons/ai";
-import { FaInstagram } from "react-icons/fa";
-import { SiGooglemaps } from "react-icons/si";
-
-import { useCart } from 'src/context/CartProvider';
-import LoginWidget from 'components/Login/LoginWidget'; 
+import React, { useState, useEffect } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from 'src/context/AuthProvider';
-import useHeaderLogic from 'src/hooks/Header/useHeaderLogic';
+// If you have a CartContext, import it here. Assuming standard context usage:
+import { useCart } from 'src/context/CartProvider'; 
+
+import { FaBars, FaTimes, FaShoppingBag, FaUser, FaSignInAlt, FaCog } from "react-icons/fa";
 
 export default function Header() {
-  const { user } = useAuth(); 
-  const { cartCount } = useCart();
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { user, isAuthenticated } = useAuth();
+    
+    // Safety check for cart context in case it's not ready
+    const cartContext = useCart ? useCart() : { cartItems: [] };
+    const cartCount = cartContext?.cartItems?.length || 0;
 
-  const {
-    isActive,
-    toggleClass,
-    showLogo,
-  } = useHeaderLogic();
+    const location = useLocation();
 
+    // Handle Scroll Effect
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
-  return (
-    <>
-      <div className="lg:bg-(--header-footer-bg) lg:py-0 flex items-center flex-col transition-all duration-500 ease-in sticky top-0 lg:static z-20 lg:pt-2 mb-1 lg:mb-0">
-        
-        {/* Main Header Bar */}
-        <div className={`${isActive ? 'bg-(--header-footer-bg)' : ''} flex items-center justify-between w-9/10 lg:my-10 px-2 lg:px-20 h-22 lg:h-0 z-20 rounded-3xl not-lg:mt-2 transition-colors ease-in-out duration-200`}>
-          
-          {/* Left Side: Hamburger & Socials */}
-          <div className="flex-1 flex justify-start">
-            <div
-              className={isActive ? 'hamburgerIcon' : 'hamburgerIcon navActive'}
-              onClick={toggleClass}
+    // Close mobile menu on route change
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [location]);
+
+    const navLinks = [
+        { name: "Home", path: "/" },
+        { name: "Menu", path: "/menu" },
+        { name: "Sklep", path: "/shop" },
+        { name: "O nas", path: "/about" },
+        { name: "Blog", path: "/blog" },
+        { name: "Kontakt", path: "/recruitment" },
+    ];
+
+    if (user?.role === 'admin') {
+        navLinks.push({ name: "Dashboard", path: "/admin", icon: <FaCog /> });
+    }
+
+    return (
+        <>
+            <header 
+                className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 border-b ${
+                    isScrolled 
+                    ? "bg-[#24201d]/80 backdrop-blur-md py-3 border-white/10 shadow-lg" 
+                    : "bg-transparent py-6 border-transparent"
+                }`}
             >
-              <span className="bar"></span>
-              <span className="bar"></span>
-              <span className="bar"></span>
-            </div>
-            
-            <ul className="hidden lg:flex lg:flex-row lg:items-center lg:gap-1 ml-4">
-              <a href="https://www.instagram.com/SomniumCafeBar/" target='_blank' rel="noreferrer">
-                <li className='headerButton'><FaInstagram /></li>
-              </a>
-              <a href="https://maps.app.goo.gl/4Vyaqvm646KZoFBb6" target='_blank' rel="noreferrer">
-                <li className='headerButton'><SiGooglemaps /></li>
-              </a>
-            </ul>
-          </div>
+                <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+                    
+                    {/* --- Logo --- */}
+                    <NavLink to="/" className="relative z-50 group">
+                        <h1 className="text-2xl md:text-3xl font-serif font-bold tracking-wider text-(--font-color)">
+                            SOMNIUM
+                            <span className="block text-[10px] md:text-xs font-sans font-light tracking-[0.4em] opacity-70 group-hover:text-(--medium-shade) transition-colors">
+                                CAFE BAR
+                            </span>
+                        </h1>
+                    </NavLink>
 
-          {/* 2. Center Side - The Logo */}
-          <div className="flex justify-center shrink-0">
-            <Link to="/">
-              <img className='block pt-0 w-35 lg:w-60 cursor-pointer' src="/images/logo body_biale.png" alt="logo" />
-            </Link>
-          </div>
+                    {/* --- Desktop Navigation --- */}
+                    <nav className="hidden lg:flex items-center gap-8">
+                        {navLinks.map((link) => (
+                            <NavLink 
+                                key={link.name} 
+                                to={link.path}
+                                className={({ isActive }) => 
+                                    `text-sm uppercase tracking-widest font-medium relative group py-2 ${
+                                        isActive ? "text-(--medium-shade)" : "text-(--font-color)/80 hover:text-(--font-color)"
+                                    }`
+                                }
+                            >
+                                {link.name}
+                                <span className="absolute bottom-0 left-0 w-0 h-px bg-(--medium-shade) transition-all duration-300 group-hover:w-full"></span>
+                            </NavLink>
+                        ))}
+                    </nav>
 
-          {/* 3. Right Side - force it to match the left width */}
-          <div className='flex-1 flex justify-end items-center gap-2'>
-            <div className={`
-              flex justify-center items-center transition-all duration-300
-              ${isActive 
-                ? 'opacity-100 scale-100 w-auto' 
-                : 'opacity-0 scale-50 w-0 pointer-events-none'
-              }
-            `}>
-              <LoginWidget />
-            </div>
+                    {/* --- Icons & Actions --- */}
+                    <div className="hidden lg:flex items-center gap-6">
+                        {/* Cart Icon */}
+                        <NavLink to="/cart" className="relative group p-2">
+                            <FaShoppingBag className="text-xl text-(--font-color) group-hover:text-(--medium-shade) transition-colors" />
+                            {cartCount > 0 && (
+                                <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-(--medium-shade) text-[#24201d] text-xs font-bold rounded-full shadow-lg border border-[#24201d]">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </NavLink>
 
-            <Link to="/cart">
-              <div className='cartButton headerButton relative'>
-                <FiShoppingCart />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                    {cartCount}
-                  </span>
-                )}
-              </div>
-            </Link>
-          </div>
-        </div>
+                        {/* Account Icon */}
+                        <NavLink 
+                            to={isAuthenticated ? "/account" : "/login"} 
+                            className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-(--medium-shade) hover:border-(--medium-shade) hover:text-[#24201d] transition-all duration-300 group"
+                        >
+                            {isAuthenticated ? <FaUser /> : <FaSignInAlt />}
+                            <span className="text-xs uppercase font-bold tracking-wider">
+                                {isAuthenticated ? "Konto" : "Login"}
+                            </span>
+                        </NavLink>
+                    </div>
 
-        {/* Mobile Sidebar Navigation */}
-        <div className={isActive ? 'sidebar' : 'sidebar navActive'}>
-          <ul>
-            <NavLink to="/" className="sidebarLink" onClick={toggleClass}><li><FiHome /> &nbsp;Home</li></NavLink>
-            <NavLink to="shop" className="sidebarLink" onClick={toggleClass}><li><AiFillShopping /> &nbsp;Sklep</li></NavLink>
-            <NavLink to="menu" className="sidebarLink" onClick={toggleClass}><li><RiDrinks2Fill /> &nbsp;Menu</li></NavLink>
-            <NavLink to="recruitment" className="sidebarLink" onClick={toggleClass}><li><FiSmartphone /> &nbsp;Rekrutacja</li></NavLink>
-            <NavLink to="about" className="sidebarLink" onClick={toggleClass}><li><GoPersonFill /> &nbsp;O nas</li></NavLink>
-            {user?.role === 'admin' && (
-              <NavLink 
-                to="/admin" 
-                className="navbarLink transition-all"
-              >
-                <li>Panel Admina</li>
-              </NavLink>
-            )}
-            
-            {/* Mobile-only Login/Profile Link */}
-            <div className="mt-4 border-t border-white/10 lg:hidden">
-              {user ? (
-                 <div className="sidebarLink text-green-400 text-center" onClick={toggleClass}>
-                    <li><FiUserCheck />Witaj, {user.username}</li>
-                 </div>
-              ) : (
-                 <NavLink to="login" className="sidebarLink" onClick={toggleClass}>
-                    <li><FiLogIn /> &nbsp;Zaloguj się</li>
-                 </NavLink>
-              )}
-            </div>
-          </ul>
-        </div>
-      </div>
+                    {/* --- Mobile Hamburger --- */}
+                    <button 
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        className="lg:hidden relative z-50 p-2 text-(--font-color) hover:text-(--medium-shade) transition-colors"
+                    >
+                        {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+                    </button>
+                </div>
+            </header>
 
-      {/* Desktop Navigation Bar (Sticky) */}
-      <div className="redirectButtons hidden lg:flex lg:flex-row lg:justify-evenly bg-(--header-footer-bg) sticky top-0 z-10 w-screen shadow-md">
-        <ul>
-          <div className={`flex justify-center items-center transition-all duration-500 animate-[enlarge_1s_ease-in-out_infinite] ${showLogo ? "logo-visible" : "logo-hidden"}`}>
-            <Link to="/"><img className='transition-all duration-500 ease-in-out navigation-logo' src="/images/logo body_biale.png" alt="logo" /></Link>
-          </div>
-          <NavLink to="/" className="navbarLink"><li>Home</li></NavLink>
-          <NavLink to="shop" className="navbarLink"><li>Sklep</li></NavLink>
-          <NavLink to="menu" className="navbarLink"><li>Menu</li></NavLink>
-          <NavLink to="recruitment" className="navbarLink"><li>Rekrutacja</li></NavLink>
-          <NavLink to="about" className="navbarLink"><li>O nas</li></NavLink>
-          {user?.role === 'admin' && (
-            <NavLink 
-              to="/admin" 
-              className="navbarLink transition-all"
+            {/* --- Mobile Menu Overlay --- */}
+            <div 
+                className={`fixed inset-0 z-40 bg-[#24201d] transition-all duration-500 ease-in-out lg:hidden flex flex-col justify-center items-center gap-8 ${
+                    isMobileMenuOpen 
+                    ? "opacity-100 visible translate-y-0" 
+                    : "opacity-0 invisible -translate-y-10"
+                }`}
             >
-              <li>Panel Admina</li>
-            </NavLink>
-          )}
-        </ul>
-      </div>
-    </>
-  );
+                {/* Background Decor */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-(--medium-shade)/10 rounded-full blur-[80px] pointer-events-none"></div>
+
+                <nav className="flex flex-col items-center gap-6 text-center">
+                    {navLinks.map((link, idx) => (
+                        <NavLink 
+                            key={link.name} 
+                            to={link.path}
+                            className="text-3xl font-serif font-bold text-(--font-color) hover:text-(--medium-shade) transition-colors"
+                            style={{ transitionDelay: `${idx * 50}ms` }} // Stagger animation
+                        >
+                            {link.name}
+                        </NavLink>
+                    ))}
+                </nav>
+
+                <div className="w-16 h-px bg-white/10 my-4"></div>
+
+                <div className="flex gap-8">
+                    <NavLink to="/cart" className="flex flex-col items-center gap-2 text-(--font-color)">
+                        <div className="relative p-4 bg-white/5 rounded-full border border-white/10">
+                            <FaShoppingBag size={20} />
+                            {cartCount > 0 && (
+                                <span className="absolute top-0 right-0 w-5 h-5 bg-(--medium-shade) text-[#24201d] text-xs font-bold rounded-full flex items-center justify-center">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </div>
+                        <span className="text-xs uppercase tracking-widest opacity-70">Koszyk</span>
+                    </NavLink>
+
+                    <NavLink to={isAuthenticated ? "/account" : "/login"} className="flex flex-col items-center gap-2 text-(--font-color)">
+                        <div className="p-4 bg-white/5 rounded-full border border-white/10">
+                            {isAuthenticated ? <FaUser size={20} /> : <FaSignInAlt size={20} />}
+                        </div>
+                        <span className="text-xs uppercase tracking-widest opacity-70">
+                            {isAuthenticated ? "Profil" : "Zaloguj"}
+                        </span>
+                    </NavLink>
+                </div>
+            </div>
+        </>
+    );
 }

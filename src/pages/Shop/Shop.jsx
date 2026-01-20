@@ -1,6 +1,6 @@
 import 'styles/Shop.css'
 
-import Products from 'pages/shop/components/ProductCard'
+import Products from 'src/pages/Shop/components/ProductList'
 import Navigation from 'pages/shop/components/ShopNavigation'
 import Recommended from 'pages/shop/components/RecommendedSection'
 import Sidebar from 'pages/shop/components/Sidebar/Sidebar'
@@ -23,7 +23,7 @@ export default function Shop() {
     const [isFilterMenuOpen, toggleFilterMenu] = useToggle(false);
 
     return (
-        <main className='w-screen flex justify-center lg:mt-2'>
+        <main className='w-screen flex justify-center lg:mt-25'>
             <div className='lg:grid lg:grid-cols-[1fr_3fr_1fr_0fr] lg:gap-0 lg:grid-rows-[auto_auto_1fr] lg:w-8/10 xl:w-75/100 mx-0 flex justify-center flex-col w-9/10'>
                 <div className='lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-6 lg:h-fit'>
                     <Sidebar

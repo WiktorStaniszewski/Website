@@ -1,4 +1,4 @@
-import { FaSpinner } from "react-icons/fa"; // Assuming you have react-icons, or use any spinner
+import { FaSpinner } from "react-icons/fa";
 
 export default function Products({ filters }) {
   if (filters.loading) {

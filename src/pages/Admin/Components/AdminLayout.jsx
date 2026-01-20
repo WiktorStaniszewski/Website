@@ -7,7 +7,7 @@ export default function AdminLayout() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex h-screen text-[#e0e0e0] lg:flex-row flex-col not-lg:items-center">
+    <div className="flex h-screen text-[#e0e0e0] lg:flex-row flex-col not-lg:items-center lg:mt-20">
       {/* Sidebar */}
       <aside className="w-64 border-r flex flex-col">
         <div className="p-6 text-center border-b border-white/5 font-bold tracking-widest">
