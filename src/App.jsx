@@ -56,10 +56,10 @@ export default function App() {
     <ViewportProvider>
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
-          <Route path="" element={<LayoutWrapper><Layout /></LayoutWrapper>}>
+          <Route path="/" element={<LayoutWrapper><Layout /></LayoutWrapper>}>
             <Route index element={<PageWrapper><Home /></PageWrapper>} />
             <Route path="login" element={<PageWrapper><LoginPage /></PageWrapper>} />
-            <Route path="register" element={<PageWrapper><RegisterPage /></PageWrapper>} /> {/* NEW ROUTE */}
+            <Route path="register" element={<PageWrapper><RegisterPage /></PageWrapper>} />
             <Route path="about" element={<PageWrapper><About /></PageWrapper>} />
             <Route path="menu" element={<PageWrapper><Menus /></PageWrapper>} />
             <Route path="recruitment" element={<PageWrapper><Recruitment /></PageWrapper>} />

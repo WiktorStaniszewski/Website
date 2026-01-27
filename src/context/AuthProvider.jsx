@@ -10,14 +10,19 @@ export function AuthProvider({ children }) {
       const initializeAuth = () => {
          try {
             const savedUser = localStorage.getItem("somnium_user");
-            if (savedUser) {
-               const parsedUser = JSON.parse(savedUser);
-               // validate JWT normally here 
-               setUser(parsedUser);
+            const savedToken = localStorage.getItem("somnium_token");
+
+            if (savedUser && savedToken) {
+               setUser(JSON.parse(savedUser));
+            } else {
+               // Cleanup if inconsistent
+               localStorage.removeItem("somnium_user");
+               localStorage.removeItem("somnium_token");
             }
          } catch (error) {
             console.error("Auth initialization failed:", error);
             localStorage.removeItem("somnium_user");
+            localStorage.removeItem("somnium_token");
          } finally {
             setLoading(false);
          }
@@ -26,21 +31,25 @@ export function AuthProvider({ children }) {
       initializeAuth();
    }, []);
 
-   const login = useCallback((userData) => {
-      const adminUsernames = ['emilys'];
+   const login = useCallback((authResponse) => {
+      // Backend returns { token: "...", user: { ... } }
+      const { user, token } = authResponse;
+      
+      if (!user || !token) {
+          console.error("Invalid login response structure", authResponse);
+          return;
+      }
 
-      const userWithRole = {
-         ...userData,
-         role: adminUsernames.includes(userData.username) ? 'admin' : 'customer'
-      };
-
-      setUser(userWithRole);
-      localStorage.setItem("somnium_user", JSON.stringify(userWithRole));
+      setUser(user);
+      localStorage.setItem("somnium_user", JSON.stringify(user));
+      localStorage.setItem("somnium_token", token);
    }, []);
 
    const logout = useCallback(() => {
       setUser(null);
       localStorage.removeItem("somnium_user");
+      localStorage.removeItem("somnium_token");
+      window.location.reload();
    }, []);
 
    const value = {

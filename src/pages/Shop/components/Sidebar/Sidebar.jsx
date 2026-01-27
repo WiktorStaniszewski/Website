@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'; // Added useEffect
+import React, { useEffect } from 'react';
 import 'styles/Shop.css';
 import { BsShop } from "react-icons/bs";
 import { FiX, FiFilter } from 'react-icons/fi';
@@ -26,8 +26,13 @@ function Sidebar({filters, isFilterMenuOpen, toggleFilterMenu}) {
   }, [isMobile, isFilterMenuOpen]);
 
   const containerClass = isMobile 
-    ? `fixed top-0 left-0 w-full z-50 bg-[#24201d] transition-transform duration-300 ease-in-out flex flex-col max-h-screen shadow-2xl ${isFilterMenuOpen ? 'translate-x-0' : '-translate-x-full'}`
-    : `flex flex-col w-full gap-6 sticky top-28`; 
+    ? `fixed inset-0 z-50 bg-[#24201d] transition-all duration-500 ease-in-out h-full w-full flex flex-col overflow-y-auto ${
+        isFilterMenuOpen 
+        ? "opacity-100 visible translate-y-0" 
+        : "opacity-0 invisible -translate-y-10"
+      }`
+    : `flex flex-col w-full gap-6 sticky top-28`;
+
 
   return (
     <aside className={containerClass}>

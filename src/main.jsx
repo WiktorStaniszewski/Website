@@ -15,7 +15,7 @@ import { CartProvider } from 'src/context/CartProvider';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-      <Router> {/*basename="/Website"*/}
+      <Router basename="/Website/">
         <AuthProvider>
           <CartProvider>
             <Wrapper>

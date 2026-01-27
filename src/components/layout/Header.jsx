@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+
 import { useAuth } from 'src/context/AuthProvider';
 import { useCart } from 'src/context/CartProvider'; 
 
@@ -118,7 +119,7 @@ export default function Header() {
                     {/* --- Mobile Hamburger --- */}
                     <button 
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="lg:hidden relative z-50 p-2 text-(--font-color) hover:text-(--medium-shade) transition-colors"
+                        className="lg:hidden relative z-50 p-2 text-(--font-color) hover:text-(--medium-shade) transition-colors cursor-pointer"
                     >
                         {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
                     </button>

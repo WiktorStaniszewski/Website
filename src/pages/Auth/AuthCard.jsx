@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "src/context/AuthProvider";
 import { Link } from "react-router-dom";
-import api from "src/services/api"; // Import API
+import api from "src/services/api"; 
 
 export default function AuthCard({ onSuccess }) {
   const [serverError, setServerError] = useState(null);
@@ -21,8 +21,9 @@ export default function AuthCard({ onSuccess }) {
         password: data.password,
       });
 
-      if (response && response.data) {
-        login(response.data);
+      // Response is now directly the JSON object { user, token }
+      if (response && response.token) {
+        login(response);
         if (onSuccess) onSuccess();
       } else {
         setServerError("Nieznany błąd logowania.");
@@ -81,7 +82,6 @@ export default function AuthCard({ onSuccess }) {
             onSubmit={handleSubmit(onSubmit)}
             className='flex justify-center flex-col items-center gap-3 w-full'
           >
-            {/* Username Input */}
             <div className="w-full">
               <input
                 {...register("username", { required: "Nazwa użytkownika jest wymagana" })}
@@ -94,7 +94,6 @@ export default function AuthCard({ onSuccess }) {
               )}
             </div>
             
-            {/* Password Input */}
             <div className="w-full">
               <input
                 {...register("password", { required: "Hasło jest wymagane" })}

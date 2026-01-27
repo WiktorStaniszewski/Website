@@ -1,6 +1,5 @@
 import 'styles/Shop.css'
 import { FiHeart } from 'react-icons/fi'
-import { AiOutlineShoppingCart } from 'react-icons/ai' // Optional if unused
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useViewport } from 'hooks/useViewport'
 
@@ -23,13 +22,13 @@ export default function Navigation({filters, toggleFilterMenu}) {
 
           {/* Actions */}
           <div className="flex items-center gap-2 ml-4">
-            <button className='p-3 rounded-xl hover:bg-white/10 text-white/80 hover:text-(--medium-shade) transition-colors'>
+            <button className='p-3 rounded-xl hover:bg-white/10 text-white/80 hover:text-(--medium-shade) transition-colors cursor-pointer'>
                 <FiHeart className='text-xl'/>
             </button>
             
             {isMobile && (
                 <button 
-                    className='p-3 rounded-xl bg-white/5 hover:bg-(--medium-shade) hover:text-[#24201d] transition-colors border border-white/10'
+                    className='p-3 rounded-xl bg-white/5 hover:bg-(--medium-shade) hover:text-[#24201d] transition-colors border border-white/10 cursor-pointer'
                     onClick={toggleFilterMenu}
                 >
                     <RxHamburgerMenu className='text-xl'/>

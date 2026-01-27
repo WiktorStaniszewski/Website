@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../../services/api"; 
-import { FiEdit2, FiTrash2, FiPlus, FiTag, FiDollarSign } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiPlus, FiTag } from "react-icons/fi";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -10,7 +10,7 @@ export default function Products() {
     setLoading(true);
     try {
         const res = await api.get("products");
-        if(res?.data) setProducts(res.data);
+        if(Array.isArray(res)) setProducts(res);
     } catch(e) {
         console.error(e);
     } finally {
@@ -20,10 +20,14 @@ export default function Products() {
 
   useEffect(() => { fetchProducts(); }, []);
 
-  const handleDelete = async (name) => {
+  const handleDelete = async (id) => {
     if(window.confirm("Czy na pewno usunąć ten produkt?")) {
-      await api.delete("products", name); 
-      fetchProducts(); 
+      try {
+        await api.delete("products", id); 
+        fetchProducts(); 
+      } catch (error) {
+        alert("Błąd podczas usuwania");
+      }
     }
   };
 
@@ -54,8 +58,8 @@ export default function Products() {
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5">
-            {products.map((p, index) => (
-              <tr key={index} className="hover:bg-white/5 transition-colors group">
+            {products.map((p) => (
+              <tr key={p.id} className="hover:bg-white/5 transition-colors group">
                 <td className="p-6 text-white font-medium text-base">{p.name}</td>
                 <td className="p-6">
                     <span className="bg-white/5 px-3 py-1 rounded-full text-xs border border-white/10">
@@ -68,7 +72,7 @@ export default function Products() {
                     <FiEdit2 />
                   </button>
                   <button 
-                    onClick={() => handleDelete(p.name)}
+                    onClick={() => handleDelete(p.id)}
                     className="p-2 hover:bg-red-500/20 hover:text-red-400 rounded-lg transition-colors" 
                     title="Usuń"
                   >
@@ -83,8 +87,8 @@ export default function Products() {
 
       {/* --- Mobile Card View --- */}
       <div className="md:hidden grid grid-cols-1 gap-4">
-        {products.map((p, index) => (
-            <div key={index} className="bg-[#24201d]/60 backdrop-blur-xl border border-white/5 p-5 rounded-3xl shadow-lg flex flex-col gap-4">
+        {products.map((p) => (
+            <div key={p.id} className="bg-[#24201d]/60 backdrop-blur-xl border border-white/5 p-5 rounded-3xl shadow-lg flex flex-col gap-4">
                 <div className="flex justify-between items-start">
                     <div>
                         <h3 className="text-lg font-bold text-white mb-1">{p.name}</h3>
@@ -102,7 +106,7 @@ export default function Products() {
                         <FiEdit2 /> Edytuj
                     </button>
                     <button 
-                        onClick={() => handleDelete(p.name)}
+                        onClick={() => handleDelete(p.id)}
                         className="flex-1 py-3 bg-red-500/10 rounded-xl text-sm font-bold text-red-400 hover:bg-red-500/20 transition-colors flex items-center justify-center gap-2"
                     >
                         <FiTrash2 /> Usuń

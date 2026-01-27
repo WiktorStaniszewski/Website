@@ -9,11 +9,12 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const ordersRes = await api.get("orders");
-        const orders = ordersRes?.data || [];
+        const orders = await api.get("orders");
+        // Ensure orders is an array
+        const safeOrders = Array.isArray(orders) ? orders : [];
         
-        const revenue = orders.reduce((acc, o) => acc + (o.status !== 'cancelled' ? Number(o.total) : 0), 0);
-        const activeOrders = orders.filter(o => o.status === 'new' || o.status === 'processing').length;
+        const revenue = safeOrders.reduce((acc, o) => acc + (o.status !== 'cancelled' ? Number(o.total) : 0), 0);
+        const activeOrders = safeOrders.filter(o => o.status === 'new' || o.status === 'processing').length;
 
         setStats({ revenue, orders: activeOrders });
       } catch (e) {
@@ -40,21 +41,19 @@ export default function Dashboard() {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
-        {/* Card 1: Revenue */}
         <div className="relative overflow-hidden p-6 rounded-4xl bg-[#24201d]/60 backdrop-blur-xl border border-white/10 group hover:border-(--medium-shade)/30 transition-colors">
           <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:scale-110 transition-transform">
              <FiDollarSign size={60} />
           </div>
           <div className="text-gray-400 text-xs uppercase tracking-widest font-bold mb-2">Dzisiejszy Przychód</div>
           <div className="text-4xl font-bold text-white flex items-baseline gap-1">
-            {stats.revenue} <span className="text-sm font-normal text-(--medium-shade)">PLN</span>
+            {stats.revenue.toFixed(2)} <span className="text-sm font-normal text-(--medium-shade)">PLN</span>
           </div>
           <div className="mt-4 flex items-center gap-2 text-green-400 text-xs font-bold bg-green-400/10 w-fit px-2 py-1 rounded-full">
             <FiTrendingUp /> +12% vs wczoraj
           </div>
         </div>
 
-        {/* Card 2: Active Orders */}
         <div className="relative overflow-hidden p-6 rounded-4xl bg-[#24201d]/60 backdrop-blur-xl border border-white/10 group hover:border-(--medium-shade)/30 transition-colors">
           <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:scale-110 transition-transform">
              <FiShoppingCart size={60} />

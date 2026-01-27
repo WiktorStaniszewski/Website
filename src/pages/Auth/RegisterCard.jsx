@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "src/context/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 import api from "src/services/api";
 
@@ -9,7 +8,6 @@ export default function RegisterCard() {
   const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  const { login } = useAuth();
   const navigate = useNavigate();
 
   const password = watch("password", "");
@@ -19,18 +17,17 @@ export default function RegisterCard() {
     setServerError(null);
 
     try {
-      // Call our new "register" endpoint in mockDatabase
-      const response = await api.post("register", {
+      // Backend returns { message: "User created successfully" } on 201
+      await api.post("register", {
         username: data.username,
         email: data.email,
         password: data.password,
+        firstName: data.username // Using username as name default
       });
-
-      if (response && response.data) {
-        // Auto-login after successful registration
-        login(response.data);
-        navigate("/"); // Redirect to home
-      }
+      
+      // Since backend doesn't return token on register, navigate to login
+      navigate("/login"); 
+      alert("Konto utworzone! Zaloguj się.");
 
     } catch (err) {
       console.error("Register error:", err);
@@ -50,7 +47,6 @@ export default function RegisterCard() {
         onSubmit={handleSubmit(onSubmit)}
         className='flex justify-center flex-col items-center gap-3 w-full'
       >
-        {/* Username */}
         <div className="w-full">
           <input
             {...register("username", { 
@@ -66,7 +62,6 @@ export default function RegisterCard() {
           )}
         </div>
 
-        {/* Email */}
         <div className="w-full">
           <input
             {...register("email", { 
@@ -82,7 +77,6 @@ export default function RegisterCard() {
           )}
         </div>
         
-        {/* Password */}
         <div className="w-full">
           <input
             {...register("password", { 
@@ -98,7 +92,6 @@ export default function RegisterCard() {
           )}
         </div>
 
-        {/* Confirm Password */}
         <div className="w-full">
           <input
             {...register("confirmPassword", { 
@@ -113,7 +106,6 @@ export default function RegisterCard() {
           )}
         </div>
 
-        {/* Checkbox */}
         <div className="flex items-start gap-2 self-start ml-2 text-sm text-(--font-color) mt-2">
           <input 
             {...register("terms", { required: true })} 

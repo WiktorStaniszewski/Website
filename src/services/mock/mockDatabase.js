@@ -37,14 +37,12 @@ export const mockDatabase = {
   post: async (collection, payload) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        // --- Special Handler for Login ---
         if (collection === "login") {
-            // Simulate a check (Accept any user/pass for demo, or add specific logic)
             if (payload.username && payload.password) {
                 const fakeUser = {
                     id: 999,
                     username: payload.username,
-                    firstName: payload.username, // Fallback for demo
+                    firstName: payload.username,
                     email: `${payload.username}@example.com`,
                     image: "https://robohash.org/" + payload.username,
                     token: "mock-jwt-token-123"
