@@ -1,4 +1,4 @@
-function Input({ title, value, handleChange, number, checked }) {
+export default function Input({ title, value, handleChange, number, checked }) {
   return (
     <label className="group flex items-center cursor-pointer py-2 select-none relative transition-all duration-300">
       <input
@@ -41,5 +41,3 @@ function Input({ title, value, handleChange, number, checked }) {
     </label>
   );
 }
-
-export default Input;

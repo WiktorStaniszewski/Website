@@ -27,8 +27,16 @@ function Menus() {
     ];
 
     return (
-        <div className="flex flex-col p-4 lg:p-8 min-h-screen pt-24">
-            <div className="flex flex-col items-center justify-center gap-6 w-full">
+        <div className="relative min-h-screen pt-32 pb-20 px-4 lg:px-8 bg-(--80-shade) overflow-hidden">
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-(--medium-shade)/20 rounded-full blur-[150px] pointer-events-none mix-blend-screen"></div>
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-(--medium-shade)/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
+
+            <div className="relative z-10 flex flex-col items-center justify-center gap-8 w-full animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                <div className="text-center">
+                     <span className="text-(--medium-shade) uppercase tracking-[0.3em] text-xs font-bold brightness-110">Nasza Oferta</span>
+                     <h2 className="font-serif font-bold text-4xl md:text-5xl mt-3 text-white">Menu</h2>
+                </div>
+
                 {menuItems.map((item, index) => (
                     <Menu 
                         key={item.key}

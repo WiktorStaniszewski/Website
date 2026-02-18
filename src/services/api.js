@@ -14,7 +14,9 @@ const getHeaders = () => {
 const api = {
   get: async (endpoint) => {
     try {
-      const res = await fetch(`${API_URL}/${endpoint}`, { 
+      // Ensure we don't double slashes if endpoint starts with /
+      const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+      const res = await fetch(`${API_URL}/${cleanEndpoint}`, { 
         headers: getHeaders() 
       });
       
@@ -23,8 +25,6 @@ const api = {
         throw new Error(errorData.message || `API Error: ${res.status}`);
       }
       
-      // Backend returns data directly, no need for .data wrapper usually,
-      // but we return the raw JSON here.
       return await res.json();
     } catch (error) {
       console.error("GET request failed:", error);
@@ -33,9 +33,15 @@ const api = {
   },
 
   post: async (endpoint, data) => {
+    // FIX: Remove manual rewrite. The Component should pass 'auth/login' or 'orders'
+    // If your components pass just 'login', we can keep a small helper, but it's better
+    // to fix the call site. For safety, I will keep the check but make it cleaner.
     let url = endpoint;
     if (endpoint === 'login') url = 'auth/login';
     if (endpoint === 'register') url = 'auth/register';
+
+    // Ensure no leading slash issues
+    url = url.startsWith('/') ? url.slice(1) : url;
 
     try {
       const res = await fetch(`${API_URL}/${url}`, {
@@ -45,8 +51,9 @@ const api = {
       });
 
       if (!res.ok) {
+        // Critical: Parse the backend JSON error to show "Invalid credentials" to user
         const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.message || "Request failed");
+        throw new Error(errorData.message || `Request failed with status ${res.status}`);
       }
 
       return await res.json();
@@ -58,13 +65,17 @@ const api = {
 
   put: async (endpoint, id, data) => {
     try {
-      const res = await fetch(`${API_URL}/${endpoint}/${id}`, {
+      const url = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+      const res = await fetch(`${API_URL}/${url}/${id}`, {
         method: "PUT",
         headers: getHeaders(),
         body: JSON.stringify(data),
       });
 
-      if (!res.ok) throw new Error("Update failed");
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || "Update failed");
+      }
       return await res.json();
     } catch (error) {
       console.error("PUT request failed:", error);
@@ -74,12 +85,16 @@ const api = {
 
   delete: async (endpoint, id) => {
     try {
-      const res = await fetch(`${API_URL}/${endpoint}/${id}`, {
+      const url = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+      const res = await fetch(`${API_URL}/${url}/${id}`, {
         method: "DELETE",
         headers: getHeaders(),
       });
 
-      if (!res.ok) throw new Error("Delete failed");
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || "Delete failed");
+      }
       return true;
     } catch (error) {
       console.error("DELETE request failed:", error);

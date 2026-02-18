@@ -8,17 +8,13 @@ import Sidebar from 'pages/shop/components/Sidebar/Sidebar'
 import { useShopFilters } from 'pages/shop/hooks/useShopFilters'
 import { useToggle } from '@uidotdev/usehooks'
 
+import { useScrollVisibility } from 'src/hooks/useScrollVisibility';
+
 export default function Shop() {
     const filters = useShopFilters();
-    /*
-        query,
-        filteredProducts,
-        handleInputChange,
-        handleCategoryChange,
-        handlePriceChange,
-        handleFlavorsChange,
-        handleCafeChange,
-    */
+
+    const { visible } = useScrollVisibility();
+
 
     const [isFilterMenuOpen, toggleFilterMenu] = useToggle(false);
 
@@ -38,7 +34,8 @@ export default function Shop() {
                 <div className="lg:col-start-2 lg:col-end-5 lg:row-start-3 lg:row-end-6">
                     <Products filters={filters} />
                 </div>
-                <div className="lg:col-start-1 lg:col-end-5 lg:row-start-1 lg:row-end-2 bottom-0 not-lg:sticky not-lg:bottom-15 not-lg:z-4 not-lg:w-8/10">
+                <div className={`lg:col-start-1 lg:col-end-5 lg:row-start-1 lg:row-end-2 bottom-0 not-lg:sticky not-lg:bottom-15 not-lg:z-4 ${visible ? 'not-lg:w-8/10' : 'not-lg:w-full'} transition-all duration-300 ease-in-out
+                    `}>
                     <Navigation filters={filters} toggleFilterMenu={toggleFilterMenu} />
                 </div>
             </div>

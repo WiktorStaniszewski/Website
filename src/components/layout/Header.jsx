@@ -46,7 +46,7 @@ export default function Header() {
         { name: "Sklep", path: "/shop" },
         { name: "O nas", path: "/about" },
         //{ name: "Blog", path: "/blog" },
-        { name: "Kontakt", path: "/recruitment" },
+        { name: "Rekrutacja", path: "/recruitment" },
     ];
 
     if (user?.role === 'admin') {

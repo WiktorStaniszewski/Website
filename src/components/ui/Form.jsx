@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { FaPaperPlane, FaCheckCircle, FaSpinner } from "react-icons/fa";
-import api from "src/services/api"; // Assuming we use your api service wrapper
+// import api from "src/services/api"; // Uncomment when API is ready
 
 export default function Form() {
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
@@ -11,9 +11,8 @@ export default function Form() {
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     
-    // Simulate API delay
     try {
-        // In a real scenario: await api.post('recruitment', data);
+        // Simulate API delay
         await new Promise(resolve => setTimeout(resolve, 2000)); 
         
         console.log("Form Data:", data);
@@ -27,24 +26,27 @@ export default function Form() {
     }
   };
 
-  // Reusable Input Style Class
-  const inputClass = "w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-[var(--font-color)] placeholder-white/30 focus:outline-none focus:border-[var(--medium-shade)] focus:bg-black/30 transition-all duration-300";
-  const labelClass = "block text-sm uppercase tracking-widest text-[var(--medium-shade)]/80 mb-2 font-bold";
-  const errorClass = "text-red-400 text-xs mt-1 ml-1";
+  // Styles refactored for "Lighter" theme:
+  // Lighter background for inputs (black/10 instead of black/20)
+  // Stronger borders (white/20) for better visibility against the lighter glass
+  const inputClass = "w-full bg-black/10 border border-white/20 rounded-xl px-4 py-3 text-[var(--font-color)] placeholder-white/40 focus:outline-none focus:border-[var(--medium-shade)] focus:bg-black/20 focus:ring-1 focus:ring-(--medium-shade)/50 transition-all duration-300";
+  const labelClass = "block text-sm uppercase tracking-widest text-[var(--medium-shade)] mb-2 font-bold brightness-110";
+  const errorClass = "text-red-300 text-xs mt-1 ml-1 font-bold";
 
+  // Success State Card
   if (isSuccess) {
       return (
-        <div className='bg-[#24201d]/60 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-12 shadow-2xl text-center min-h-[400px] flex flex-col items-center justify-center animate-in zoom-in-95 duration-500'>
-            <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mb-6">
-                <FaCheckCircle className="text-5xl text-green-500" />
+        <div className='bg-white/10 backdrop-blur-md border border-white/20 rounded-[2.5rem] p-12 shadow-2xl text-center min-h-[400px] flex flex-col items-center justify-center animate-in zoom-in-95 duration-500'>
+            <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6 shadow-inner">
+                <FaCheckCircle className="text-5xl text-green-400" />
             </div>
-            <h2 className="text-3xl font-serif font-bold mb-4">Dziękujemy!</h2>
-            <p className="text-lg text-white/80 max-w-lg">
+            <h2 className="text-3xl font-serif font-bold mb-4 text-white">Dziękujemy!</h2>
+            <p className="text-lg text-white/90 max-w-lg">
                 Twoje zgłoszenie zostało przyjęte. Skontaktujemy się z wybranymi kandydatami, aby zaprosić ich na kawę i rozmowę.
             </p>
             <button 
                 onClick={() => setIsSuccess(false)}
-                className="mt-8 px-8 py-3 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 transition-colors"
+                className="mt-8 px-8 py-3 bg-white/10 hover:bg-white/20 rounded-full border border-white/20 transition-colors text-white font-bold tracking-wide"
             >
                 Wyślij kolejne zgłoszenie
             </button>
@@ -52,11 +54,12 @@ export default function Form() {
       );
   }
 
+  // Main Form Card
   return (
-    <div className='bg-[#24201d]/60 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden'>
-        <div className="mb-10 border-b border-white/10 pb-6">
+    <div className='bg-white/10 backdrop-blur-md border border-white/20 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden'>
+        <div className="mb-10 border-b border-white/20 pb-6">
             <h2 className='font-serif font-bold text-3xl text-(--font-color)'>Formularz Zgłoszeniowy</h2>
-            <p className="text-white/60 mt-2">Wypełnij dokładnie wszystkie pola. To Twój pierwszy krok do Somnium.</p>
+            <p className="text-white/80 mt-2 font-light">Wypełnij dokładnie wszystkie pola. To Twój pierwszy krok do Somnium.</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
@@ -107,7 +110,7 @@ export default function Form() {
             </div>
 
             {/* --- Experience Questions --- */}
-            <div className="space-y-6 pt-6 border-t border-white/5">
+            <div className="space-y-6 pt-6 border-t border-white/20">
                 <label className="block">
                     <span className={labelClass}>Z czym kojarzy Ci się Somnium? *</span>
                     <textarea 
@@ -126,7 +129,7 @@ export default function Form() {
                     />
                 </label>
 
-                <fieldset className="bg-black/10 p-6 rounded-2xl border border-white/5">
+                <fieldset className="bg-black/5 p-6 rounded-2xl border border-white/10">
                     <legend className={labelClass}>Doświadczenie *</legend>
                     <div className="flex gap-8 mt-2">
                         <label className="flex items-center gap-3 cursor-pointer group">
@@ -142,26 +145,26 @@ export default function Form() {
             </div>
 
             {/* --- Skills Checkboxes --- */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/5">
-                 <fieldset className="bg-black/10 p-6 rounded-2xl border border-white/5">
-                    <legend className={labelClass}>Latte Art (Zaznacz co potrafisz)</legend>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/20">
+                 <fieldset className="bg-black/5 p-6 rounded-2xl border border-white/10">
+                    <legend className={labelClass}>Latte Art</legend>
                     <div className="flex flex-col gap-3 mt-3">
                         {["Umiem spienić mleko", "Serce", "Tulipan", "Rozeta", "Inwerty", "Łabędź"].map((skill, i) => (
                              <label key={i} className="flex items-center gap-3 cursor-pointer group">
                                 <input type="checkbox" {...register(`skills.latteArt.${i}`)} className="accent-(--medium-shade) w-4 h-4 rounded cursor-pointer" />
-                                <span className="text-white/70 group-hover:text-white text-sm transition-colors">{skill}</span>
+                                <span className="text-white/80 group-hover:text-white text-sm transition-colors">{skill}</span>
                              </label>
                         ))}
                     </div>
                 </fieldset>
 
-                <fieldset className="bg-black/10 p-6 rounded-2xl border border-white/5">
+                <fieldset className="bg-black/5 p-6 rounded-2xl border border-white/10">
                     <legend className={labelClass}>Espresso & Sprzęt</legend>
                     <div className="flex flex-col gap-3 mt-3">
                         {["Parzę z wagą", "Ustawiam młynek", "Znam TDS/EXT", "Wymieniam żarna", "Rozróżniam defekty (przeparzenie)"].map((skill, i) => (
                              <label key={i} className="flex items-center gap-3 cursor-pointer group">
                                 <input type="checkbox" {...register(`skills.espresso.${i}`)} className="accent-(--medium-shade) w-4 h-4 rounded cursor-pointer" />
-                                <span className="text-white/70 group-hover:text-white text-sm transition-colors">{skill}</span>
+                                <span className="text-white/80 group-hover:text-white text-sm transition-colors">{skill}</span>
                              </label>
                         ))}
                     </div>
@@ -169,7 +172,7 @@ export default function Form() {
             </div>
 
             {/* --- Logistics --- */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/20">
                 <label className="block">
                     <span className={labelClass}>Oczekiwania finansowe (netto/h) *</span>
                     <input {...register("salary", { required: true })} type="text" className={inputClass} />
@@ -182,7 +185,7 @@ export default function Form() {
             </div>
 
             {/* --- Details --- */}
-            <div className="space-y-6 pt-6 border-t border-white/5">
+            <div className="space-y-6 pt-6 border-t border-white/20">
                  <label className="block">
                     <span className={labelClass}>Dlaczego chcesz tę pracę? *</span>
                     <textarea 
@@ -207,8 +210,8 @@ export default function Form() {
                         {...register("rodo", { required: true })} 
                         className="mt-1 accent-(--medium-shade) w-5 h-5 shrink-0 cursor-pointer" 
                     />
-                    <span className="text-xs text-white/60 text-justify leading-relaxed">
-                        Wyrażam zgodę na przetwarzanie moich danych osobowych przez Somnium Cafe Bar dla potrzeb niezbędnych do realizacji procesu rekrutacji zgodnie z RODO.
+                    <span className="text-xs text-white/70 text-justify leading-relaxed group-hover:text-white/90">
+                        Wyrażam zgodę na przetwarzanie moich danych osobowych przez Somnium Cafe Bar dla potrzeb niezbędnych do realizacji procesu rekrutacji zgodnie z RODO.
                     </span>
                 </label>
                 {errors.rodo && <p className={errorClass}>Musisz zaakceptować zgodę RODO</p>}
@@ -219,7 +222,7 @@ export default function Form() {
                 <button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="group relative px-10 py-4 bg-(--medium-shade) text-[#24201d] font-bold text-lg rounded-full shadow-[0_0_20px_rgba(143,120,93,0.3)] hover:shadow-[0_0_30px_rgba(143,120,93,0.5)] hover:scale-105 transition-all duration-300 disabled:opacity-70 disabled:hover:scale-100 cursor-pointer"
+                    className="group relative px-10 py-4 bg-(--medium-shade) text-[#24201d] font-bold text-lg rounded-full shadow-lg hover:shadow-[0_0_30px_rgba(143,120,93,0.6)] hover:scale-105 hover:brightness-110 transition-all duration-300 disabled:opacity-70 disabled:hover:scale-100 cursor-pointer"
                 >
                     <span className="flex items-center gap-3">
                         {isSubmitting ? (

@@ -26,9 +26,9 @@ function Sidebar({filters, isFilterMenuOpen, toggleFilterMenu}) {
   }, [isMobile, isFilterMenuOpen]);
 
   const containerClass = isMobile 
-    ? `fixed inset-0 z-50 bg-[#24201d] transition-all duration-500 ease-in-out h-full w-full flex flex-col overflow-y-auto ${
+    ? `fixed inset-0 z-50 bg-[#24201d] transition-all duration-500 ease-in-out h-screen w-full flex flex-col overflow-y-auto ${
         isFilterMenuOpen 
-        ? "opacity-100 visible translate-y-0" 
+        ? "opacity-100 visible translate-y-10" 
         : "opacity-0 invisible -translate-y-10"
       }`
     : `flex flex-col w-full gap-6 sticky top-28`;
@@ -53,8 +53,7 @@ function Sidebar({filters, isFilterMenuOpen, toggleFilterMenu}) {
         )}
 
         {!isMobile && (
-             <div className="mb-4 text-3xl text-(--medium-shade) pl-2 opacity-80">
-                 <BsShop />
+             <div className="mb-11 text-3xl text-(--medium-shade) pl-2 opacity-80">
              </div>
         )}
 

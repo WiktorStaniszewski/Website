@@ -13,25 +13,25 @@ const HeroSection = () => (
                 alt="Somnium Cafe Interior" 
                 className='w-full h-full object-cover object-center scale-105 animate-in fade-in duration-1000' 
             />
-            {/* Gradient Overlay for Readability */}
-            <div className="absolute inset-0 bg-linear-to-t from-[#24201d] via-[#24201d]/60 to-black/30" />
+            {/* Lighter Gradient Overlay: Fades from transparent to the warm page background */}
+            <div className="absolute inset-0 bg-linear-to-t from-(--80-shade) via-(--80-shade)/40 to-black/20" />
         </div>
 
         {/* Hero Content */}
         <div className='relative z-10 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto space-y-8 animate-in slide-in-from-bottom-8 duration-1000 fill-mode-both'>
             
-            <div className="border-b border-white/20 pb-2 mb-2">
-                <span className="text-xs md:text-sm uppercase tracking-[0.3em] opacity-80 text-(--font-color)">
+            <div className="border-b border-white/30 pb-2 mb-2">
+                <span className="text-xs md:text-sm uppercase tracking-[0.3em] text-white font-bold drop-shadow-md">
                     Est. 2023 • Kraków
                 </span>
             </div>
 
-            <h1 className='text-6xl md:text-8xl font-serif font-bold text-(--font-color) drop-shadow-2xl tracking-wide'>
+            <h1 className='text-6xl md:text-8xl font-serif font-bold text-white drop-shadow-2xl tracking-wide'>
                 Somnium
-                <span className="block text-3xl md:text-5xl font-light italic mt-2 opacity-90">Cafe Bar</span>
+                <span className="block text-3xl md:text-5xl font-light italic mt-2 text-(--medium-shade) brightness-125">Cafe Bar</span>
             </h1>
             
-            <p className='text-lg md:text-xl font-light leading-relaxed max-w-2xl opacity-90 text-balance'>
+            <p className='text-lg md:text-xl font-light leading-relaxed max-w-2xl text-white/95 drop-shadow-md text-balance'>
                 Kawiarnia z segmentu Specialty Coffee. <br className="hidden md:block"/>
                 Kreatywnie w temacie kawy! Zero napinki, tylko dobre szoty.
             </p>
@@ -39,9 +39,9 @@ const HeroSection = () => (
             <div className="pt-6">
                 <NavLink 
                     to="/menu" 
-                    className="group relative px-8 py-4 bg-white/5 hover:bg-(--medium-shade) backdrop-blur-md border border-white/20 rounded-full transition-all duration-300 overflow-hidden"
+                    className="group relative px-8 py-4 bg-white/10 hover:bg-(--medium-shade) backdrop-blur-md border border-white/20 rounded-full transition-all duration-300 overflow-hidden shadow-lg hover:shadow-[0_0_20px_rgba(143,120,93,0.4)]"
                 >
-                    <span className="relative z-10 text-(--font-color) group-hover:text-[#24201d] font-bold uppercase tracking-widest text-sm transition-colors">
+                    <span className="relative z-10 text-white font-bold uppercase tracking-widest text-sm transition-colors group-hover:text-[#24201d]">
                         Zobacz Menu
                     </span>
                 </NavLink>
@@ -49,26 +49,33 @@ const HeroSection = () => (
         </div>
         
         {/* Scroll Indicator */}
-        <div className="absolute bottom-10 animate-bounce opacity-50">
+        <div className="absolute bottom-10 animate-bounce opacity-60">
              <div className="w-px h-16 bg-linear-to-b from-transparent via-white to-transparent"></div>
         </div>
     </div>
 );
 
 const FeatureIcons = () => (
-    <div className="w-full bg-[#24201d] py-12 border-b border-white/5 relative z-20 -mt-8 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
-        <div className="flex flex-wrap justify-center gap-8 md:gap-24 text-(--font-color) opacity-80">
-            <div className="flex flex-col items-center gap-2">
-                <FaCoffee className="text-3xl text-(--medium-shade)" />
-                <span className="text-xs uppercase tracking-widest">Specialty Coffee</span>
+    // Lighter background (matches page) with a glass effect top border
+    <div className="w-full bg-(--80-shade) py-12 border-b border-white/10 relative z-20 -mt-8 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
+        <div className="flex flex-wrap justify-center gap-8 md:gap-24 text-(--font-color)">
+            <div className="flex flex-col items-center gap-2 group cursor-default">
+                <div className="p-4 rounded-full bg-white/5 border border-white/5 group-hover:border-(--medium-shade)/30 transition-colors">
+                    <FaCoffee className="text-3xl text-(--medium-shade) group-hover:scale-110 transition-transform" />
+                </div>
+                <span className="text-xs uppercase tracking-widest opacity-80 font-bold">Specialty Coffee</span>
             </div>
-            <div className="flex flex-col items-center gap-2">
-                <FaLeaf className="text-3xl text-(--medium-shade)" />
-                <span className="text-xs uppercase tracking-widest">100% Arabica</span>
+            <div className="flex flex-col items-center gap-2 group cursor-default">
+                <div className="p-4 rounded-full bg-white/5 border border-white/5 group-hover:border-(--medium-shade)/30 transition-colors">
+                    <FaLeaf className="text-3xl text-(--medium-shade) group-hover:scale-110 transition-transform" />
+                </div>
+                <span className="text-xs uppercase tracking-widest opacity-80 font-bold">100% Arabica</span>
             </div>
-            <div className="flex flex-col items-center gap-2">
-                <FaStar className="text-3xl text-(--medium-shade)" />
-                <span className="text-xs uppercase tracking-widest">Premium Quality</span>
+            <div className="flex flex-col items-center gap-2 group cursor-default">
+                <div className="p-4 rounded-full bg-white/5 border border-white/5 group-hover:border-(--medium-shade)/30 transition-colors">
+                     <FaStar className="text-3xl text-(--medium-shade) group-hover:scale-110 transition-transform" />
+                </div>
+                <span className="text-xs uppercase tracking-widest opacity-80 font-bold">Premium Quality</span>
             </div>
         </div>
     </div>
@@ -81,13 +88,13 @@ const QuestionField = ({ title, content, isOpen, onClick }) => {
             className={`
                 group cursor-pointer rounded-2xl border transition-all duration-300 ease-out overflow-hidden
                 ${isOpen 
-                    ? 'bg-(--80-shade) border-(--medium-shade) shadow-lg scale-[1.02]' 
-                    : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10'
+                    ? 'bg-white/15 border-(--medium-shade)/50 shadow-[0_0_20px_rgba(0,0,0,0.1)]' 
+                    : 'bg-white/10 border-white/10 hover:bg-white/20 hover:border-white/20'
                 }
             `}
         >
             <div className='flex justify-between items-center p-6'>
-                <h3 className={`font-serif text-lg md:text-xl transition-colors ${isOpen ? 'text-(--medium-shade)' : 'text-(--font-color)'}`}>
+                <h3 className={`font-serif text-lg md:text-xl transition-colors ${isOpen ? 'text-(--medium-shade) brightness-110' : 'text-(--font-color)'}`}>
                     {title}
                 </h3>
                 <span className={`text-sm transition-transform duration-300 ${isOpen ? 'rotate-180 text-(--medium-shade)' : 'text-white/50'}`}>
@@ -98,7 +105,7 @@ const QuestionField = ({ title, content, isOpen, onClick }) => {
             <div 
                 className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
             >
-                <div className='p-6 pt-0 text-base md:text-lg leading-relaxed text-white/80 border-t border-white/5 mt-2'>
+                <div className='p-6 pt-0 text-base md:text-lg leading-relaxed text-white/80 border-t border-white/10 mt-2 font-light'>
                     {content}
                 </div>
             </div>
@@ -130,16 +137,19 @@ const FAQSection = () => {
     ];
 
     return (
-        <div className='flex justify-center items-center flex-col px-4 py-20'>
-            <div className="text-center mb-12">
-                <span className="text-(--medium-shade) uppercase tracking-widest text-sm font-bold">Wiedza & Info</span>
+        <div className='flex justify-center items-center flex-col px-4 py-20 relative overflow-hidden'>
+             {/* Background Ambience */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-(--medium-shade)/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
+
+            <div className="text-center mb-12 relative z-10">
+                <span className="text-(--medium-shade) uppercase tracking-widest text-sm font-bold brightness-110">Wiedza & Info</span>
                 <h2 className='font-serif font-bold text-4xl md:text-5xl mt-2 mb-4 text-(--font-color)'>
                     Częste Pytania
                 </h2>
-                <div className="w-24 h-1 bg-(--medium-shade) mx-auto rounded-full opacity-50"></div>
+                <div className="w-24 h-1 bg-(--medium-shade) mx-auto rounded-full opacity-60"></div>
             </div>
 
-            <div className="flex flex-col gap-4 w-full max-w-3xl">
+            <div className="flex flex-col gap-4 w-full max-w-3xl relative z-10">
                 {questions.map((q, index) => (
                     <QuestionField 
                         key={index}
@@ -158,7 +168,8 @@ const FAQSection = () => {
 
 export default function Home() {
     return (
-        <main className="w-full min-h-screen bg-[#24201d]">
+        // Changed main bg to warmer --80-shade
+        <main className="w-full min-h-screen bg-(--80-shade)">
             <HeroSection />
             <FeatureIcons />
             <FAQSection />

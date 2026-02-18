@@ -28,8 +28,8 @@ function Menu({ displayedTitle, productArray, isActive, toggleMenu, classTitle, 
 
   const isEven = index % 2 === 0;
   const cardStyle = isEven 
-    ? "bg-black/15 border-white/10 hover:bg-black/20" 
-    : "bg-black/20 border-white/5 hover:bg-black/30";
+    ? "bg-white/15 border-white/10 hover:bg-white/5" 
+    : "bg-white/25 border-white/5 hover:bg-white/15";
 
   return (
     <motion.div 
