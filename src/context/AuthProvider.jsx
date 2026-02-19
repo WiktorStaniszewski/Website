@@ -15,7 +15,6 @@ export function AuthProvider({ children }) {
             if (savedUser && savedToken) {
                setUser(JSON.parse(savedUser));
             } else {
-               // Cleanup if inconsistent
                localStorage.removeItem("somnium_user");
                localStorage.removeItem("somnium_token");
             }
@@ -31,8 +30,9 @@ export function AuthProvider({ children }) {
       initializeAuth();
    }, []);
 
+
+   
    const login = useCallback((authResponse) => {
-      // Backend returns { token: "...", user: { ... } }
       const { user, token } = authResponse;
       
       if (!user || !token) {
@@ -49,6 +49,7 @@ export function AuthProvider({ children }) {
       setUser(null);
       localStorage.removeItem("somnium_user");
       localStorage.removeItem("somnium_token");
+      localStorage.removeItem("somnium_cart"); 
       window.location.reload();
    }, []);
 

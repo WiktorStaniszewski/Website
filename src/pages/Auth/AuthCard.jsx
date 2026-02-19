@@ -17,11 +17,10 @@ export default function AuthCard({ onSuccess }) {
 
     try {
       const response = await api.post("login", {
-        username: data.username,
+        email: data.identifier,
         password: data.password,
       });
 
-      // Response is now directly the JSON object { user, token }
       if (response && response.token) {
         login(response);
         if (onSuccess) onSuccess();
@@ -40,7 +39,7 @@ export default function AuthCard({ onSuccess }) {
   return (
     <div className="flex flex-col items-center w-full">
       <h2 className="text-2xl pb-4 text-center text-(--font-color)">
-        {user ? `Witaj, ${user.firstName || user.username}!` : "Hejka! Zaloguj się :)"}
+        {user ? `Witaj, ${user.username}!` : "Hejka! Zaloguj się :)"}
       </h2>
 
       {user ? (
@@ -53,45 +52,31 @@ export default function AuthCard({ onSuccess }) {
           </div>
 
           <nav className="flex flex-col w-full gap-1 border-t border-white/10 pt-3 mb-3">
-            <Link 
-              to="/account?tab=history" 
-              onClick={onSuccess}
-              className="text-sm p-2 hover:bg-white/5 rounded-lg transition-colors text-(--font-color)"
-            >
+            <Link to="/account?tab=history" onClick={onSuccess} className="text-sm p-2 hover:bg-white/5 rounded-lg transition-colors text-(--font-color)">
               📦 Historia zamówień
             </Link>
-            <Link 
-              to="/account?tab=profile" 
-              onClick={onSuccess} 
-              className="text-sm p-2 hover:bg-white/5 rounded-lg transition-colors text-(--font-color)"
-            >
+            <Link to="/account?tab=profile" onClick={onSuccess} className="text-sm p-2 hover:bg-white/5 rounded-lg transition-colors text-(--font-color)">
               ⚙️ Ustawienia konta
             </Link>
           </nav>
 
-          <button 
-            onClick={logout} 
-            className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm p-2 rounded-xl transition-colors cursor-pointer"
-          >
+          <button onClick={logout} className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm p-2 rounded-xl transition-colors cursor-pointer">
             Wyloguj się
           </button>
         </div>
       ) : (
         <>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className='flex justify-center flex-col items-center gap-3 w-full'
-          >
+          <form onSubmit={handleSubmit(onSubmit)} className='flex justify-center flex-col items-center gap-3 w-full'>
             <div className="w-full">
               <input
-                {...register("username", { required: "Nazwa użytkownika jest wymagana" })}
+                {...register("identifier", { 
+                    required: "Email lub nazwa użytkownika są wymagane",
+                })}
                 type="text"
-                placeholder="Nazwa użytkownika"
-                className={`loginInput w-full ${errors.username ? 'border-red-500 ring-1 ring-red-500' : ''}`}
+                placeholder="Email lub Nazwa użytkownika"
+                className={`loginInput w-full ${errors.identifier ? 'border-red-500 ring-1 ring-red-500' : ''}`}
               />
-              {errors.username && (
-                <span className="text-red-400 text-xs pl-2 pt-1 block">{errors.username.message}</span>
-              )}
+              {errors.identifier && <span className="text-red-400 text-xs pl-2 pt-1 block">{errors.identifier.message}</span>}
             </div>
             
             <div className="w-full">
@@ -101,18 +86,11 @@ export default function AuthCard({ onSuccess }) {
                 placeholder="Hasło"
                 className={`loginInput w-full ${errors.password ? 'border-red-500 ring-1 ring-red-500' : ''}`}
               />
-              {errors.password && (
-                <span className="text-red-400 text-xs pl-2 pt-1 block">{errors.password.message}</span>
-              )}
+              {errors.password && <span className="text-red-400 text-xs pl-2 pt-1 block">{errors.password.message}</span>}
             </div>
 
             <div className="flex items-center gap-2 self-start ml-2 text-sm text-(--font-color)">
-              <input 
-                {...register("rememberMe")} 
-                type="checkbox" 
-                id="rememberMe" 
-                className="cursor-pointer"
-              />
+              <input {...register("rememberMe")} type="checkbox" id="rememberMe" className="cursor-pointer" />
               <label htmlFor="rememberMe" className="cursor-pointer select-none">Zapamiętaj mnie</label>
             </div>
 
@@ -122,21 +100,14 @@ export default function AuthCard({ onSuccess }) {
               </div>
             )}
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full mt-2 cursor-pointer bg-(--80-shade) hover:bg-(--button-hover-bg) text-(--font-color) p-3 rounded-3xl transition-colors duration-300 disabled:opacity-50"
-            >
+            <button type="submit" disabled={isLoading} className="w-full mt-2 cursor-pointer bg-(--80-shade) hover:bg-(--button-hover-bg) text-(--font-color) p-3 rounded-3xl transition-colors duration-300 disabled:opacity-50">
               {isLoading ? "Logowanie..." : "Zaloguj się"}
             </button>
           </form>
         
           <div className="mt-4 flex flex-row gap-2 text-sm text-(--font-color)">
             <p>Nie masz konta?</p>
-            <Link 
-              to="/register" 
-              className="cursor-pointer underline font-bold hover:text-(--button-hover-bg) transition-colors"
-            >
+            <Link to="/register" className="cursor-pointer underline font-bold hover:text-(--button-hover-bg) transition-colors">
               Zarejestruj się
             </Link>
           </div>

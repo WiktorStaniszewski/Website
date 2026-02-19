@@ -4,9 +4,8 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import api from "src/services/api";
 import { 
     FaUser, FaBox, FaLock, FaTruck, FaSignOutAlt, 
-    FaSpinner, FaSearch, FaCheck, FaExclamationCircle, FaChevronRight 
+    FaSpinner, FaCheck, FaChevronRight 
 } from "react-icons/fa";
-
 
 const ProfileTab = ({ user }) => (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -48,7 +47,8 @@ const ProfileTab = ({ user }) => (
     </div>
 );
 
-const HistoryTab = ({ orders, loading }) => (
+// TUTAJ DODANO navigate DO WŁAŚCIWOŚCI
+const HistoryTab = ({ orders, loading, navigate }) => (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 h-full flex flex-col">
         <h2 className="text-3xl font-serif mb-6 border-b border-white/10 pb-4">Historia Zamówień</h2>
         
@@ -60,13 +60,17 @@ const HistoryTab = ({ orders, loading }) => (
         ) : orders.length > 0 ? (
             <div className="flex flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar">
                 {orders.map((order) => (
-                    <div key={order.id} className="group bg-white/5 hover:bg-white/10 p-5 rounded-2xl border border-white/5 transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div 
+                        key={order.id} 
+                        onClick={() => navigate(`/account/orders/${order.id}`)}
+                        className="group cursor-pointer bg-white/5 hover:bg-white/10 p-5 rounded-2xl border border-white/5 transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+                    >
                         <div className="flex items-center gap-4">
-                            <div className="p-3 bg-white/5 rounded-xl text-2xl">
+                            <div className="p-3 bg-white/5 rounded-xl text-2xl group-hover:scale-110 transition-transform duration-300">
                                 <FaBox className="text-(--medium-shade)" />
                             </div>
                             <div>
-                                <p className="font-bold text-lg">Zamówienie #{order.id}</p>
+                                <p className="font-bold text-lg group-hover:text-(--medium-shade) transition-colors">Zamówienie #{order.id}</p>
                                 <p className="text-sm opacity-60 font-mono">{order.date || "Unknown Date"}</p>
                             </div>
                         </div>
@@ -82,8 +86,8 @@ const HistoryTab = ({ orders, loading }) => (
                                     {order.status.toUpperCase()}
                                 </span>
                             </div>
-                            <button className="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-white/10 rounded-full cursor-pointer">
-                                <FaChevronRight />
+                            <button className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all p-2 hover:bg-white/10 rounded-full cursor-pointer text-(--medium-shade)">
+                                <FaChevronRight size={20} />
                             </button>
                         </div>
                     </div>
@@ -93,7 +97,10 @@ const HistoryTab = ({ orders, loading }) => (
             <div className="flex-1 flex flex-col items-center justify-center opacity-50">
                 <FaBox className="text-6xl mb-4 opacity-20" />
                 <p className="text-lg">Nie masz jeszcze żadnych zamówień.</p>
-                <button className="mt-4 px-6 py-2 bg-(--80-shade) hover:bg-(--button-hover-bg) rounded-xl transition-colors cursor-pointer">
+                <button 
+                    onClick={() => navigate('/shop')} 
+                    className="mt-4 px-6 py-2 bg-(--80-shade) hover:bg-(--button-hover-bg) text-[#24201d] font-bold rounded-xl transition-colors cursor-pointer"
+                >
                     Przejdź do sklepu
                 </button>
             </div>
@@ -155,7 +162,7 @@ const SecurityTab = ({ user }) => {
                 <button 
                     type="submit" 
                     disabled={isLoading}
-                    className="mt-4 bg-(--80-shade) hover:bg-(--button-hover-bg) text-white py-3 px-6 rounded-xl font-medium shadow-lg transition-all flex justify-center items-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="mt-4 bg-(--80-shade) hover:bg-(--button-hover-bg) text-[#24201d] py-3 px-6 rounded-xl font-bold shadow-lg transition-all flex justify-center items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                     {isLoading ? <FaSpinner className="animate-spin" /> : "Zaktualizuj hasło"}
                 </button>
@@ -180,7 +187,6 @@ const StatusTab = () => {
         if(!searchId) return;
         
         setLoading(true);
-        // Simulate lookup
         setTimeout(() => {
             setTrackingResult({
                 id: searchId,
@@ -212,7 +218,7 @@ const StatusTab = () => {
                         placeholder="Wpisz numer zamówienia (np. 101)" 
                         className="flex-1 bg-black/20 border-b-2 border-white/10 py-3 px-4 focus:outline-none focus:border-(--medium-shade) transition-colors text-lg"
                     />
-                    <button type="submit" className="bg-(--medium-shade) hover:brightness-110 text-black px-8 rounded-xl font-bold transition-all cursor-pointer">
+                    <button type="submit" className="bg-(--medium-shade) hover:brightness-110 text-black px-8 rounded-xl font-bold transition-all cursor-pointer flex justify-center items-center">
                         {loading ? <FaSpinner className="animate-spin" /> : "Szukaj"}
                     </button>
                 </form>
@@ -244,7 +250,7 @@ const StatusTab = () => {
                                         <div className={`w-4 h-4 rounded-full border-2 z-10 transition-colors ${
                                             index <= trackingResult.step 
                                             ? "bg-(--medium-shade) border-(--medium-shade) shadow-[0_0_15px_rgba(143,120,93,0.6)]" 
-                                            : "bg-(--header-footer-bg) border-white/20"
+                                            : "bg-[#24201d] border-white/20"
                                         }`}></div>
                                         <div className={`text-center transition-opacity ${index <= trackingResult.step ? "opacity-100" : "opacity-30"}`}>
                                             <p className="text-sm font-bold">{step.label}</p>
@@ -261,7 +267,6 @@ const StatusTab = () => {
     );
 };
 
-
 export default function AccountManager() {
   const { user, logout } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -277,13 +282,13 @@ export default function AccountManager() {
   };
 
   useEffect(() => {
-    if (activeTab === "history") {
+    if (activeTab === "history" && user) {
       const fetchOrders = async () => {
         setLoadingOrders(true);
         try {
-          const response = await api.get("orders");
-          if (response && response.data) {
-             setOrders(response.data); 
+          const response = await api.get("orders/my-orders"); 
+          if (Array.isArray(response)) {
+             setOrders(response); 
           }
         } catch (error) {
           console.error("Error fetching orders:", error);
@@ -345,12 +350,11 @@ export default function AccountManager() {
 
         {/* Content Area */}
         <main className="min-h-[600px] bg-[#24201d]/60 backdrop-blur-xl border border-white/5 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
-            {/* Background Decor */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-(--medium-shade)/5 rounded-full blur-[100px] pointer-events-none"></div>
             
             <div className="relative z-10">
                 {activeTab === "profile" && <ProfileTab user={user} />}
-                {activeTab === "history" && <HistoryTab orders={orders} loading={loadingOrders} />}
+                {activeTab === "history" && <HistoryTab orders={orders} loading={loadingOrders} navigate={navigate} />}
                 {activeTab === "security" && <SecurityTab user={user} />}
                 {activeTab === "status" && <StatusTab />}
             </div>

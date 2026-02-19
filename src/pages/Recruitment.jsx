@@ -5,12 +5,10 @@ import { FaCoffee, FaStar, FaUserFriends, FaRegCheckCircle } from 'react-icons/f
 export default function Recruitment() {
   return (
     <div className='min-h-screen pt-32 pb-20 px-4 md:px-8 flex flex-col items-center relative overflow-hidden bg-(--80-shade)'>
-       {/* Background Ambience - Adjusted for lighter theme */}
        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-(--medium-shade)/20 rounded-full blur-[150px] pointer-events-none mix-blend-screen"></div>
        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-(--medium-shade)/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
 
        <section className='max-w-4xl w-full animate-in fade-in slide-in-from-bottom-8 duration-700 relative z-10'>
-          {/* Header Card */}
           <div className='bg-white/10 backdrop-blur-md border border-white/20 rounded-[2.5rem] p-8 md:p-12 shadow-2xl mb-12 relative overflow-hidden'>
             <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-(--medium-shade) to-transparent opacity-60"></div>
             
@@ -73,8 +71,7 @@ export default function Recruitment() {
                 </p>
             </div>
           </div> 
-          
-          {/* Application Form Component */}
+        
           <Form />
       </section>
     </div>

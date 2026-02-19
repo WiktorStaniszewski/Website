@@ -2,22 +2,17 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaPlus, FaMinus, FaCoffee, FaStar, FaLeaf } from "react-icons/fa";
 
-// --- Components ---
-
 const HeroSection = () => (
     <div className='relative w-full h-screen overflow-hidden flex items-center justify-center'>
-        {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
             <img 
                 src="images/tlo1.jpg" 
                 alt="Somnium Cafe Interior" 
                 className='w-full h-full object-cover object-center scale-105 animate-in fade-in duration-1000' 
             />
-            {/* Lighter Gradient Overlay: Fades from transparent to the warm page background */}
             <div className="absolute inset-0 bg-linear-to-t from-(--80-shade) via-(--80-shade)/40 to-black/20" />
         </div>
 
-        {/* Hero Content */}
         <div className='relative z-10 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto space-y-8 animate-in slide-in-from-bottom-8 duration-1000 fill-mode-both'>
             
             <div className="border-b border-white/30 pb-2 mb-2">
@@ -47,8 +42,6 @@ const HeroSection = () => (
                 </NavLink>
             </div>
         </div>
-        
-        {/* Scroll Indicator */}
         <div className="absolute bottom-10 animate-bounce opacity-60">
              <div className="w-px h-16 bg-linear-to-b from-transparent via-white to-transparent"></div>
         </div>
@@ -56,7 +49,6 @@ const HeroSection = () => (
 );
 
 const FeatureIcons = () => (
-    // Lighter background (matches page) with a glass effect top border
     <div className="w-full bg-(--80-shade) py-12 border-b border-white/10 relative z-20 -mt-8 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
         <div className="flex flex-wrap justify-center gap-8 md:gap-24 text-(--font-color)">
             <div className="flex flex-col items-center gap-2 group cursor-default">
@@ -114,7 +106,6 @@ const QuestionField = ({ title, content, isOpen, onClick }) => {
 }
 
 const FAQSection = () => {
-    // Independent state for accordion behavior
     const [openIndex, setOpenIndex] = useState(0); 
 
     const questions = [
@@ -138,7 +129,6 @@ const FAQSection = () => {
 
     return (
         <div className='flex justify-center items-center flex-col px-4 py-20 relative overflow-hidden'>
-             {/* Background Ambience */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-(--medium-shade)/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
 
             <div className="text-center mb-12 relative z-10">
@@ -164,11 +154,8 @@ const FAQSection = () => {
     );
 }
 
-// --- Main Page ---
-
 export default function Home() {
     return (
-        // Changed main bg to warmer --80-shade
         <main className="w-full min-h-screen bg-(--80-shade)">
             <HeroSection />
             <FeatureIcons />

@@ -14,7 +14,6 @@ import ScrollButton from './components/ui/ScrollButton';
 import { PageWrapper, LayoutWrapper } from 'components/layout/PageWrappers';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
-
 import Home from 'pages/Home';
 import About from 'src/pages/About/About';
 import Menus from 'pages/Menu/Menus';
@@ -27,9 +26,13 @@ import RegisterPage from './pages/Register/RegisterPage';
 import Cart from './pages/Cart/Cart';
 import Checkout from 'pages/Checkout/Checkout';
 import OrderSuccess from 'pages/Checkout/OrderSuccess';
-import AdminLayout from "pages/Admin/Components/AdminLayout";
-import Dashboard from "pages/Admin/Dashboard";
-import Products from "pages/Admin/Products";
+import AdminLayout from "src/pages/Admin/AdminLayout"; 
+import Dashboard from "src/pages/Admin/Components/Dashboard";
+import Products from "src/pages/Admin/Components/Products";
+import AdminOrders from './pages/Admin/Components/Orders';
+import OrderDetails from './pages/Admin/Components/OrderDetails';
+import Users from './pages/Admin/Components/Users';
+import UserOrderDetails from './pages/UserOrderDetails';
 
 function Layout() {
   return (
@@ -43,9 +46,9 @@ function Layout() {
 }
 
 const AdminRoute = ({ children }) => {
-  const { user, isAdmin, loading } = useAuth();
+  const { user, loading } = useAuth();
   if (loading) return null;
-  if (!user || !isAdmin) return <Navigate to="/login" />;
+  if (!user || user.role !== 'admin') return <Navigate to="/login" />;
   return children;
 };
 
@@ -69,7 +72,8 @@ export default function App() {
             <Route path="checkout" element={<ProtectedRoute><PageWrapper><Checkout /></PageWrapper></ProtectedRoute>} />
             <Route path="order-success" element={<PageWrapper><OrderSuccess /></PageWrapper>} />
             
-            <Route path="/admin" element={
+            {/* --- ADMIN ROUTES --- */}
+            <Route path="admin" element={
               <AdminRoute>
                 <PageWrapper>
                   <AdminLayout />
@@ -78,8 +82,12 @@ export default function App() {
             }>
               <Route index element={<PageWrapper><Dashboard /></PageWrapper>} />
               <Route path="products" element={<PageWrapper><Products /></PageWrapper>} />
+              <Route path="orders" element={<PageWrapper><AdminOrders /></PageWrapper>} />
+              <Route path="orders/:id" element={<PageWrapper><OrderDetails /></PageWrapper>} />
+              <Route path="users" element={<PageWrapper><Users /></PageWrapper>} />
             </Route>
             
+            {/* --- USER ACCOUNT ROUTES --- */}
             <Route path="account" element={
               <ProtectedRoute>
                 <PageWrapper>
@@ -87,6 +95,15 @@ export default function App() {
                 </PageWrapper>
               </ProtectedRoute>
             } />
+            
+            <Route path="account/orders/:id" element={
+              <ProtectedRoute>
+                <PageWrapper>
+                  <UserOrderDetails />
+                </PageWrapper>
+              </ProtectedRoute>
+            } />
+
             <Route path="*" element={<h1>404 - Page not found</h1>} />
           </Route>
         </Routes>

@@ -11,8 +11,7 @@ export default function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { user, isAuthenticated } = useAuth();
     
-    const cartContext = useCart ? useCart() : { cartItems: [] };
-    const cartCount = cartContext?.cartItems?.length || 0;
+    const { cartCount = 0 } = useCart() || {};
 
     const location = useLocation();
 

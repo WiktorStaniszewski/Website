@@ -7,7 +7,7 @@ import api from 'src/services/api';
 import { FiArrowLeft, FiTruck, FiCreditCard, FiCheckCircle } from "react-icons/fi";
 
 export default function Checkout() {
-  const { cartItems, cartTotal, loading: cartLoading, setCartItems } = useCart();
+  const { cartItems, cartTotal, loading: cartLoading, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { register, handleSubmit, watch, formState: { errors } } = useForm({
@@ -59,8 +59,7 @@ export default function Checkout() {
     try {
       await api.post('orders', orderPayload);
       
-      localStorage.removeItem('somnium_cart'); 
-      window.dispatchEvent(new Event("storage")); 
+      await clearCart();
       
       navigate('/order-success', { state: { orderId: Date.now() } });
     } catch (error) {
@@ -74,9 +73,7 @@ export default function Checkout() {
   return (
     <div className="w-screen flex justify-center pt-24 pb-20 text-(--font-color)">
       <div className="w-9/10 max-w-7xl grid lg:grid-cols-[1.5fr_1fr] gap-10">
-        
-        {/* LEFT COLUMN: FORM */}
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
+                <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
           
           {/* 1. Contact & Address */}
           <section className="bg-(--header-footer-bg) p-6 lg:p-8 rounded-3xl shadow-lg border border-white/5">
