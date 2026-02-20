@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { createPortal } from "react-dom";
 import api from "services/api"; 
 import { FiEdit2, FiTrash2, FiPlus, FiTag, FiX, FiUploadCloud } from "react-icons/fi";
 
@@ -12,15 +13,24 @@ export default function Products() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
-    producent: "",
+    producent: "", 
     category: "Kawa", 
     price: "",
     image: "",
     flavours: "",
     description: ""
   });
+  
   const [isDragging, setIsDragging] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null); 
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (isModalOpen) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "unset";
+    return () => { document.body.style.overflow = "unset"; };
+  }, [isModalOpen]);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -53,20 +63,16 @@ export default function Products() {
     }
   };
 
-  const openAddModal = () => {
-    setEditingProduct(null);
-    setFormData({ name: "", producent: "", category: "Kawa", price: "", image: "", flavours: "", description: "" });
-    setIsModalOpen(true);
-  };
-
   const openEditModal = (product) => {
     setEditingProduct(product);
+    setPreviewUrl(null); 
+    setSelectedFile(null);
     setFormData({
       name: product.name || "",
-      producent: product.producent || "",
+      producent: product.company || "", 
       category: product.category || "Kawa",
       price: product.price || "",
-      image: product.image || "",
+      image: product.image || product.img || "",
       flavours: product.flavours || "",
       description: product.description || ""
     });
@@ -85,17 +91,33 @@ export default function Products() {
 
   const handleDragOver = (e) => { e.preventDefault(); setIsDragging(true); };
   const handleDragLeave = (e) => { e.preventDefault(); setIsDragging(false); };
+  
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setFormData(prev => ({ ...prev, image: e.dataTransfer.files[0].name }));
+      const file = e.dataTransfer.files[0];
+      setSelectedFile(file);
+      setFormData(prev => ({ ...prev, image: file.name }));
+      setPreviewUrl(URL.createObjectURL(file)); 
     }
   };
+
   const handleFileSelect = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setFormData(prev => ({ ...prev, image: e.target.files[0].name }));
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      setFormData(prev => ({ ...prev, image: file.name }));
+      setPreviewUrl(URL.createObjectURL(file)); 
     }
+  };
+  
+  const openAddModal = () => {
+    setEditingProduct(null);
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    setFormData({ name: "", producent: "", category: "Kawa", price: "", image: "", flavours: "", description: "" });
+    setIsModalOpen(true);
   };
 
   const handleSubmit = async (e) => {
@@ -104,11 +126,26 @@ export default function Products() {
       const finalData = { ...formData };
       if (finalData.category !== "Kawa") finalData.flavours = ""; 
 
-      if (editingProduct) {
-        await api.put("products", editingProduct.id, finalData);
-      } else {
-        await api.post("products", finalData);
+      const payload = new FormData();
+      payload.append("name", finalData.name);
+      payload.append("producent", finalData.producent || "Nieznany");
+      payload.append("category", finalData.category);
+      payload.append("price", finalData.price ? Number(finalData.price) : 0);
+      payload.append("flavours", finalData.flavours || "");
+      payload.append("description", finalData.description || "");
+      
+      if (selectedFile) {
+          payload.append("image", selectedFile);
+      } else if (finalData.image) {
+          payload.append("image", finalData.image);
       }
+
+      if (editingProduct) {
+        await api.put("products", editingProduct.id, payload);
+      } else {
+        await api.post("products", payload);
+      }
+      
       closeModal();
       fetchProducts();
     } catch (err) {
@@ -148,15 +185,31 @@ export default function Products() {
             </tr>
           </thead>
           <tbody className="divide-y divide-[#846f60] bg-(--medium-shade)/20">
-            {products.map((p) => (
+            {products.map((p) => {
+              const imgName = p.image || p.img || "placeholder.png";
+              
+              return (
               <tr key={p.id} className="hover:bg-[#5C4A3D]/50 transition-colors group">
                 <td className="p-6 font-medium text-base flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#2D231C] border border-[#5C4A3D]">
-                     <img src={`images/tempProducts/${p.image || p.img}`} alt={p.name} className="w-full h-full object-cover" onError={(e) => e.target.style.display='none'}/>
+                  <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#2D231C] border border-[#5C4A3D] shrink-0">
+                     <img 
+                        src={`http://localhost:5000/images/products/${imgName}`} 
+                        alt={p.name} 
+                        className="w-full h-full object-cover" 
+                        onError={(e) => { 
+                           // KULOODPORNY FALLBACK
+                           const fallback = `images/tempProducts/${imgName}`;
+                           if (!e.target.src.includes(fallback)) {
+                               e.target.src = fallback; // Jeśli nie ma na backendzie, szukaj na frontendzie
+                           } else {
+                               e.target.src = 'https://placehold.co/150x150?text=Brak+foto'; // Ostateczność
+                           }
+                        }}
+                     />
                   </div>
                   {p.name}
                 </td>
-                <td className="p-6 text-[#F2EAE1]/60 font-medium">{p.producent || "Brak"}</td>
+                <td className="p-6 text-[#F2EAE1]/60 font-medium">{p.company || "Brak"}</td>
                 <td className="p-6">
                     <span className="bg-[#2D231C] px-3 py-1 rounded-full text-xs font-bold border border-[#5C4A3D] text-[#F2EAE1]/80">
                         {p.category}
@@ -172,7 +225,7 @@ export default function Products() {
                   </button>
                 </td>
               </tr>
-            ))}
+            )})}
           </tbody>
         </table>
       </div>
@@ -184,6 +237,7 @@ export default function Products() {
                 <div className="flex justify-between items-start">
                     <div>
                         <h3 className="text-lg font-bold text-[#F2EAE1] mb-1">{p.name}</h3>
+                        <p className="text-sm opacity-60 mb-2">{p.company}</p> 
                         <div className="flex items-center gap-2 text-xs text-[#F2EAE1]/50">
                             <FiTag /> {p.category}
                         </div>
@@ -205,13 +259,15 @@ export default function Products() {
         ))}
       </div>
 
-      {isModalOpen && (
-        <>
-          <div className="fixed inset-0 z-100 bg-black/70 backdrop-blur-sm animate-in fade-in duration-300" onClick={closeModal}></div>
+      {/* --- MODAL --- */}
+      {isModalOpen && createPortal(
+        <div className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6" style={{ margin: 0 }}>
           
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-101 w-[95%] max-w-2xl max-h-[90vh] bg-[#46382E] border border-[#5C4A3D] rounded-3xl flex flex-col shadow-[0_10px_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-300">
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-in fade-in duration-300" onClick={closeModal}></div>
+          
+          <div className="relative z-10 w-full max-w-2xl max-h-[90vh] bg-[#46382E] border border-[#5C4A3D] rounded-3xl flex flex-col shadow-[0_10px_50px_rgba(0,0,0,0.5)] animate-in zoom-in-95 duration-300">
             
-            <div className="flex justify-between items-center p-6 border-b border-[#5C4A3D] bg-[#352A21] rounded-t-3xl">
+            <div className="flex justify-between items-center p-6 border-b border-[#5C4A3D] bg-[#352A21] rounded-t-3xl shrink-0">
               <h2 className="text-2xl font-serif font-bold text-(--medium-shade)">
                 {editingProduct ? "Edytuj produkt" : "Dodaj nowy produkt"}
               </h2>
@@ -222,27 +278,46 @@ export default function Products() {
 
             <form onSubmit={handleSubmit} className="p-6 overflow-y-auto flex flex-col gap-5 custom-scrollbar text-[#F2EAE1]">
               
-              {/* DRAG AND DROP ZONE */}
               <div className="w-full">
                  <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Zdjęcie produktu</label>
+                 
                  <div 
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
                     onClick={() => fileInputRef.current.click()}
-                    className={`mt-2 border-2 border-dashed rounded-2xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300
+                    className={`mt-2 border-2 border-dashed rounded-2xl p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 relative overflow-hidden min-h-40
                       ${isDragging ? 'border-(--medium-shade) bg-(--medium-shade)/10' : 'border-[#5C4A3D] hover:bg-[#5C4A3D]/50 hover:border-[#8f785d]'}
                     `}
                  >
                     <input type="file" className="hidden" ref={fileInputRef} onChange={handleFileSelect} accept="image/*" />
-                    <FiUploadCloud className={`text-4xl mb-3 ${isDragging ? 'text-(--medium-shade)' : 'text-[#F2EAE1]/40'}`} />
-                    {formData.image ? (
-                        <p className="font-bold text-(--medium-shade)">Wybrano: {formData.image}</p>
+                    
+                    {previewUrl ? (
+                        <div className="absolute inset-0 w-full h-full p-2">
+                           <img src={previewUrl} alt="Podgląd" className="w-full h-full object-contain rounded-xl" />
+                           <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center text-white font-bold rounded-xl">
+                               Kliknij, aby zmienić
+                           </div>
+                        </div>
+                    ) : formData.image && !selectedFile ? (
+                        <div className="absolute inset-0 w-full h-full p-2">
+                           <img 
+                              src={`http://localhost:5000/images/products/${formData.image}`} 
+                              alt="Podgląd z bazy" 
+                              className="w-full h-full object-contain rounded-xl"
+                              onError={(e) => {
+                                  const fallback = `images/tempProducts/${formData.image}`;
+                                  if (!e.target.src.includes(fallback)) e.target.src = fallback;
+                                  else e.target.style.display = 'none';
+                              }} 
+                           />
+                        </div>
                     ) : (
-                        <div>
+                        <>
+                          <FiUploadCloud className={`text-4xl mb-3 ${isDragging ? 'text-(--medium-shade)' : 'text-[#F2EAE1]/40'}`} />
                           <p className="font-bold">Przeciągnij i upuść plik tutaj</p>
                           <p className="text-xs text-[#F2EAE1]/50 mt-1">lub kliknij, aby przeglądać</p>
-                        </div>
+                        </>
                     )}
                  </div>
               </div>
@@ -304,7 +379,7 @@ export default function Products() {
                 />
               </div>
 
-              <div className="mt-6 pt-4 border-t border-[#5C4A3D] flex gap-3">
+              <div className="mt-2 pt-4 border-t border-[#5C4A3D] flex gap-3 shrink-0">
                 <button type="button" onClick={closeModal} className="flex-1 py-3 bg-[#352A21] hover:bg-[#2D231C] border border-[#5C4A3D] text-[#F2EAE1] rounded-xl font-bold transition-colors cursor-pointer">
                   Anuluj
                 </button>
@@ -315,7 +390,8 @@ export default function Products() {
             </form>
 
           </div>
-        </>
+        </div>, 
+        document.body
       )}
     </div>
   );

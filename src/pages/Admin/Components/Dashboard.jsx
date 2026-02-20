@@ -36,7 +36,7 @@ export default function Dashboard() {
       
       <div 
         onClick={() => navigate('/admin/products?add=true')}
-        className="w-full bg-(--medium-shade)/20 border-2 border-dashed border-(--medium-shade)/50 hover:border-(--medium-shade) hover:bg-[#5C4A3D] rounded-3xl p-8 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 group shadow-lg"
+        className="w-full bg-[#46382E] border-2 border-dashed border-(--medium-shade)/50 hover:border-(--medium-shade) hover:bg-[#5C4A3D] rounded-3xl p-8 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 group shadow-lg"
       >
         <FiPlusCircle className="text-5xl text-(--medium-shade) group-hover:scale-110 transition-transform" />
         <h2 className="text-2xl font-bold text-[#F2EAE1]">Dodaj nowy produkt</h2>
@@ -44,7 +44,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="relative overflow-hidden p-8 rounded-3xl bg-(--medium-shade)/20 border border-[#5C4A3D] shadow-lg">
+        <div className="relative overflow-hidden p-8 rounded-3xl bg-[#46382E] border border-[#5C4A3D] shadow-lg">
           <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:scale-110 transition-transform text-(--medium-shade)">
              <FiDollarSign size={80} />
           </div>
@@ -57,16 +57,20 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden p-8 rounded-3xl bg-(--medium-shade)/20 border border-[#5C4A3D] shadow-lg">
+        {/* --- TUTAJ JEST ZMIANA - Dodano onClick, cursor-pointer i hover:bg --- */}
+        <div 
+            onClick={() => navigate('/admin/orders')}
+            className="relative overflow-hidden p-8 rounded-3xl bg-[#46382E] border border-[#5C4A3D] shadow-lg cursor-pointer hover:bg-[#5C4A3D] transition-colors group"
+        >
           <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:scale-110 transition-transform text-(--medium-shade)">
              <FiShoppingCart size={80} />
           </div>
           <div className="text-[#F2EAE1]/60 text-xs uppercase tracking-widest font-bold mb-2">Do realizacji</div>
-          <div className="text-4xl font-bold text-[#F2EAE1]">
+          <div className="text-4xl font-bold text-[#F2EAE1] group-hover:text-(--medium-shade) transition-colors">
             {stats.orders}
           </div>
            <div className="mt-4 text-xs font-bold text-(--medium-shade) bg-(--medium-shade)/10 border border-(--medium-shade)/20 w-fit px-3 py-1.5 rounded-full">
-             Oczekujące zamówienia
+             Kliknij, aby przejść do zamówień
           </div>
         </div>
       </div>

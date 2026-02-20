@@ -1,10 +1,13 @@
 const API_URL = "http://localhost:5000/api";
 
-const getHeaders = () => {
+const getHeaders = (isFormData = false) => {
   const token = localStorage.getItem("somnium_token");
-  const headers = {
-    "Content-Type": "application/json",
-  };
+  const headers = {};
+
+  if (!isFormData) {
+    headers["Content-Type"] = "application/json";
+  }
+
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
@@ -38,11 +41,13 @@ const api = {
 
     url = url.startsWith('/') ? url.slice(1) : url;
 
+    const isFormData = data instanceof FormData;
+
     try {
       const res = await fetch(`${API_URL}/${url}`, {
         method: "POST",
-        headers: getHeaders(),
-        body: JSON.stringify(data),
+        headers: getHeaders(isFormData),
+        body: isFormData ? data : JSON.stringify(data),
       });
 
       if (!res.ok) {
@@ -62,10 +67,12 @@ const api = {
       const url = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
       const fetchUrl = id ? `${API_URL}/${url}/${id}` : `${API_URL}/${url}`;
       
+      const isFormData = data instanceof FormData;
+
       const res = await fetch(fetchUrl, {
         method: "PUT",
-        headers: getHeaders(),
-        body: JSON.stringify(data),
+        headers: getHeaders(isFormData),
+        body: isFormData ? data : JSON.stringify(data),
       });
 
       if (!res.ok) {

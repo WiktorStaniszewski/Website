@@ -53,7 +53,7 @@ export default function AdminLayout() {
       </aside>
 
       {/* --- Mobile Top Bar --- */}
-      <div className="lg:hidden fixed top-0 w-full z-30 bg-[#46382E] border-b border-[#5C4A3D] p-4 flex justify-between items-center mt-20 shadow-md">
+      <div className="lg:hidden fixed top-3 w-full z-30 bg-[#46382E] border-b border-[#5C4A3D] p-4 flex justify-between items-center mt-20 shadow-md">
          <div>
             <span className="font-serif font-bold tracking-widest text-lg text-(--medium-shade)">SOMNIUM</span>
             <span className="text-[10px] uppercase tracking-[0.2em] text-[#F2EAE1]/70 ml-2 font-bold">Admin</span>

@@ -20,7 +20,7 @@ import Menus from 'pages/Menu/Menus';
 import Recruitment from 'pages/Recruitment';
 import Shop from 'pages/Shop/Shop';
 import Blog from 'pages/Blog';
-import AccountManager from 'pages/AccountManager';
+import AccountManager from 'src/pages/Account/AccountManager';
 import LoginPage from './pages/Login/LoginPage';
 import RegisterPage from './pages/Register/RegisterPage'; 
 import Cart from './pages/Cart/Cart';
@@ -32,7 +32,8 @@ import Products from "src/pages/Admin/Components/Products";
 import AdminOrders from './pages/Admin/Components/Orders';
 import OrderDetails from './pages/Admin/Components/OrderDetails';
 import Users from './pages/Admin/Components/Users';
-import UserOrderDetails from './pages/UserOrderDetails';
+import UserOrderDetails from './pages/Account/UserOrderDetails';
+import UserDetails from './pages/Admin/Components/UserDetails';
 
 function Layout() {
   return (
@@ -85,6 +86,7 @@ export default function App() {
               <Route path="orders" element={<PageWrapper><AdminOrders /></PageWrapper>} />
               <Route path="orders/:id" element={<PageWrapper><OrderDetails /></PageWrapper>} />
               <Route path="users" element={<PageWrapper><Users /></PageWrapper>} />
+              <Route path="users/:id" element={<PageWrapper><UserDetails /></PageWrapper>} />
             </Route>
             
             {/* --- USER ACCOUNT ROUTES --- */}
