@@ -1,68 +1,93 @@
 import React, { useState } from 'react';
-import { FaCartPlus, FaCheck } from "react-icons/fa";
-import { useCart } from 'src/context/CartProvider';
+import { FaCartPlus, FaCheck, FaSpinner } from "react-icons/fa";
+import { FiXCircle } from "react-icons/fi";
+import { useCart } from 'context/CartProvider';
 
 export const AddToCartButton = ({ product, compact = false, className = '' }) => { 
     const { addToCart } = useCart();
     const [isAdded, setIsAdded] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleAddToCart = (e) => {
+    const available = product.availableStock !== undefined ? product.availableStock : (product.stockQuantity || 0);
+    const isSoldOut = available <= 0;
+
+    const handleAddToCart = async (e) => {
         e.stopPropagation(); 
+        if (isSoldOut || isLoading) return; 
+
+        setIsLoading(true);
 
         const itemToAdd = {
             id: product.id || product.name, 
             title: product.name,
             price: Number(product.price),
-            img: "images/tempProducts/" + product.image,
+            img: product.image || product.img,
             ...product
         };
 
-        addToCart(itemToAdd);
+        const success = await addToCart(itemToAdd);
 
-        setIsAdded(true);
-        setTimeout(() => setIsAdded(false), 1500);
+        setIsLoading(false);
+
+        if (success) {
+            setIsAdded(true);
+            setTimeout(() => setIsAdded(false), 1500);
+        }
     }
 
-    // Compact styling for Product Card (smaller, icon-focused)
     if (compact) {
         return (
             <button 
                 onClick={handleAddToCart}
+                disabled={isSoldOut || isLoading}
                 className={`
                     flex items-center justify-center p-3 rounded-full transition-all duration-300 ease-in-out shadow-lg
-                    ${isAdded 
-                        ? 'bg-green-500 text-white' 
-                        : 'bg-(--medium-shade) text-[#24201d] hover:brightness-110 hover:scale-110'
+                    ${isSoldOut 
+                        ? 'bg-red-500/10 text-red-400 opacity-50 cursor-not-allowed border border-red-500/20' 
+                        : isAdded 
+                            ? 'bg-green-500 text-white' 
+                            : 'bg-(--medium-shade) text-[#24201d] hover:brightness-110 hover:scale-110 cursor-pointer'
                     }
                     ${className}
                 `}
-                title="Dodaj do koszyka"
+                title={isSoldOut ? "Wyprzedane" : "Dodaj do koszyka"}
             >
-                {isAdded ? <FaCheck size={18} /> : <FaCartPlus size={18} />}
+                {isLoading ? <FaSpinner className="animate-spin" size={18} /> 
+                 : isSoldOut ? <FiXCircle size={18} /> 
+                 : isAdded ? <FaCheck size={18} /> 
+                 : <FaCartPlus size={18} />}
             </button>
         );
     }
 
-    // Default Large Button (for Product Details)
     return (
-        <div 
+        <button 
             onClick={handleAddToCart}
+            disabled={isSoldOut || isLoading}
             className={`
-                flex w-full justify-center gap-3 px-6 py-3 mt-4 backdrop-brightness-125 cursor-pointer 
-                rounded-xl transition-all duration-200 ease-in-out border border-white/10 hover:bg-white/10
-                ${isAdded ? 'bg-green-600/50 text-white border-green-500/50' : 'bg-white/5'}
+                flex w-full justify-center items-center gap-3 px-6 py-4 mt-4 cursor-pointer 
+                rounded-xl transition-all duration-200 ease-in-out border font-bold text-sm md:text-base shadow-lg
+                ${isSoldOut 
+                    ? 'bg-red-500/10 text-red-400 border-red-500/20 cursor-not-allowed opacity-70' 
+                    : isAdded 
+                        ? 'bg-green-500 text-[#24201d] border-green-500' 
+                        : 'bg-(--medium-shade) hover:bg-(--button-hover-bg) text-[#24201d] border-(--medium-shade)'}
                 ${className}
             `}
         >
-            <span className='font-bold select-none text-sm md:text-base'>
-                {isAdded ? "Dodano do koszyka!" : "Dodaj do koszyka"}
+            <span className='select-none'>
+                {isLoading ? "Sprawdzanie..." : isSoldOut ? "Wyprzedane" : isAdded ? "Dodano do koszyka!" : "Dodaj do koszyka"}
             </span>
             
-            {isAdded ? (
-                <FaCheck className='h-5 w-5 animate-bounce text-green-400'/> 
+            {isLoading ? (
+                <FaSpinner className="h-5 w-5 animate-spin"/>
+            ) : isSoldOut ? (
+                <FiXCircle className='h-5 w-5'/>
+            ) : isAdded ? (
+                <FaCheck className='h-5 w-5 animate-bounce text-[#24201d]'/> 
             ) : (
                 <FaCartPlus className='h-5 w-5'/>
             )}
-        </div>
+        </button>
     )
 }

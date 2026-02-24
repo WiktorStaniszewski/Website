@@ -3,12 +3,10 @@ import { filteredData } from "pages/shop/utils/shopHelpers";
 import api from "src/services/api";
 
 export function useShopFilters() {
-  // --- Data State ---
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // --- Filter States ---
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [selectedFlavors, setSelectedFlavors] = useState(null);
@@ -39,7 +37,6 @@ export function useShopFilters() {
     fetchProducts();
   }, []);
 
-  // --- Handlers ---
   const handleInputChange = useCallback((e) => setQuery(e.target.value), []);
   const handleCategoryChange = useCallback((e) => setSelectedCategory(e.target.value), []);
   const handlePriceChange = useCallback((e) => setSelectedPrice(e.target.value), []);
@@ -49,7 +46,7 @@ export function useShopFilters() {
   const filteredProducts = useMemo(() => {
     const safeProducts = Array.isArray(products) ? products : [];
     
-    return filteredData(
+    const filtered = filteredData(
       safeProducts,
       {
         category: selectedCategory,
@@ -59,6 +56,19 @@ export function useShopFilters() {
       },
       query
     );
+
+    return filtered.sort((a, b) => {
+      const aStock = a.availableStock !== undefined ? a.availableStock : (a.stockQuantity || 0);
+      const bStock = b.availableStock !== undefined ? b.availableStock : (b.stockQuantity || 0);
+
+      const aIsSoldOut = aStock <= 0;
+      const bIsSoldOut = bStock <= 0;
+
+      if (aIsSoldOut && !bIsSoldOut) return 1;
+      if (!aIsSoldOut && bIsSoldOut) return -1;
+      
+      return 0; 
+    });
   }, [products, selectedCategory, selectedPrice, selectedFlavors, selectedCafe, query]);
 
   const resetFilters = useCallback(() => {

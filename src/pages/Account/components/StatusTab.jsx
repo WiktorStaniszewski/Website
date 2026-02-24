@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from "services/api";
+import api from "src/services/api"; // Upewnij się, że ścieżka do API jest poprawna
 import { FaSpinner } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
 
@@ -30,7 +30,6 @@ export default function StatusTab() {
         }
     };
 
-    // Obsługa ręcznego formularza
     const handleSearch = (e) => {
         e.preventDefault();
         performSearch(searchId);
@@ -42,12 +41,22 @@ export default function StatusTab() {
         }
     }, [urlTrackingNumber]);
 
-    const stepsTemplate = [
-        { id: 'new', label: "Przyjęto" },
-        { id: 'processing', label: "Spakowano" },
-        { id: 'shipped', label: "Wysłano" },
-        { id: 'completed', label: "Dostarczono" },
-    ];
+    // Oś czasu: Różna w zależności od tego, czy to odbiór osobisty, czy kurier
+    const isPickup = trackingResult?.isPickup;
+
+    const stepsTemplate = isPickup 
+        ? [
+            { id: 'new', label: "Przyjęto" },
+            { id: 'processing', label: "W przygotowaniu" },
+            { id: 'shipped', label: "Gotowe na miejscu" }, // Kiedy admin kliknie 'Wysłano', klient widzi 'Gotowe'
+            { id: 'completed', label: "Odebrano" },
+          ]
+        : [
+            { id: 'new', label: "Przyjęto" },
+            { id: 'processing', label: "Spakowano" },
+            { id: 'shipped', label: "Wysłano" },
+            { id: 'completed', label: "Dostarczono" },
+          ];
 
     const getTimestampForStep = (stepId) => {
         if (!trackingResult || !trackingResult.statusHistory) return null;
@@ -89,7 +98,10 @@ export default function StatusTab() {
                                 <p className="text-2xl font-bold text-(--medium-shade)">{trackingResult.trackingNumber}</p>
                             </div>
                             <div className="text-right">
-                                <p className="text-sm opacity-50 uppercase tracking-widest">Szacowana dostawa</p>
+                                <p className="text-sm opacity-50 uppercase tracking-widest">
+                                    {/* Zmiana tekstu nagłówka w zależności od odbioru */}
+                                    {isPickup ? 'Status gotowości' : 'Szacowana dostawa'}
+                                </p>
                                 <p className="text-lg font-medium">{trackingResult.estimatedDelivery}</p>
                             </div>
                         </div>

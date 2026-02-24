@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { createPortal } from "react-dom";
 import api from "services/api"; 
-import { FiEdit2, FiTrash2, FiPlus, FiTag, FiX, FiUploadCloud } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiPlus, FiTag, FiX, FiUploadCloud, FiAlertTriangle } from "react-icons/fi";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -11,6 +11,7 @@ export default function Products() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  
   const [formData, setFormData] = useState({
     name: "",
     producent: "", 
@@ -18,7 +19,8 @@ export default function Products() {
     price: "",
     image: "",
     flavours: "",
-    description: ""
+    description: "",
+    stockQuantity: ""
   });
   
   const [isDragging, setIsDragging] = useState(false);
@@ -74,7 +76,8 @@ export default function Products() {
       price: product.price || "",
       image: product.image || product.img || "",
       flavours: product.flavours || "",
-      description: product.description || ""
+      description: product.description || "",
+      stockQuantity: product.stockQuantity || 0
     });
     setIsModalOpen(true);
   };
@@ -116,7 +119,7 @@ export default function Products() {
     setEditingProduct(null);
     setSelectedFile(null);
     setPreviewUrl(null);
-    setFormData({ name: "", producent: "", category: "Kawa", price: "", image: "", flavours: "", description: "" });
+    setFormData({ name: "", producent: "", category: "Kawa", price: "", image: "", flavours: "", description: "", stockQuantity: "" });
     setIsModalOpen(true);
   };
 
@@ -133,6 +136,7 @@ export default function Products() {
       payload.append("price", finalData.price ? Number(finalData.price) : 0);
       payload.append("flavours", finalData.flavours || "");
       payload.append("description", finalData.description || "");
+      payload.append("stockQuantity", finalData.stockQuantity ? parseInt(finalData.stockQuantity) : 0);
       
       if (selectedFile) {
           payload.append("image", selectedFile);
@@ -157,7 +161,7 @@ export default function Products() {
   if (loading) return <div className="text-(--medium-shade) font-bold text-center mt-20">Ładowanie produktów...</div>;
 
   return (
-    <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500 not-lg:pt-20">
+    <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500 not-lg:pt-20 overflow-x-scroll">
       
       <div className="flex justify-between items-end">
         <div>
@@ -172,7 +176,6 @@ export default function Products() {
         </button>
       </div>
 
-      {/* --- Desktop Table View --- */}
       <div className="hidden md:block rounded-3xl border border-[#5C4A3D] overflow-hidden bg-[#46382E] shadow-xl">
         <table className="w-full text-left text-sm text-[#F2EAE1]">
           <thead className="bg-[#352A21] text-(--medium-shade) uppercase text-xs tracking-wider border-b border-[#5C4A3D]">
@@ -181,29 +184,25 @@ export default function Products() {
               <th className="p-6 font-bold">PRODUCENT</th>
               <th className="p-6 font-bold">KATEGORIA</th>
               <th className="p-6 font-bold">CENA</th>
+              <th className="p-6 font-bold">MAGAZYN</th>
               <th className="p-6 text-right font-bold">AKCJE</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[#846f60] bg-(--medium-shade)/20">
             {products.map((p) => {
               const imgName = p.image || p.img || "placeholder.png";
+              const stock = p.stockQuantity || 0;
               
               return (
               <tr key={p.id} className="hover:bg-[#5C4A3D]/50 transition-colors group">
                 <td className="p-6 font-medium text-base flex items-center gap-4">
                   <div className="w-12 h-12 rounded-lg overflow-hidden bg-[#2D231C] border border-[#5C4A3D] shrink-0">
                      <img 
-                        src={`http://localhost:5000/images/products/${imgName}`} 
+                        src={`images/tempProducts/${imgName}`} 
                         alt={p.name} 
                         className="w-full h-full object-cover" 
                         onError={(e) => { 
-                           // KULOODPORNY FALLBACK
-                           const fallback = `images/tempProducts/${imgName}`;
-                           if (!e.target.src.includes(fallback)) {
-                               e.target.src = fallback; // Jeśli nie ma na backendzie, szukaj na frontendzie
-                           } else {
-                               e.target.src = 'https://placehold.co/150x150?text=Brak+foto'; // Ostateczność
-                           }
+                           e.target.src = 'https://placehold.co/150x150?text=Brak+foto'; 
                         }}
                      />
                   </div>
@@ -216,6 +215,19 @@ export default function Products() {
                     </span>
                 </td>
                 <td className="p-6 font-mono font-bold text-(--medium-shade)">{p.price} PLN</td>
+                
+                <td className="p-6 font-bold text-sm">
+                    {stock > 5 ? (
+                        <span className="text-green-400 bg-green-500/10 px-3 py-1 rounded-full">{stock} szt.</span>
+                    ) : stock > 0 ? (
+                        <span className="text-yellow-400 bg-yellow-500/10 px-3 py-1 rounded-full flex items-center gap-1 w-max" title="Produkt na wyczerpaniu!">
+                            <FiAlertTriangle /> {stock} szt.
+                        </span>
+                    ) : (
+                        <span className="text-red-400 bg-red-500/10 px-3 py-1 rounded-full">Wyprzedane</span>
+                    )}
+                </td>
+
                 <td className="p-6 text-right flex justify-end gap-2 opacity-60 group-hover:opacity-100 transition-opacity items-center">
                   <button onClick={() => openEditModal(p)} className="p-2 hover:bg-(--medium-shade) hover:text-[#24201d] rounded-lg transition-colors cursor-pointer" title="Edytuj">
                     <FiEdit2 />
@@ -230,16 +242,24 @@ export default function Products() {
         </table>
       </div>
 
-      {/* --- Mobile Card View --- */}
       <div className="md:hidden grid grid-cols-1 gap-4">
-        {products.map((p) => (
-            <div key={p.id} className="bg-[#46382E] border border-[#5C4A3D] p-5 rounded-3xl shadow-lg flex flex-col gap-4">
-                <div className="flex justify-between items-start">
+        {products.map((p) => {
+            const stock = p.stockQuantity || 0;
+            return (
+            <div key={p.id} className="bg-[#46382E] border border-[#5C4A3D] p-5 rounded-3xl shadow-lg flex flex-col gap-4 relative overflow-hidden">
+                {stock <= 5 && stock > 0 && <div className="absolute top-0 right-0 bg-yellow-500/20 text-yellow-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-b border-l border-yellow-500/30 flex items-center gap-1"><FiAlertTriangle/> Na wyczerpaniu</div>}
+                {stock === 0 && <div className="absolute top-0 right-0 bg-red-500/20 text-red-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-b border-l border-red-500/30">Wyprzedane</div>}
+
+                <div className="flex justify-between items-start mt-2">
                     <div>
                         <h3 className="text-lg font-bold text-[#F2EAE1] mb-1">{p.name}</h3>
                         <p className="text-sm opacity-60 mb-2">{p.company}</p> 
                         <div className="flex items-center gap-2 text-xs text-[#F2EAE1]/50">
                             <FiTag /> {p.category}
+                            <span className="mx-1 opacity-30">|</span>
+                            <span className={stock > 5 ? 'text-green-400' : stock > 0 ? 'text-yellow-400' : 'text-red-400'}>
+                                {stock} szt.
+                            </span>
                         </div>
                     </div>
                     <div className="font-mono text-(--medium-shade) font-bold text-lg">
@@ -256,10 +276,9 @@ export default function Products() {
                     </button>
                 </div>
             </div>
-        ))}
+        )})}
       </div>
 
-      {/* --- MODAL --- */}
       {isModalOpen && createPortal(
         <div className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6" style={{ margin: 0 }}>
           
@@ -302,7 +321,7 @@ export default function Products() {
                     ) : formData.image && !selectedFile ? (
                         <div className="absolute inset-0 w-full h-full p-2">
                            <img 
-                              src={`http://localhost:5000/images/products/${formData.image}`} 
+                              src={formData.image.startsWith('images/') ? `/${formData.image}` : `http://localhost:5000/images/products/${formData.image}`} 
                               alt="Podgląd z bazy" 
                               className="w-full h-full object-contain rounded-xl"
                               onError={(e) => {
@@ -339,7 +358,7 @@ export default function Products() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Kategoria</label>
                   <select 
@@ -356,6 +375,13 @@ export default function Products() {
                   <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Cena (PLN)</label>
                   <input 
                     type="number" name="price" step="0.01" required value={formData.price} onChange={handleInputChange}
+                    className="w-full bg-[#2D231C] border border-[#5C4A3D] rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) transition-colors text-[#F2EAE1]"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">W magazynie (szt.)</label>
+                  <input 
+                    type="number" name="stockQuantity" min="0" required value={formData.stockQuantity} onChange={handleInputChange} placeholder="np. 20"
                     className="w-full bg-[#2D231C] border border-[#5C4A3D] rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) transition-colors text-[#F2EAE1]"
                   />
                 </div>
