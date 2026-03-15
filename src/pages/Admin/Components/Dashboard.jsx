@@ -1,14 +1,24 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import api from "services/api"; 
-import { FiDollarSign, FiShoppingCart, FiTrendingUp, FiPlusCircle } from "react-icons/fi";
+import { FiDollarSign, FiShoppingCart, FiPlusCircle, FiTruck } from "react-icons/fi";
+import { useAuth } from "src/context/AuthProvider";
+
+import DeliveryModal from './DeliveryModal'; 
+import ProductModal from './ProductModal';
 
 export default function Dashboard() {
+  const { isSuperAdmin, loading: authLoading } = useAuth();
   const [stats, setStats] = useState({ revenue: 0, orders: 0 });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  
+  const [isDeliveryModalOpen, setIsDeliveryModalOpen] = useState(false);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
 
   useEffect(() => {
+    if (!isSuperAdmin) return;
+
     const fetchData = async () => {
       try {
         const orders = await api.get("orders");
@@ -23,7 +33,13 @@ export default function Dashboard() {
       }
     };
     fetchData();
-  }, []);
+  }, [isSuperAdmin]);
+
+  if (authLoading) return null;
+
+  if (!isSuperAdmin) {
+    return <Navigate to="/admin/orders" replace />;
+  }
 
   if (loading) return <div className="flex justify-center items-center h-[50vh] text-(--medium-shade) animate-pulse font-bold">Ładowanie danych...</div>;
 
@@ -34,13 +50,24 @@ export default function Dashboard() {
         <p className="text-[#F2EAE1]/60 text-sm font-medium">Oto podsumowanie twojego sklepu.</p>
       </header>
       
-      <div 
-        onClick={() => navigate('/admin/products?add=true')}
-        className="w-full bg-[#46382E] border-2 border-dashed border-(--medium-shade)/50 hover:border-(--medium-shade) hover:bg-[#5C4A3D] rounded-3xl p-8 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 group shadow-lg"
-      >
-        <FiPlusCircle className="text-5xl text-(--medium-shade) group-hover:scale-110 transition-transform" />
-        <h2 className="text-2xl font-bold text-[#F2EAE1]">Dodaj nowy produkt</h2>
-        <p className="text-[#F2EAE1]/60 text-sm">Kliknij tutaj, aby natychmiast uzupełnić asortyment</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div 
+          onClick={() => setIsProductModalOpen(true)}
+          className="w-full bg-[#46382E] border-2 border-dashed border-(--medium-shade)/50 hover:border-(--medium-shade) hover:bg-[#5C4A3D] rounded-3xl p-8 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 group shadow-lg"
+        >
+          <FiPlusCircle className="text-5xl text-(--medium-shade) group-hover:scale-110 transition-transform" />
+          <h2 className="text-2xl font-bold text-[#F2EAE1]">Nowy produkt</h2>
+          <p className="text-[#F2EAE1]/60 text-sm text-center">Dodaj nowy asortyment jednym kliknięciem</p>
+        </div>
+
+        <div 
+          onClick={() => setIsDeliveryModalOpen(true)}
+          className="w-full bg-[#46382E] border-2 border-dashed border-(--medium-shade)/50 hover:border-(--medium-shade) hover:bg-[#5C4A3D] rounded-3xl p-8 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 group shadow-lg"
+        >
+          <FiTruck className="text-5xl text-(--medium-shade) group-hover:scale-110 transition-transform" />
+          <h2 className="text-2xl font-bold text-[#F2EAE1]">Zarejestruj dostawę</h2>
+          <p className="text-[#F2EAE1]/60 text-sm text-center">Uzupełnij stany magazynowe w mgnieniu oka</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -48,16 +75,12 @@ export default function Dashboard() {
           <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:scale-110 transition-transform text-(--medium-shade)">
              <FiDollarSign size={80} />
           </div>
-          <div className="text-[#F2EAE1]/60 text-xs uppercase tracking-widest font-bold mb-2">Dzisiejszy Przychód</div>
+          <div className="text-[#F2EAE1]/60 text-xs uppercase tracking-widest font-bold mb-2">Całkowity Przychód</div>
           <div className="text-4xl font-bold text-[#F2EAE1] flex items-baseline gap-1">
             {stats.revenue.toFixed(2)} <span className="text-lg font-normal text-(--medium-shade)">PLN</span>
           </div>
-          <div className="mt-4 flex items-center gap-2 text-green-400 text-xs font-bold bg-green-400/10 w-fit px-3 py-1.5 rounded-full border border-green-400/20">
-            <FiTrendingUp /> +12% vs wczoraj
-          </div>
         </div>
 
-        {/* --- TUTAJ JEST ZMIANA - Dodano onClick, cursor-pointer i hover:bg --- */}
         <div 
             onClick={() => navigate('/admin/orders')}
             className="relative overflow-hidden p-8 rounded-3xl bg-[#46382E] border border-[#5C4A3D] shadow-lg cursor-pointer hover:bg-[#5C4A3D] transition-colors group"
@@ -74,6 +97,16 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      <DeliveryModal 
+        isOpen={isDeliveryModalOpen} 
+        onClose={() => setIsDeliveryModalOpen(false)} 
+        onSuccess={() => {}} 
+      />
+      <ProductModal 
+        isOpen={isProductModalOpen} 
+        onClose={() => setIsProductModalOpen(false)} 
+      />
     </div>
   );
 }

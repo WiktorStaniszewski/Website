@@ -67,7 +67,7 @@ export default function Recruitment() {
                 <h3 className='text-lg font-bold text-(--medium-shade) mb-2'>Ważna informacja</h3>
                 <p className="text-sm md:text-base opacity-80">
                    Nie szukamy osób na sezon. Wychodzimy z założenia, że to ludzie tworzą kawiarnie. 
-                   Jeśli chcesz zostać z nami na dłużej i rozwijać swoje umiejętności – wypełnij formularz poniżej.
+                   Jeśli chcesz zostać z nami na dłużej i rozwijać swoje umiejętności - wypełnij formularz poniżej.
                 </p>
             </div>
           </div> 

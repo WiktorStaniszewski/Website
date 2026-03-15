@@ -10,7 +10,7 @@ export default function OrderDetails() {
   const [loading, setLoading] = useState(true);
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [statusMessage, setStatusMessage] = useState(null);
-  const statusWeights = { 'new': 0, 'processing': 1, 'shipped': 2, 'completed': 3 };
+  const statusWeights = { 'new': 0, 'processing': 1, 'shipped': 2, 'completed': 3, 'cancelled': 99 };
   const isTerminalState = order?.status === 'completed' || order?.status === 'cancelled';
 
   useEffect(() => {
@@ -47,12 +47,22 @@ export default function OrderDetails() {
     }
   };
 
+  const isOptionDisabled = (val) => {
+      if (isTerminalState) return true;
+      if (val === 'cancelled' && order?.status === 'shipped') return true;
+      return statusWeights[val] < statusWeights[order?.status];
+  };
+
+  const getOptionClass = (val) => {
+      return isOptionDisabled(val) ? "text-[#F2EAE1]/30 bg-[#2D231C] italic" : "text-[#F2EAE1] bg-[#46382E]";
+  };
+
   if (loading) return <div className="text-(--medium-shade) text-center mt-20 font-bold">Ładowanie szczegółów zamówienia...</div>;
   if (!order) return <div className="text-red-400 text-center mt-20">Nie znaleziono zamówienia.</div>;
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-5 pt-20">
-            <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
+      <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
         <div className="flex items-center gap-4">
             <button 
             onClick={() => navigate('/admin/orders')}
@@ -84,30 +94,21 @@ export default function OrderDetails() {
                         ${(updatingStatus || isTerminalState) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                     `}
                 >
-                    <option 
-                      value="new" 
-                      disabled={statusWeights['new'] < statusWeights[order.status]}
-                    >Nowe (Przyjęte)</option>
-                    
-                    <option 
-                      value="processing" 
-                      disabled={statusWeights['processing'] < statusWeights[order.status]}
-                    >W realizacji (Spakowane)</option>
-                    
-                    <option 
-                      value="shipped" 
-                      disabled={statusWeights['shipped'] < statusWeights[order.status]}
-                    >Wysłane</option>
-                    
-                    <option 
-                      value="completed" 
-                      disabled={statusWeights['completed'] < statusWeights[order.status]}
-                    >Dostarczone</option>
-                    
-                    <option 
-                      value="cancelled" 
-                      disabled={order.status === 'shipped' || isTerminalState}
-                    >Anulowane</option>
+                    <option value="new" disabled={isOptionDisabled('new')} className={getOptionClass('new')}>
+                        Nowe (Przyjęte)
+                    </option>
+                    <option value="processing" disabled={isOptionDisabled('processing')} className={getOptionClass('processing')}>
+                        W realizacji (Spakowane)
+                    </option>
+                    <option value="shipped" disabled={isOptionDisabled('shipped')} className={getOptionClass('shipped')}>
+                        Wysłane
+                    </option>
+                    <option value="completed" disabled={isOptionDisabled('completed')} className={getOptionClass('completed')}>
+                        Dostarczone
+                    </option>
+                    <option value="cancelled" disabled={isOptionDisabled('cancelled')} className={getOptionClass('cancelled')}>
+                        Anulowane
+                    </option>
                 </select>
             </div>
         </div>
@@ -132,7 +133,11 @@ export default function OrderDetails() {
               <FiTruck className="text-(--medium-shade)" /> Dostawa
             </h2>
             <div className="space-y-2 text-sm text-[#F2EAE1]/80">
-              <p className="font-bold text-[#F2EAE1] text-base">{order.shipping?.details?.label || order.shipping?.method}</p>
+              <p className="font-bold text-[#F2EAE1] text-base">
+                {order.shipping?.method === 'pickup' 
+                  ? `Odbiór: ${order.Location?.name || 'Kawiarnia'}` 
+                  : (order.shipping?.details?.label || order.shipping?.method)}
+              </p>
               <p>{order.customer?.address}</p>
               <p>{order.customer?.zip} {order.customer?.city}</p>
               <p className="mt-4 pt-4 border-t border-[#5C4A3D]">

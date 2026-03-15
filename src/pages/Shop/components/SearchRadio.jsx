@@ -10,7 +10,6 @@ export default function Input({ title, value, handleChange, number, checked }) {
         checked={checked}
       />
       
-      {/* Custom Radio Indicator */}
       <div className="
         w-5 h-5 mr-3 
         rounded-full border border-white/20 bg-black/40 backdrop-blur-sm
@@ -20,7 +19,6 @@ export default function Input({ title, value, handleChange, number, checked }) {
         peer-focus:ring-2 peer-focus:ring-(--medium-shade)/30
         peer-checked:border-(--medium-shade) peer-checked:bg-(--darker-bg)/20
       ">
-        {/* Inner Dot */}
         <div 
             className={`
                 w-2.5 h-2.5 rounded-full bg-(--medium-shade) 
@@ -31,7 +29,6 @@ export default function Input({ title, value, handleChange, number, checked }) {
         />
       </div>
 
-      {/* Label Text */}
       <div className={`
           text-sm lg:text-base tracking-wide transition-colors duration-300
           ${checked ? 'text-white font-bold' : 'text-white/60 group-hover:text-white'}

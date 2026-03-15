@@ -32,8 +32,8 @@ export default function HistoryTab({ orders, loading, navigate }) {
                             onClick={() => navigate(`/account/orders/${order.id}`)} 
                             className={`group cursor-pointer p-5 rounded-2xl border transition-all flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4
                                 ${order.status === 'completed' || order.status === 'cancelled' 
-                                    ? 'bg-black/20 border-white/5 opacity-70 hover:opacity-100' // Lekko wyszarzone dla starych
-                                    : 'bg-white/5 hover:bg-white/10 border-white/10 shadow-lg' // Wyróżnione dla aktywnych
+                                    ? 'bg-black/20 border-white/5 opacity-70 hover:opacity-100'
+                                    : 'bg-white/5 hover:bg-white/10 border-white/10 shadow-lg' 
                                 }
                             `}
                         >

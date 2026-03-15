@@ -41,6 +41,17 @@ export const ProductDetails = ({ product, on, toggle, toggleClass, ref }) => {
     return `images/tempProducts/${imageName}`;
   };
 
+  const SpecRow = ({ label, value }) => {
+      if (!value) return null;
+      return (
+        <div className="flex items-center gap-2">
+          <span className="text-(--medium-shade) text-sm uppercase tracking-widest font-bold whitespace-nowrap">{label}</span>
+          <span className="h-px flex-1 bg-white/10"></span>
+          <span className="font-medium text-right text-sm text-[#F2EAE1]/90">{value}</span>
+        </div>
+      );
+  };
+
   const modalContent = (
     <div className={`fixed inset-0 w-screen h-screen z-100 flex justify-center items-center transition-all duration-300 ${on ? 'opacity-100 visible backdrop-blur-md bg-black/60' : 'opacity-0 invisible pointer-events-none'}`}>
       
@@ -83,16 +94,17 @@ export const ProductDetails = ({ product, on, toggle, toggleClass, ref }) => {
                    </div>
 
                    <div className='space-y-4 text-(--font-color) opacity-90'>
-                      <div className="flex items-center gap-2">
-                        <span className="text-(--medium-shade) text-sm uppercase tracking-widest font-bold">Producent</span>
-                        <span className="h-px flex-1 bg-white/10"></span>
-                        <span className="font-medium">{product.company}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <span className="text-(--medium-shade) text-sm uppercase tracking-widest font-bold">Nuty Smakowe</span>
-                        <span className="h-px flex-1 bg-white/10"></span>
-                        <span className="font-medium text-right">{product.flavours || "Brak danych"}</span>
+                      <div className='space-y-2.5 mt-2'>
+                          <SpecRow label="Producent" value={product.company} />
+                          <SpecRow label="Kategoria" value={product.category} />
+                          <SpecRow label="Rozmiar / Waga" value={product.size} />
+                          <SpecRow label="Przeznaczenie" value={product.purpose} />
+                          <SpecRow label="Odmiana (Variety)" value={product.variety} />
+                          <SpecRow label="Farma / Region" value={product.farm} />
+                          <SpecRow label="Metoda Obróbki" value={product.processingMethod} />
+                          <SpecRow label="Rodzaj Herbaty" value={product.teaType} />
+                          {product.category === 'Ziarna' && <SpecRow label="Data wypalenia" value={product.roastDate ? new Date(product.roastDate).toLocaleDateString('pl-PL') : null} />}
+                          <SpecRow label="Nuty Smakowe" value={product.flavours} />
                       </div>
                       
                       <div className="mt-8 pt-6 border-t border-white/10">

@@ -1,17 +1,31 @@
-import 'styles/Shop.css'
+import React from 'react';
+import 'styles/Shop.css';
 
-function Recommended({filters}) {
+export default function Recommended({ filters }) {
+    const categories = [
+        { label: "Wszystko", value: "" },
+        { label: "Kawa Ziarnista", value: "Ziarna" },
+        { label: "Akcesoria", value: "Zaparzacze" },
+        { label: "Matcha i Herbaty", value: "Herbaty" }
+    ];
+
     return (
-        <div className='flex flex-col justify-center items-center recommended-section lg:items-start'>
-            <h2 className='flex justify-center items-center py-6 font-semibold text-2xl mx-5'>Recommended</h2>
-            <div className='grid grid-cols-2 gap-4 justify-center items-center mb-6 px-4 lg:flex lg:flex-row flex-wrap'>
-                <button onClick={filters.handleCategoryChange} className='mainButton text-sm border-0' value="">Wszystko</button>
-                <button onClick={filters.handleCategoryChange} className='mainButton text-sm' value="ziarna">Ziarna</button>
-                <button onClick={filters.handleCategoryChange} className='mainButton text-sm' value="zaparzarki">Zaparzarki</button>
-                <button onClick={filters.handleCategoryChange} className='mainButton text-sm' value="akcesoria">Akcesoria</button>
+        <div className='flex flex-col justify-center items-center lg:items-start mb-10 animate-in fade-in duration-500'>
+            <h2 className='py-4 font-bold text-xs uppercase tracking-widest text-white/50 mx-5'>Szybkie Filtrowanie</h2>
+            <div className='flex flex-wrap gap-3 justify-center lg:justify-start px-4'>
+                {categories.map((cat) => {
+                    const isActive = filters.category === cat.value;
+                    return (
+                        <button 
+                            key={cat.label} onClick={() => filters.handleCategoryChange(cat.value)} 
+                            className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 border cursor-pointer
+                                ${isActive ? 'bg-(--medium-shade) text-[#24201d] border-(--medium-shade) shadow-[0_0_15px_rgba(143,120,93,0.3)] scale-105' 
+                                : 'bg-[#24201d]/40 text-white/70 border-white/10 hover:border-(--medium-shade)/50 hover:text-white backdrop-blur-md'}
+                            `}
+                        >{cat.label}</button>
+                    );
+                })}
             </div>
         </div>
-    )
+    );
 }
-
-export default Recommended;

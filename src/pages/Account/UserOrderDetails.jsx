@@ -59,10 +59,10 @@ export default function UserOrderDetails() {
           </div>
           
           <div className="flex items-center gap-4 self-end md:self-auto">
-              <span className={`px-4 py-2 bg-white/5 border rounded-full text-sm font-bold uppercase tracking-wider
-                  ${order.status === 'completed' ? 'border-green-500/30 text-green-400' : 
-                    order.status === 'cancelled' ? 'border-red-500/30 text-red-400' :
-                    'border-yellow-500/30 text-yellow-400'}`}
+              <span className={`px-4 py-2 bg-[#24201d]/30 border rounded-full text-sm font-bold uppercase tracking-wider
+                  ${order.status === 'completed' ? 'border-green-500/60 border-2 text-green-400' : 
+                    order.status === 'cancelled' ? 'border-red-500/60 border-2 text-red-400' :
+                    'border-yellow-500/30 border-2 text-yellow-400'}`}
               >
                 {order.status}
               </span>
@@ -70,7 +70,7 @@ export default function UserOrderDetails() {
         </div>
 
         {order.status !== 'cancelled' && (
-            <div className="bg-(--medium-shade)/10 backdrop-brightness-65 border border-(--medium-shade)/30 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg">
+            <div className="bg-[#24201d]/30 border border-(--medium-shade)/30 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg">
                 <div>
                     <h3 className="text-lg font-bold text-white mb-1">Gdzie jest moja paczka?</h3>
                     <p className="text-sm opacity-70">Sprawdź aktualny etap realizacji zamówienia i szacowany czas dostawy.</p>

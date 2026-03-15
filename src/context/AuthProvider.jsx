@@ -30,8 +30,6 @@ export function AuthProvider({ children }) {
       initializeAuth();
    }, []);
 
-
-   
    const login = useCallback((authResponse) => {
       const { user, token } = authResponse;
       
@@ -46,11 +44,10 @@ export function AuthProvider({ children }) {
    }, []);
 
    const logout = useCallback(() => {
-      setUser(null);
       localStorage.removeItem("somnium_user");
       localStorage.removeItem("somnium_token");
       localStorage.removeItem("somnium_cart"); 
-      window.location.reload();
+      setUser(null);
    }, []);
 
    const value = {
@@ -59,7 +56,8 @@ export function AuthProvider({ children }) {
       login,
       logout,
       loading,
-      isAdmin: user?.role === 'admin',
+      isAdmin: user?.role === 'super_admin' || user?.role === 'admin',
+      isSuperAdmin: user?.role === 'super_admin', 
    };
 
    return (

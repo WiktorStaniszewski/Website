@@ -34,7 +34,7 @@ function Card({ product }) {
     return (
         <>
             <section 
-                className={`group relative h-fit backdrop-blur-md bg-white/5 border border-white/10 hover:border-(--medium-shade)/50 rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-2 max-w-60 w-full flex flex-col ${isSoldOut ? 'opacity-75 grayscale-30' : 'cursor-pointer'}`}
+                className={`group relative h-120 backdrop-blur-md bg-[#24201d]/20 border border-white/10 hover:border-(--medium-shade)/50 rounded-3xl overflow-hidden transition-all duration-300 max-w-60 w-full flex flex-col ${isSoldOut ? 'opacity-75 grayscale-30' : 'hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-2 cursor-pointer'}`}
                 onClick={handleCardClick}
             >
                 <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
@@ -71,8 +71,12 @@ function Card({ product }) {
                         </div>
                     </div>
                     
-                    <div className="text-sm text-white/60 line-clamp-2 min-h-[2.5em]">
-                        <span className="font-semibold text-(--medium-shade)">Nuty:</span> {product.flavours}
+                    <div className="text-sm text-white/60 line-clamp-2 min-h-[2.5em] flex flex-col gap-0.5">
+                        {product.category === 'Ziarna' && product.flavours && <span><strong className="text-(--medium-shade)">Nuty:</strong> {product.flavours}</span>}
+                        {product.category === 'Zaparzacze' && product.purpose && <span><strong className="text-(--medium-shade)">Przeznaczenie:</strong> {product.purpose}</span>}
+                        {product.category === 'Herbaty' && product.teaType && <span><strong className="text-(--medium-shade)">Rodzaj:</strong> {product.teaType}</span>}
+                        {product.category === 'Filtry' && product.size && <span><strong className="text-(--medium-shade)">Rozmiar:</strong> {product.size}</span>}
+                        {['Kubki'].includes(product.category) && product.company && <span><strong className="text-(--medium-shade)">Marka:</strong> {product.company}</span>}
                     </div>
                     
                     <div className="mt-auto pt-4 flex items-center justify-between border-t border-white/5">

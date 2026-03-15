@@ -71,7 +71,7 @@ export default function AccountManager() {
                             : "hover:bg-white/5 text-white/70 hover:text-white"
                         }`}
                     >
-                        <span className={`text-xl ${activeTab === tab.id ? "text-[#24201d]" : "group-hover:text-(--medium-shade)"}`}>
+                        <span className={`text-xl ${activeTab ===  tab.id ? "text-[#24201d]" : "group-hover:text-(--medium-shade)"}`}>
                             {tab.icon}
                         </span>
                         <span className="font-medium">{tab.label}</span>

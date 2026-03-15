@@ -1,10 +1,31 @@
 import AuthCard from "src/pages/Auth/AuthCard";
+import { useAuth } from "src/context/AuthProvider"; 
 
 export default function LoginPage() {
+  const { user } = useAuth();
+
   return (
-    <div className="min-h-160 w-full flex items-center justify-center">
-      <div className="w-full max-w-md bg-(--darker-bg) p-8 rounded-3xl shadow-xl border border-white/5">
-        <AuthCard />
+    <div className="min-h-screen w-full flex items-center justify-center pt-24 pb-12 relative overflow-hidden">
+      
+      <div className="absolute top-1/3 -right-20 w-72 h-72 bg-(--medium-shade) rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-pulse"></div>
+      <div className="absolute bottom-1/3 -left-20 w-80 h-80 bg-[#5C4A3D] rounded-full mix-blend-multiply filter blur-[128px] opacity-30 animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+
+      <div className="relative w-full max-w-md z-10 px-4">
+        <div className="bg-[#24201d]/60 backdrop-blur-2xl p-8 sm:p-10 rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.4)] border border-white/10 animate-in fade-in zoom-in-95 duration-700 ease-out relative overflow-hidden">
+          
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-linear-to-r from-transparent via-(--medium-shade)/50 to-transparent"></div>
+
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-serif font-bold text-white mb-2">
+                {user ? "Twój profil" : "Witaj ponownie"}
+            </h1>
+            <p className="text-white/50 text-sm">
+                {user ? "Zarządzaj swoim kontem" : "Zaloguj się na swoje konto"}
+            </p>
+          </div>
+
+          <AuthCard />
+        </div>
       </div>
     </div>
   );

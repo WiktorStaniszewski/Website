@@ -53,7 +53,6 @@ export default function UserDetails() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* Lewa kolumna: Informacje o kliencie */}
         <div className="space-y-6 lg:col-span-1">
           <div className="bg-[#46382E] border border-[#5C4A3D] p-6 rounded-3xl shadow-lg text-[#F2EAE1]">
             <div className="flex justify-center mb-6">

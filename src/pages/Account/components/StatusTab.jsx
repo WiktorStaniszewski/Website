@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from "src/services/api"; // Upewnij się, że ścieżka do API jest poprawna
+import api from "src/services/api";
 import { FaSpinner } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
 
@@ -41,14 +41,13 @@ export default function StatusTab() {
         }
     }, [urlTrackingNumber]);
 
-    // Oś czasu: Różna w zależności od tego, czy to odbiór osobisty, czy kurier
     const isPickup = trackingResult?.isPickup;
 
     const stepsTemplate = isPickup 
         ? [
             { id: 'new', label: "Przyjęto" },
             { id: 'processing', label: "W przygotowaniu" },
-            { id: 'shipped', label: "Gotowe na miejscu" }, // Kiedy admin kliknie 'Wysłano', klient widzi 'Gotowe'
+            { id: 'shipped', label: "Gotowe na miejscu" },
             { id: 'completed', label: "Odebrano" },
           ]
         : [
@@ -99,7 +98,6 @@ export default function StatusTab() {
                             </div>
                             <div className="text-right">
                                 <p className="text-sm opacity-50 uppercase tracking-widest">
-                                    {/* Zmiana tekstu nagłówka w zależności od odbioru */}
                                     {isPickup ? 'Status gotowości' : 'Szacowana dostawa'}
                                 </p>
                                 <p className="text-lg font-medium">{trackingResult.estimatedDelivery}</p>
@@ -119,7 +117,7 @@ export default function StatusTab() {
                                         <div key={index} className="flex flex-col items-center gap-3 relative -top-4 w-1/4">
                                             <div className={`w-4 h-4 rounded-full border-2 z-10 transition-colors duration-500 ${isReached ? "bg-(--medium-shade) border-(--medium-shade) shadow-[0_0_15px_rgba(143,120,93,0.6)]" : "bg-[#24201d] border-white/20"}`}></div>
                                             <div className={`text-center transition-opacity duration-500 ${isReached ? "opacity-100" : "opacity-30"}`}>
-                                                <p className="text-sm font-bold whitespace-nowrap">{step.label}</p>
+                                                <p className="text-sm font-bold whitespace-nowrap pt-4">{step.label}</p>
                                                 <p className="text-[10px] sm:text-xs font-mono text-(--medium-shade) mt-1">{timestamp || '--:--'}</p>
                                             </div>
                                         </div>

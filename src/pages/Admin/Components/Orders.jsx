@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "services/api"; 
-import { FiChevronRight, FiBox, FiChevronDown, FiCheck } from "react-icons/fi";
+import { FiChevronRight, FiBox, FiChevronDown, FiCheck, FiMapPin, FiSearch } from "react-icons/fi";
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isArchivedOpen, setIsArchivedOpen] = useState(false);
+  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [visibleActiveCount, setVisibleActiveCount] = useState(10);
+  const [visibleArchivedCount, setVisibleArchivedCount] = useState(10);
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,25 +28,47 @@ export default function AdminOrders() {
     fetchOrders();
   }, []);
 
+  useEffect(() => {
+      setVisibleActiveCount(10);
+      setVisibleArchivedCount(10);
+  }, [searchQuery]);
+
   const statusWeights = { 'new': 0, 'processing': 1, 'shipped': 2, 'completed': 3, 'cancelled': 99 };
 
-  const activeOrders = orders.filter(o => o.status !== 'completed' && o.status !== 'cancelled');
-  const archivedOrders = orders.filter(o => o.status === 'completed' || o.status === 'cancelled');
+  const searchedOrders = orders.filter(o => {
+      if (!searchQuery) return true;
+      const q = searchQuery.toLowerCase();
+      const trackStr = o.trackingNumber ? o.trackingNumber.toLowerCase() : "";
+      const idStr = o.id ? String(o.id) : "";
+      const emailStr = o.customer?.email ? o.customer.email.toLowerCase() : "";
+      
+      return trackStr.includes(q) || idStr.includes(q) || emailStr.includes(q);
+  });
+
+  const activeOrders = searchedOrders.filter(o => o.status !== 'completed' && o.status !== 'cancelled');
+  const archivedOrders = searchedOrders.filter(o => o.status === 'completed' || o.status === 'cancelled');
 
   activeOrders.sort((a, b) => {
-    if (statusWeights[a.status] !== statusWeights[b.status]) {
-        return statusWeights[a.status] - statusWeights[b.status];
-    }
-    const dateA = new Date(a.createdAt || a.date).getTime();
-    const dateB = new Date(b.createdAt || b.date).getTime();
-    return dateA - dateB;
+    if (statusWeights[a.status] !== statusWeights[b.status]) return statusWeights[a.status] - statusWeights[b.status];
+    return new Date(a.createdAt || a.date).getTime() - new Date(b.createdAt || b.date).getTime();
   });
 
   archivedOrders.sort((a, b) => {
-    const dateA = new Date(a.createdAt || a.date).getTime();
-    const dateB = new Date(b.createdAt || b.date).getTime();
-    return dateB - dateA;
+      return new Date(b.createdAt || b.date).getTime() - new Date(a.createdAt || a.date).getTime();
   });
+
+  const getShippingLabel = (method, location) => {
+    if (method === 'pickup') {
+      return (
+        <span className="flex items-center gap-1 text-(--medium-shade) font-bold">
+          <FiMapPin /> Odbiór: {location?.name || 'Kawiarnia'}
+        </span>
+      );
+    }
+    if (method === 'courier') return 'Kurier InPost';
+    if (method === 'locker') return 'Paczkomat InPost';
+    return method;
+  };
 
   const renderOrderRow = (o) => (
     <div 
@@ -53,7 +80,9 @@ export default function AdminOrders() {
         <p className="font-bold text-lg group-hover:text-(--medium-shade) transition-colors">
             Zamówienie {o.trackingNumber || `#${o.id}`}
         </p>
-        <p className="text-sm opacity-50">{o.customer?.email} | {o.shipping?.method}</p>
+        <p className="text-sm opacity-50 flex items-center gap-2">
+            {o.customer?.email} | {getShippingLabel(o.shipping?.method, o.Location)}
+        </p>
         <p className="text-xs text-(--medium-shade) mt-1">{o.date}</p>
       </div>
       <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
@@ -77,52 +106,82 @@ export default function AdminOrders() {
 
   return (
     <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500 not-lg:pt-20 pb-20">
-      
-      <div>
-        <h1 className="text-3xl font-serif font-bold text-white">Zamówienia</h1>
-        <p className="text-white/50 text-sm mt-1">Zarządzaj zamówieniami ze sklepu ({orders.length})</p>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-serif font-bold text-white">Zamówienia</h1>
+          <p className="text-white/50 text-sm mt-1">Zarządzaj zamówieniami ze sklepu ({orders.length})</p>
+        </div>
+        
+        <div className="relative w-full md:w-80">
+          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 text-lg" />
+          <input 
+              type="text" 
+              placeholder="Szukaj (np. SOM-..., email)" 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-[#2D231C] border border-[#5C4A3D] rounded-xl py-3 pl-11 pr-4 text-white focus:outline-none focus:border-(--medium-shade) transition-colors placeholder-white/30"
+          />
+        </div>
       </div>
       
       <div className="rounded-[2.5rem] border border-white/5 overflow-hidden bg-[#24201d]/60 backdrop-blur-xl shadow-xl p-6 md:p-8">
         
-        {orders.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <FiBox className="text-6xl text-white/10 mb-4" />
-            <h3 className="text-xl font-bold text-white">Brak zamówień</h3>
-            <p className="text-white/50 mt-2">Gdy klienci coś kupią, lista pojawi się tutaj.</p>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-6">
-            
-            {activeOrders.length > 0 ? (
-                <div className="flex flex-col gap-4">
-                    {activeOrders.map(renderOrderRow)}
+        <div className="mb-6">
+            <h2 className="text-xl font-bold text-white mb-4 border-b border-white/10 pb-2">Zamówienia Aktywne</h2>
+            {activeOrders.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-10 text-center">
+                    <FiBox className="text-5xl text-white/10 mb-3" />
+                    <p className="text-sm opacity-50 italic">Brak aktywnych zamówień.</p>
                 </div>
             ) : (
-                <p className="text-sm opacity-50 italic text-center py-4">Brak aktywnych zamówień w toku.</p>
-            )}
-
-            {archivedOrders.length > 0 && (
-                <div className="mt-8 border-t border-white/10 pt-6">
-                    <button 
-                        onClick={() => setIsArchivedOpen(!isArchivedOpen)}
-                        className="flex items-center gap-3 text-lg font-bold opacity-80 hover:opacity-100 transition-opacity cursor-pointer w-full text-left text-white"
-                    >
-                        <FiChevronDown className={`transition-transform duration-300 ${isArchivedOpen ? 'rotate-180' : ''}`} />
-                        Zrealizowane i anulowane ({archivedOrders.length})
-                    </button>
+                <div className="flex flex-col gap-4">
+                    {activeOrders.slice(0, visibleActiveCount).map(renderOrderRow)}
                     
-                    <div className={`grid transition-all duration-500 ease-in-out ${isArchivedOpen ? 'grid-rows-[1fr] opacity-100 mt-6' : 'grid-rows-[0fr] opacity-0'}`}>
-                        <div className="overflow-hidden flex flex-col gap-4">
-                            {archivedOrders.map(renderOrderRow)}
-                        </div>
-                    </div>
+                    {activeOrders.length > visibleActiveCount && (
+                        <button 
+                            onClick={() => setVisibleActiveCount(prev => prev + 10)}
+                            className="w-full py-3 mt-2 border border-white/10 rounded-xl text-white/50 hover:text-white hover:bg-white/5 transition-all font-bold text-sm cursor-pointer"
+                        >
+                            Załaduj kolejne 10 ({activeOrders.length - visibleActiveCount} pozostało)
+                        </button>
+                    )}
                 </div>
             )}
+        </div>
 
-          </div>
-        )}
-        
+        <div className="mt-8 pt-6 border-t border-white/10">
+            <div 
+                className="flex items-center justify-between cursor-pointer group p-2 -mx-2 rounded-xl hover:bg-white/5 transition-colors"
+                onClick={() => setIsArchivedOpen(!isArchivedOpen)}
+            >
+                <h2 className="text-xl font-bold text-white/70 group-hover:text-white transition-colors">
+                    Archiwum Zakończonych ({archivedOrders.length})
+                </h2>
+                <FiChevronDown className={`text-2xl text-white/50 transition-transform duration-300 ${isArchivedOpen ? 'rotate-180' : ''}`} />
+            </div>
+
+            {isArchivedOpen && (
+                <div className="mt-6 animate-in slide-in-from-top-4 fade-in duration-300">
+                    {archivedOrders.length === 0 ? (
+                        <p className="text-sm opacity-50 italic text-center py-4">Brak zakończonych zamówień.</p>
+                    ) : (
+                        <div className="flex flex-col gap-4">
+                            {archivedOrders.slice(0, visibleArchivedCount).map(renderOrderRow)}
+                            
+                            {archivedOrders.length > visibleArchivedCount && (
+                                <button 
+                                    onClick={() => setVisibleArchivedCount(prev => prev + 10)}
+                                    className="w-full py-3 mt-2 border border-white/10 rounded-xl text-white/50 hover:text-white hover:bg-white/5 transition-all font-bold text-sm cursor-pointer"
+                                >
+                                    Załaduj kolejne 10 ({archivedOrders.length - visibleArchivedCount} pozostało)
+                                </button>
+                            )}
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+
       </div>
     </div>
   );
