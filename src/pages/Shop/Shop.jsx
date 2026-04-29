@@ -36,7 +36,7 @@ export default function Shop() {
                     <Products filters={filters} />
                 </div>
                 
-                <div className={`lg:col-start-1 lg:col-end-5 lg:row-start-1 lg:row-end-2 bottom-0 not-lg:sticky not-lg:bottom-15 not-lg:z-4 ${visible ? 'not-lg:w-75/100' : 'not-lg:w-full'} transition-all duration-300 ease-in-out`}>
+                <div className={`lg:col-start-1 lg:col-end-5 lg:row-start-1 lg:row-end-2 bottom-0 not-lg:sticky not-lg:bottom-15 not-lg:z-9999 ${visible ? 'not-lg:w-75/100' : 'not-lg:w-full'} transition-all duration-300 ease-in-out`}>
                     <Navigation filters={filters} toggleFilterMenu={toggleFilterMenu} />
                 </div>
 

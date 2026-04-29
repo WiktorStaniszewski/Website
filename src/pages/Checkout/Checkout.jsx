@@ -9,6 +9,8 @@ import { DeliveryMethod } from './components/DeliveryMethod';
 import { ContactAndAddress } from './components/ContactAndAddress';
 import { PaymentMethod } from './components/PaymentMethod';
 import { CheckoutSummary } from './components/CheckoutSummary';
+import PaymentSimulationModal from 'src/components/PaymentSimulationModal';
+import ConfirmModal from 'src/components/ConfirmModal';
 
 export default function Checkout() {
   const { cartItems, cartTotal, loading: cartLoading, clearCart } = useCart();
@@ -24,14 +26,21 @@ export default function Checkout() {
   const [saveNewAddress, setSaveNewAddress] = useState(false);
   const [newAddressLabel, setNewAddressLabel] = useState("");
   const [shippingMethod, setShippingMethod] = useState('courier');
+  const [selectedLocker, setSelectedLocker] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState('p24');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
+  
+  const [simulationModalOpen, setSimulationModalOpen] = useState(false);
+  const [createdOrderData, setCreatedOrderData] = useState(null);
+  
+  const [validationModal, setValidationModal] = useState({ isOpen: false, message: '' });
 
   const orderPlacedRef = useRef(false);
   const [timeLeft, setTimeLeft] = useState(600);
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
-    defaultValues: { email: user?.email || "", firstName: user?.firstName || "", address: "", city: "", zip: "", phone: "" }
+    defaultValues: { email: user?.email || "", firstName: user?.firstName || "", address: "", city: "", zip: "", phone: user?.phone || "" }
   });
 
   const shippingOptions = {
@@ -54,23 +63,44 @@ export default function Checkout() {
   const isTimeRunningOut = timeLeft <= 60;
 
   useEffect(() => {
-    const validateCart = async () => {
+    const fetchLocationsAndValidate = async () => {
         setIsCartValidating(true);
         try {
             const sessionId = localStorage.getItem('somnium_session_id');
-            const res = await api.post('cart/validate-pickup', { cartItems, sessionId });
-            setCafeOptions(res);
             
-            if (res.length > 0 && !selectedCafeId) {
-                setSelectedCafeId(res[0].locationId);
+            const [locationsRes, validationRes] = await Promise.all([
+                api.get('locations'),
+                api.post('cart/validate-pickup', { cartItems, sessionId })
+            ]);
+            
+            const cafes = Array.isArray(locationsRes) ? locationsRes.filter(loc => loc.type === 'cafe') : [];
+            
+            const options = cafes.map(cafe => {
+                const valData = Array.isArray(validationRes) 
+                    ? validationRes.find(v => String(v.locationId) === String(cafe.id)) 
+                    : null;
+                
+                return {
+                    locationId: cafe.id,
+                    name: cafe.name,
+                    readiness: valData ? valData.readiness : 100,
+                    status: valData ? valData.status : 'instant'
+                };
+            });
+
+            setCafeOptions(options);
+            
+            if (options.length > 0 && !selectedCafeId) {
+                setSelectedCafeId(options[0].locationId);
             }
         } catch (error) {
-            console.error("Błąd weryfikacji kawiarni:", error);
+            console.error("Błąd weryfikacji i pobierania kawiarni:", error);
         } finally {
             setIsCartValidating(false);
         }
     };
-    if (cartItems.length > 0 && !cartLoading) validateCart();
+
+    if (cartItems.length > 0 && !cartLoading) fetchLocationsAndValidate();
   }, [cartItems, cartLoading]);
 
   useEffect(() => {
@@ -149,10 +179,11 @@ export default function Checkout() {
       if (addrId) {
           const addr = savedAddresses.find(a => a.id.toString() === addrId);
           if (addr) { 
-              setValue("address", addr.street); 
-              setValue("city", addr.city); 
-              setValue("zip", addr.zip); 
-              setValue("phone", addr.phone); 
+              setValue("address", addr.street || ""); 
+              setValue("city", addr.city || ""); 
+              setValue("zip", addr.zip || ""); 
+              setValue("phone", addr.phone || ""); 
+              if (addr.name) setValue("firstName", addr.name);
           }
       } else {
           setValue("address", ""); setValue("city", ""); setValue("zip", ""); setValue("phone", "");
@@ -161,10 +192,16 @@ export default function Checkout() {
 
   const onSubmit = async (data) => {
     if (isTimeExpired) return; 
+    
+    if (shippingMethod === 'locker' && !selectedLocker) {
+        setValidationModal({ isOpen: true, message: "Proszę wybrać paczkomat na mapie przed złożeniem zamówienia." });
+        return;
+    }
+
     setIsSubmitting(true);
     const sessionId = localStorage.getItem('somnium_session_id');
 
-    if (shippingMethod === 'pickup') {
+    if (['pickup', 'locker'].includes(shippingMethod)) {
         data.address = ""; data.city = ""; data.zip = "";
     }
 
@@ -177,7 +214,13 @@ export default function Checkout() {
       userId: user?.id || null, 
       sessionId: sessionId,
       locationId: shippingMethod === 'pickup' ? selectedCafeId : null,
-      shipping: { method: shippingMethod, cost: currentShippingCost, details: shippingOptions[shippingMethod] }
+      shipping: { 
+          method: shippingMethod, 
+          cost: currentShippingCost, 
+          details: shippingOptions[shippingMethod],
+          pointId: shippingMethod === 'locker' ? selectedLocker?.name : null
+      },
+      paymentMethod: paymentMethod
     };
 
     try {
@@ -185,7 +228,14 @@ export default function Checkout() {
       const tracking = response.trackingNumber || response.id;
       
       if (user && saveNewAddress && newAddressLabel && shippingMethod !== 'pickup') {
-          await api.post('users/profile/addresses', { label: newAddressLabel, street: data.address, city: data.city, zip: data.zip, phone: data.phone }).catch(()=>{});
+          await api.post('users/profile/addresses', { 
+              label: newAddressLabel, 
+              street: data.address, 
+              city: data.city, 
+              zip: data.zip, 
+              phone: data.phone,
+              firstName: data.firstName 
+          }).catch(()=>{});
       }
 
       orderPlacedRef.current = true;
@@ -193,10 +243,14 @@ export default function Checkout() {
       await clearCart(true);
       localStorage.removeItem('somnium_checkout_expires');
       
-      navigate('/order-success', { state: { trackingNumber: tracking } });
+      if (['p24', 'blik'].includes(paymentMethod)) {
+          setCreatedOrderData({ trackingNumber: tracking, integrations: response.integrations, orderId: response.id });
+          setSimulationModalOpen(true);
+      } else {
+          navigate('/order-success', { state: { trackingNumber: tracking, integrations: response.integrations } });
+      }
     } catch (error) {
-      alert("Wystąpił błąd zamówienia. Czas Twojej sesji w kasie mógł minąć.");
-      navigate('/cart');
+      setValidationModal({ isOpen: true, message: "Wystąpił błąd zamówienia. Czas Twojej sesji w kasie mógł minąć." });
     } finally {
       setIsSubmitting(false);
     }
@@ -259,7 +313,13 @@ export default function Checkout() {
     <div className="w-screen flex justify-center pt-24 pb-20 text-white">
       <div className="w-9/10 max-w-7xl grid lg:grid-cols-[1.5fr_1fr] gap-10">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
-          <DeliveryMethod shippingMethod={shippingMethod} setShippingMethod={setShippingMethod} shippingOptions={shippingOptions} />
+          <DeliveryMethod 
+              shippingMethod={shippingMethod} 
+              setShippingMethod={setShippingMethod} 
+              shippingOptions={shippingOptions} 
+              selectedLocker={selectedLocker}
+              setSelectedLocker={setSelectedLocker}
+          />
           
           {shippingMethod === 'pickup' && (
               <div className="bg-[#24201d]/60 backdrop-blur-md p-6 rounded-2xl border border-white/10 animate-in fade-in slide-in-from-top-4">
@@ -274,7 +334,7 @@ export default function Checkout() {
               handleAddressSelect={handleAddressSelect} saveNewAddress={saveNewAddress} setSaveNewAddress={setSaveNewAddress} 
               newAddressLabel={newAddressLabel} setNewAddressLabel={setNewAddressLabel} shippingMethod={shippingMethod} 
           />
-          <PaymentMethod />
+          <PaymentMethod paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />
         </form>
 
         <div className="flex flex-col gap-6">
@@ -289,6 +349,28 @@ export default function Checkout() {
            />
         </div>
       </div>
+      
+      <PaymentSimulationModal 
+          isOpen={simulationModalOpen}
+          orderId={createdOrderData?.orderId}
+          onClose={() => navigate('/order-pending', { state: { trackingNumber: createdOrderData?.trackingNumber, orderId: createdOrderData?.orderId } })}
+          onSuccess={() => navigate('/order-success', { state: { trackingNumber: createdOrderData?.trackingNumber, integrations: createdOrderData?.integrations } })}
+      />
+      
+      <ConfirmModal 
+          isOpen={validationModal.isOpen} 
+          onClose={() => {
+              setValidationModal({ isOpen: false, message: '' });
+              if (validationModal.message.includes("błąd zamówienia")) navigate('/cart');
+          }} 
+          onConfirm={() => {
+              setValidationModal({ isOpen: false, message: '' });
+              if (validationModal.message.includes("błąd zamówienia")) navigate('/cart');
+          }}
+          title="Uwaga"
+          description={validationModal.message}
+          confirmText="Rozumiem"
+      />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import api from "services/api";
 
 export default function ProductModal({ isOpen, onClose, onSuccess }) {
   const defaultState = {
-      name: "", producent: "", category: "Ziarna", price: "", stockQuantity: "", image: "", description: "",
+      name: "", producent: "", category: "Ziarna", price: "", image: "", description: "",
       size: "", purpose: "", flavours: "", processingMethod: "", variety: "", farm: "", roastDate: "", teaType: ""
   };
   
@@ -46,7 +46,7 @@ export default function ProductModal({ isOpen, onClose, onSuccess }) {
       e.preventDefault();
       setIsSubmitting(true);
       try {
-          const cleanData = { ...formData };
+          const cleanData = { ...formData, stockQuantity: 0 }; // Wymuszamy stan początkowy 0
           if (cleanData.category !== "Ziarna") {
               cleanData.flavours = ""; cleanData.processingMethod = ""; cleanData.variety = ""; cleanData.farm = ""; cleanData.roastDate = "";
           }
@@ -157,15 +157,9 @@ export default function ProductModal({ isOpen, onClose, onSuccess }) {
                         <option value="Kubki">Kubki i Szkło</option>
                     </select>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                    <div>
-                        <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Cena (PLN)</label>
-                        <input type="number" step="0.01" required name="price" value={formData.price} onChange={handleInputChange} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade)" />
-                    </div>
-                    <div>
-                        <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Początkowy stan</label>
-                        <input type="number" required name="stockQuantity" value={formData.stockQuantity} onChange={handleInputChange} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade)" />
-                    </div>
+                <div>
+                    <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Cena (PLN)</label>
+                    <input type="number" step="0.01" required name="price" value={formData.price} onChange={handleInputChange} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade)" />
                 </div>
 
                 <div className="md:col-span-2">
@@ -187,7 +181,7 @@ export default function ProductModal({ isOpen, onClose, onSuccess }) {
             <div className="flex gap-3 mt-2 pt-6 border-t border-white/10">
                 <button type="button" onClick={onClose} className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-xl font-bold cursor-pointer transition-colors">Anuluj</button>
                 <button type="submit" disabled={isSubmitting} className="flex-1 py-3 bg-(--80-shade) hover:bg-(--button-hover-bg) text-[#24201d] rounded-xl font-bold cursor-pointer transition-colors shadow-lg disabled:opacity-50">
-                    {isSubmitting ? "Zapisywanie..." : "Utwórz produkt i dodaj stan"}
+                    {isSubmitting ? "Zapisywanie..." : "Utwórz produkt"}
                 </button>
             </div>
         </form>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import api from "services/api";
-import { FaMapMarkerAlt, FaSpinner } from "react-icons/fa";
+import { FaMapMarkerAlt, FaSpinner, FaCity, FaPhoneAlt, FaBoxOpen } from "react-icons/fa";
 import { FiEdit2, FiTrash2, FiPlus } from "react-icons/fi";
 
 export default function AddressTab() {
-    const [addresses, setAddresses] = useState([]);
+    const[addresses, setAddresses] = useState([]);
     const [editingId, setEditingId] = useState(null); 
     const [isLoading, setIsLoading] = useState(false);
     
@@ -22,7 +22,7 @@ export default function AddressTab() {
             }
         };
         fetchAddresses();
-    }, []);
+    },[]);
 
     const handleSaveForm = async (e) => {
         e.preventDefault();
@@ -69,43 +69,49 @@ export default function AddressTab() {
         setEditingId('new');
     };
 
+    const inputClass = "w-full bg-[#1a1715] border border-white/10 rounded-xl p-3.5 text-white placeholder-white/20 focus:outline-none focus:border-(--medium-shade) focus:ring-1 focus:ring-(--medium-shade)/50 transition-all duration-300";
+    const labelClass = "text-xs uppercase tracking-widest text-(--medium-shade) ml-1 font-bold";
+
     if (editingId) {
         return (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-2xl">
-                <h2 className="text-3xl font-serif mb-6 border-b border-white/10 pb-4">
-                    {editingId === 'new' ? "Dodaj nowy adres" : "Edytuj adres"}
-                </h2>
-                <form onSubmit={handleSaveForm} className="flex flex-col gap-5">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-white">
+                <div className="mb-8 pb-6 border-b border-white/5">
+                    <span className="text-(--medium-shade) uppercase tracking-[0.2em] text-xs font-bold">Formularz</span>
+                    <h2 className="text-3xl font-serif font-bold text-white mt-2">
+                        {editingId === 'new' ? "Dodaj nowy adres" : "Edytuj adres"}
+                    </h2>
+                </div>
+                <form onSubmit={handleSaveForm} className="flex flex-col gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2 md:col-span-2">
-                            <label className="text-xs uppercase tracking-widest opacity-70 ml-1">Nazwa adresu</label>
-                            <input type="text" value={formData.label} onChange={e => setFormData({...formData, label: e.target.value})} className="w-full bg-black/20 border border-white/10 rounded-xl p-3 focus:outline-none focus:border-(--medium-shade) transition-colors" placeholder="np. Dom, Praca..." required />
+                            <label className={labelClass}>Nazwa adresu</label>
+                            <input type="text" value={formData.label} onChange={e => setFormData({...formData, label: e.target.value})} className={inputClass} placeholder="np. Dom, Praca..." required />
                         </div>
                         <div className="space-y-2 md:col-span-2">
-                            <label className="text-xs uppercase tracking-widest opacity-70 ml-1">Ulica i numer</label>
-                            <input type="text" value={formData.street} onChange={e => setFormData({...formData, street: e.target.value})} className="w-full bg-black/20 border border-white/10 rounded-xl p-3 focus:outline-none focus:border-(--medium-shade) transition-colors" placeholder="Wpisz adres doręczenia..." />
+                            <label className={labelClass}>Ulica i numer</label>
+                            <input type="text" value={formData.street} onChange={e => setFormData({...formData, street: e.target.value})} className={inputClass} placeholder="Wpisz adres doręczenia..." />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-xs uppercase tracking-widest opacity-70 ml-1">Kod pocztowy</label>
-                            <input type="text" value={formData.zip} onChange={e => setFormData({...formData, zip: e.target.value})} className="w-full bg-black/20 border border-white/10 rounded-xl p-3 focus:outline-none focus:border-(--medium-shade) transition-colors" placeholder="00-000" />
+                            <label className={labelClass}>Kod pocztowy</label>
+                            <input type="text" value={formData.zip} onChange={e => setFormData({...formData, zip: e.target.value})} className={inputClass} placeholder="00-000" />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-xs uppercase tracking-widest opacity-70 ml-1">Miasto</label>
-                            <input type="text" value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} className="w-full bg-black/20 border border-white/10 rounded-xl p-3 focus:outline-none focus:border-(--medium-shade) transition-colors" placeholder="Wpisz miasto..." />
+                            <label className={labelClass}>Miasto</label>
+                            <input type="text" value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} className={inputClass} placeholder="Wpisz miasto..." />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-xs uppercase tracking-widest opacity-70 ml-1">Numer telefonu</label>
-                            <input type="text" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full bg-black/20 border border-white/10 rounded-xl p-3 focus:outline-none focus:border-(--medium-shade) transition-colors" placeholder="+48 000 000 000" />
+                            <label className={labelClass}>Numer telefonu</label>
+                            <input type="text" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className={inputClass} placeholder="+48 000 000 000" />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-xs uppercase tracking-widest opacity-70 ml-1 text-(--medium-shade) font-bold">Domyślny Paczkomat</label>
-                            <input type="text" value={formData.paczkomat} onChange={e => setFormData({...formData, paczkomat: e.target.value})} className="w-full bg-(--medium-shade)/5 border border-(--medium-shade)/30 rounded-xl p-3 focus:outline-none focus:border-(--medium-shade) transition-colors" placeholder="KRA123M" />
+                            <label className="text-xs uppercase tracking-widest text-[#d4a373] ml-1 font-bold">Domyślny Paczkomat (Opcjonalnie)</label>
+                            <input type="text" value={formData.paczkomat} onChange={e => setFormData({...formData, paczkomat: e.target.value})} className={`${inputClass} bg-[#d4a373]/5 border-[#d4a373]/30`} placeholder="KRA123M" />
                         </div>
                     </div>
-                    <div className="mt-4 flex gap-3">
-                        <button type="button" onClick={() => setEditingId(null)} className="flex-1 bg-white/5 hover:bg-white/10 text-white py-3 px-6 rounded-xl font-bold transition-all cursor-pointer">Anuluj</button>
-                        <button type="submit" disabled={isLoading} className="flex-1 bg-(--80-shade) hover:bg-(--button-hover-bg) text-[#24201d] py-3 px-6 rounded-xl font-bold transition-all flex justify-center items-center gap-2 cursor-pointer disabled:opacity-50">
-                            {isLoading ? <FaSpinner className="animate-spin" /> : "Zapisz adres"}
+                    <div className="mt-4 flex flex-col-reverse sm:flex-row gap-4 pt-4 border-t border-white/5">
+                        <button type="button" onClick={() => setEditingId(null)} className="flex-1 bg-white/5 hover:bg-white/10 text-white py-4 px-6 rounded-2xl font-bold transition-all cursor-pointer">Anuluj</button>
+                        <button type="submit" disabled={isLoading} className="flex-1 bg-(--medium-shade) hover:brightness-110 text-[#1a1715] py-4 px-6 rounded-2xl font-bold uppercase tracking-widest text-sm transition-all flex justify-center items-center gap-2 cursor-pointer disabled:opacity-50">
+                            {isLoading ? <FaSpinner className="animate-spin text-xl" /> : "Zapisz adres"}
                         </button>
                     </div>
                 </form>
@@ -115,39 +121,48 @@ export default function AddressTab() {
 
     return (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 h-full flex flex-col">
-            <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4">
-                <h2 className="text-3xl font-serif">Książka Adresowa</h2>
-                <button onClick={openAdd} className="bg-(--medium-shade) hover:brightness-110 text-[#24201d] px-4 py-2 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer">
-                    <FiPlus /> Dodaj
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 pb-6 border-b border-white/5 gap-4">
+                <div>
+                    <span className="text-(--medium-shade) uppercase tracking-[0.2em] text-xs font-bold">Wysyłka</span>
+                    <h2 className="text-4xl font-serif font-bold text-white mt-2">Książka Adresowa</h2>
+                </div>
+                <button onClick={openAdd} className="bg-(--medium-shade) hover:brightness-110 text-[#1a1715] px-5 py-3 rounded-2xl font-bold uppercase tracking-widest text-sm flex items-center gap-2 transition-transform hover:-translate-y-0.5 cursor-pointer shadow-[0_0_20px_rgba(143,120,93,0.2)]">
+                    <FiPlus className="text-lg" /> Nowy Adres
                 </button>
             </div>
             
             {addresses.length === 0 ? (
-                <div className="flex-1 flex flex-col items-center justify-center opacity-50 text-center py-10">
-                    <FaMapMarkerAlt className="text-6xl mb-4 opacity-20" />
-                    <p className="text-lg">Nie masz jeszcze zapisanych żadnych adresów.</p>
+                <div className="flex-1 flex flex-col items-center justify-center opacity-50 text-center py-16 bg-[#1a1715]/50 rounded-3xl border border-white/5 border-dashed">
+                    <FaMapMarkerAlt className="text-6xl mb-6 opacity-20 text-(--medium-shade)" />
+                    <p className="text-xl font-serif">Nie masz jeszcze zapisanych adresów.</p>
+                    <p className="text-sm mt-2 font-light">Dodaj adres, aby przyspieszyć proces zamówienia.</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {addresses.map((addr) => (
-                        <div key={addr.id} className="bg-white/5 p-5 rounded-2xl border border-white/5 hover:bg-white/10 transition-colors flex flex-col justify-between">
+                        <div key={addr.id} className="bg-[#1a1715]/80 p-6 rounded-3xl border border-white/5 border-l-4 border-l-(--medium-shade) shadow-lg hover:bg-[#1a1715] hover:shadow-xl transition-all flex flex-col justify-between group">
                             <div>
-                                <div className="flex items-center gap-2 mb-3">
-                                    <FaMapMarkerAlt className="text-(--medium-shade)" />
-                                    <h3 className="font-bold text-lg text-white">{addr.label}</h3>
+                                <div className="flex items-center gap-3 mb-4 border-b border-white/5 pb-3">
+                                    <div className="p-2 bg-(--medium-shade)/10 rounded-lg">
+                                        <FaMapMarkerAlt className="text-(--medium-shade)" />
+                                    </div>
+                                    <h3 className="font-bold text-lg text-white tracking-wide">{addr.label}</h3>
                                 </div>
-                                <div className="text-sm opacity-70 space-y-1">
-                                    <p>{addr.street}</p>
-                                    <p>{addr.zip} {addr.city}</p>
-                                    <p>{addr.phone}</p>
-                                    {addr.paczkomat && <p className="text-(--medium-shade) font-bold mt-2">Paczkomat: {addr.paczkomat}</p>}
+                                <div className="text-sm text-white/70 space-y-2.5 font-light">
+                                    <p className="flex items-start gap-3"><span className="mt-1 opacity-50 w-4"><FaCity /></span> {addr.street}<br/>{addr.zip} {addr.city}</p>
+                                    {addr.phone && <p className="flex items-center gap-3"><span className="opacity-50 w-4"><FaPhoneAlt /></span> {addr.phone}</p>}
+                                    {addr.paczkomat && (
+                                        <div className="mt-4 inline-flex items-center gap-2 bg-[#d4a373]/10 text-[#d4a373] px-3 py-1.5 rounded-lg text-xs font-bold border border-[#d4a373]/20">
+                                            <FaBoxOpen size={14} /> Paczkomat: {addr.paczkomat}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
-                            <div className="flex gap-2 mt-4 pt-4 border-t border-white/5">
-                                <button onClick={() => openEdit(addr)} className="flex-1 py-2 bg-white/5 rounded-lg text-sm font-bold text-white/80 hover:bg-white/10 transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                            <div className="flex gap-3 mt-6 pt-4 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onClick={() => openEdit(addr)} className="flex-1 py-2.5 bg-white/5 rounded-xl text-sm font-bold text-white hover:bg-white/10 transition-colors flex items-center justify-center gap-2 cursor-pointer">
                                     <FiEdit2 /> Edytuj
                                 </button>
-                                <button onClick={() => handleDelete(addr.id)} className="flex-1 py-2 bg-red-500/10 rounded-lg text-sm font-bold text-red-400 hover:bg-red-500/20 transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                                <button onClick={() => handleDelete(addr.id)} className="flex-1 py-2.5 bg-red-500/10 rounded-xl text-sm font-bold text-red-400 hover:bg-red-500/20 transition-colors flex items-center justify-center gap-2 cursor-pointer">
                                     <FiTrash2 /> Usuń
                                 </button>
                             </div>

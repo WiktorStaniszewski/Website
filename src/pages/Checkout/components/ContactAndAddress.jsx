@@ -5,17 +5,17 @@ export const ContactAndAddress = ({
     register, errors, user, savedAddresses, selectedAddressId, handleAddressSelect, 
     saveNewAddress, setSaveNewAddress, newAddressLabel, setNewAddressLabel, shippingMethod 
 }) => {
-  const isPickup = shippingMethod === 'pickup';
+  const isAddressHidden = shippingMethod === 'pickup' || shippingMethod === 'locker';
 
   return (
     <section className="bg-[#24201d]/60 backdrop-blur-xl p-6 lg:p-8 rounded-3xl shadow-lg border border-white/5 animate-in fade-in">
       <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
         <span className="bg-(--80-shade) text-[#24201d] w-8 h-8 flex items-center justify-center rounded-full text-sm">2</span>
-        {isPickup ? 'Dane kontaktowe' : 'Dane dostawy'}
+        {isAddressHidden ? 'Dane kontaktowe' : 'Dane dostawy'}
       </h2>
       
-      {/* Książka adresowa zika, gdy odbieramy osobiście */}
-      {!isPickup && user && savedAddresses.length > 0 && (
+      {/* Książka adresowa zika, gdy odbieramy osobiście lub w paczkomacie */}
+      {!isAddressHidden && user && savedAddresses.length > 0 && (
           <div className="mb-6 p-4 bg-white/5 border border-white/10 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <FiBookOpen className="text-(--medium-shade) text-2xl hidden sm:block" />
               <div className="w-full">
@@ -68,13 +68,13 @@ export const ContactAndAddress = ({
           />
         </div>
 
-        {/* Pola Adresowe (Ukryte przy odbiorze osobistym) */}
-        {!isPickup && (
+        {/* Pola Adresowe (Ukryte przy odbiorze osobistym i paczkomacie) */}
+        {!isAddressHidden && (
             <>
               <div className="md:col-span-2 mt-2">
                 <label className="text-xs uppercase tracking-widest opacity-70 ml-2">Ulica i numer</label>
                 <input 
-                  {...register("address", { required: !isPickup ? "Adres jest wymagany" : false })}
+                  {...register("address", { required: !isAddressHidden ? "Adres jest wymagany" : false })}
                   className={`w-full bg-black/20 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) transition-colors ${errors.address ? 'border-red-500' : ''}`}
                   placeholder="ul. Kawowa 12/4"
                 />
@@ -83,7 +83,7 @@ export const ContactAndAddress = ({
               <div>
                 <label className="text-xs uppercase tracking-widest opacity-70 ml-2">Kod pocztowy</label>
                 <input 
-                  {...register("zip", { required: !isPickup ? "Kod jest wymagany" : false })}
+                  {...register("zip", { required: !isAddressHidden ? "Kod jest wymagany" : false })}
                   className={`w-full bg-black/20 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) transition-colors ${errors.zip ? 'border-red-500' : ''}`}
                   placeholder="00-001"
                 />
@@ -92,7 +92,7 @@ export const ContactAndAddress = ({
               <div>
                 <label className="text-xs uppercase tracking-widest opacity-70 ml-2">Miasto</label>
                 <input 
-                  {...register("city", { required: !isPickup ? "Miasto jest wymagane" : false })}
+                  {...register("city", { required: !isAddressHidden ? "Miasto jest wymagane" : false })}
                   className={`w-full bg-black/20 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) transition-colors ${errors.city ? 'border-red-500' : ''}`}
                   placeholder="Warszawa"
                 />
@@ -101,8 +101,8 @@ export const ContactAndAddress = ({
         )}
       </div>
 
-      {/* Zapisywanie adresu - tylko gdy to nie jest pickup */}
-      {!isPickup && user && !selectedAddressId && (
+      {/* Zapisywanie adresu - tylko gdy to nie jest pickup/locker */}
+      {!isAddressHidden && user && !selectedAddressId && (
           <div className="mt-6 p-4 border border-(--medium-shade)/30 bg-(--medium-shade)/5 rounded-xl">
               <label className="flex items-center gap-3 cursor-pointer">
                   <input 

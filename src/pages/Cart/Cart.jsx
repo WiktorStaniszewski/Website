@@ -81,10 +81,10 @@ export default function Cart() {
   }
 
   return (
-    <div className="w-screen flex justify-center lg:mt-10 mb-20 pt-25 animate-in slide-in-from-bottom-4 duration-500 backdrop-blur-sm backdrop-brightness-75">
+    <div className="w-screen flex justify-center lg:mt-10 mb-20 pt-25 animate-in slide-in-from-bottom-4 duration-500">
       <div className="w-9/10 lg:w-8/10 flex flex-col lg:flex-row gap-8">
         
-        <div className="flex-1 rounded-3xl p-4 lg:p-8 shadow-sm">
+        <div className="flex-1 rounded-3xl p-4 lg:p-8 shadow-sm bg-[#24201d]/60 backdrop-blur-sm backdrop-brightness-75  ">
           <div className="flex items-center gap-2 mb-6 text-gray-500 hover:text-black transition-colors w-max">
              <FiArrowLeft /> <Link to="/shop">Kontynuuj zakupy</Link>
           </div>

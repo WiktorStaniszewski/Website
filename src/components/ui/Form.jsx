@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { FaPaperPlane, FaCheckCircle, FaSpinner } from "react-icons/fa";
-// import api from "src/services/api"; // Uncomment when API is ready
+// import api from "src/services/api";
 
 export default function Form() {
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
@@ -12,7 +12,6 @@ export default function Form() {
     setIsSubmitting(true);
     
     try {
-        // Simulate API delay
         await new Promise(resolve => setTimeout(resolve, 2000)); 
         
         console.log("Form Data:", data);
@@ -26,17 +25,13 @@ export default function Form() {
     }
   };
 
-  // Styles refactored for "Lighter" theme:
-  // Lighter background for inputs (black/10 instead of black/20)
-  // Stronger borders (white/20) for better visibility against the lighter glass
   const inputClass = "w-full bg-black/10 border border-white/20 rounded-xl px-4 py-3 text-[var(--font-color)] placeholder-white/40 focus:outline-none focus:border-[var(--medium-shade)] focus:bg-black/20 focus:ring-1 focus:ring-(--medium-shade)/50 transition-all duration-300";
   const labelClass = "block text-sm uppercase tracking-widest text-[var(--medium-shade)] mb-2 font-bold brightness-110";
   const errorClass = "text-red-300 text-xs mt-1 ml-1 font-bold";
 
-  // Success State Card
   if (isSuccess) {
       return (
-        <div className='bg-white/10 backdrop-blur-md border border-white/20 rounded-[2.5rem] p-12 shadow-2xl text-center min-h-[400px] flex flex-col items-center justify-center animate-in zoom-in-95 duration-500'>
+        <div className='bg-white/10 backdrop-blur-sm border border-white/20 rounded-[2.5rem] p-12 shadow-2xl text-center min-h-[400px] flex flex-col items-center justify-center animate-in zoom-in-95 duration-500'>
             <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6 shadow-inner">
                 <FaCheckCircle className="text-5xl text-green-400" />
             </div>
@@ -54,9 +49,8 @@ export default function Form() {
       );
   }
 
-  // Main Form Card
   return (
-    <div className='bg-white/10 backdrop-blur-md border border-white/20 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden'>
+    <div className='bg-white/10 backdrop-blur-sm border border-white/20 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden'>
         <div className="mb-10 border-b border-white/20 pb-6">
             <h2 className='font-serif font-bold text-3xl text-(--font-color)'>Formularz Zgłoszeniowy</h2>
             <p className="text-white/80 mt-2 font-light">Wypełnij dokładnie wszystkie pola. To Twój pierwszy krok do Somnium.</p>
@@ -64,7 +58,6 @@ export default function Form() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
             
-            {/* --- Personal Info Section --- */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <label className="block">
                     <span className={labelClass}>Imię i Nazwisko *</span>
@@ -109,7 +102,6 @@ export default function Form() {
                 </label>
             </div>
 
-            {/* --- Experience Questions --- */}
             <div className="space-y-6 pt-6 border-t border-white/20">
                 <label className="block">
                     <span className={labelClass}>Z czym kojarzy Ci się Somnium? *</span>
@@ -144,7 +136,6 @@ export default function Form() {
                 </fieldset>
             </div>
 
-            {/* --- Skills Checkboxes --- */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/20">
                  <fieldset className="bg-black/5 p-6 rounded-2xl border border-white/10">
                     <legend className={labelClass}>Latte Art</legend>
@@ -171,7 +162,6 @@ export default function Form() {
                 </fieldset>
             </div>
 
-            {/* --- Logistics --- */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-white/20">
                 <label className="block">
                     <span className={labelClass}>Oczekiwania finansowe (netto/h) *</span>
@@ -184,7 +174,6 @@ export default function Form() {
                 </label>
             </div>
 
-            {/* --- Details --- */}
             <div className="space-y-6 pt-6 border-t border-white/20">
                  <label className="block">
                     <span className={labelClass}>Dlaczego chcesz tę pracę? *</span>
@@ -217,7 +206,6 @@ export default function Form() {
                 {errors.rodo && <p className={errorClass}>Musisz zaakceptować zgodę RODO</p>}
             </div>
 
-            {/* --- Submit --- */}
             <div className="pt-6 flex justify-center">
                 <button 
                     type="submit" 

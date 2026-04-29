@@ -108,7 +108,7 @@ const QuestionField = ({ title, content, isOpen, onClick }) => {
 const FAQSection = () => {
     const [openIndex, setOpenIndex] = useState(0); 
 
-    const questions = [
+    const questions =[
         {
             title: "Co to jest Premium Shot?",
             content: "Odkryj espresso w nieoczywistej odsłonie! Nasz PREMIUM SHOT to wyjątkowa selekcja ziaren z przeróżnych krajów, które zachwycają owocowym charakterem, przyjemną kwasowością oraz pełnią aromatu. Jest to espresso dla poszukiwaczy niespotykanych doznań smakowych."
@@ -129,7 +129,11 @@ const FAQSection = () => {
 
     return (
         <div className='flex justify-center items-center flex-col px-4 py-20 relative overflow-hidden'>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-(--medium-shade)/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
+            {/* OPTYMALIZACJA: Usunięto blur i mix-blend-screen, wstawiono radial-gradient */}
+            <div 
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full pointer-events-none"
+                style={{ background: 'radial-gradient(circle, var(--medium-shade) 0%, transparent 60%)', opacity: 0.1 }}
+            ></div>
 
             <div className="text-center mb-12 relative z-10">
                 <span className="text-(--medium-shade) uppercase tracking-widest text-sm font-bold brightness-110">Wiedza & Info</span>

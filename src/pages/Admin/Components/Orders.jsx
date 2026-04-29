@@ -8,7 +8,7 @@ export default function AdminOrders() {
   const [loading, setLoading] = useState(true);
   const [isArchivedOpen, setIsArchivedOpen] = useState(false);
   
-  const [searchQuery, setSearchQuery] = useState("");
+  const[searchQuery, setSearchQuery] = useState("");
   const [visibleActiveCount, setVisibleActiveCount] = useState(10);
   const [visibleArchivedCount, setVisibleArchivedCount] = useState(10);
   
@@ -26,14 +26,14 @@ export default function AdminOrders() {
       }
     };
     fetchOrders();
-  }, []);
+  },[]);
 
   useEffect(() => {
       setVisibleActiveCount(10);
       setVisibleArchivedCount(10);
   }, [searchQuery]);
 
-  const statusWeights = { 'new': 0, 'processing': 1, 'shipped': 2, 'completed': 3, 'cancelled': 99 };
+  const statusWeights = { 'pending_payment': -1, 'new': 0, 'processing': 1, 'shipped': 2, 'completed': 3, 'cancelled': 99 };
 
   const searchedOrders = orders.filter(o => {
       if (!searchQuery) return true;
@@ -41,8 +41,9 @@ export default function AdminOrders() {
       const trackStr = o.trackingNumber ? o.trackingNumber.toLowerCase() : "";
       const idStr = o.id ? String(o.id) : "";
       const emailStr = o.customer?.email ? o.customer.email.toLowerCase() : "";
+      const locStr = o.Location?.name ? o.Location.name.toLowerCase() : "";
       
-      return trackStr.includes(q) || idStr.includes(q) || emailStr.includes(q);
+      return trackStr.includes(q) || idStr.includes(q) || emailStr.includes(q) || locStr.includes(q);
   });
 
   const activeOrders = searchedOrders.filter(o => o.status !== 'completed' && o.status !== 'cancelled');
@@ -57,11 +58,12 @@ export default function AdminOrders() {
       return new Date(b.createdAt || b.date).getTime() - new Date(a.createdAt || a.date).getTime();
   });
 
+
   const getShippingLabel = (method, location) => {
     if (method === 'pickup') {
       return (
         <span className="flex items-center gap-1 text-(--medium-shade) font-bold">
-          <FiMapPin /> Odbiór: {location?.name || 'Kawiarnia'}
+          <FiMapPin /> Odbiór: {location?.name || 'Nieznana placówka'}
         </span>
       );
     }
@@ -91,10 +93,11 @@ export default function AdminOrders() {
           <span className={`inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full border
               ${o.status === 'completed' ? 'border-green-500/30 text-green-300 bg-green-500/10' : 
                 o.status === 'cancelled' ? 'border-red-500/30 text-red-300 bg-red-500/10' :
+                o.status === 'pending_payment' ? 'border-blue-500/30 text-blue-300 bg-blue-500/10' :
                 'border-yellow-500/30 text-yellow-300 bg-yellow-500/10'}`}
           >
               {o.status === 'completed' && <FiCheck size={10} />}
-              {o.status.toUpperCase()}
+              {o.status === 'pending_payment' ? 'OCZEKUJE NA WPŁATĘ' : o.status.toUpperCase()}
           </span>
         </div>
         <FiChevronRight className="opacity-0 group-hover:opacity-100 transition-transform transform group-hover:translate-x-1 text-2xl text-(--medium-shade)" />
@@ -116,7 +119,7 @@ export default function AdminOrders() {
           <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 text-lg" />
           <input 
               type="text" 
-              placeholder="Szukaj (np. SOM-..., email)" 
+              placeholder="Szukaj (np. SOM-..., email, kawiarnia)" 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-[#2D231C] border border-[#5C4A3D] rounded-xl py-3 pl-11 pr-4 text-white focus:outline-none focus:border-(--medium-shade) transition-colors placeholder-white/30"

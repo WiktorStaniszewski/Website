@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import api from "services/api"; 
-import { FiBox, FiMapPin, FiTruck, FiArrowLeft, FiAlertTriangle } from "react-icons/fi";
+import { FiBox, FiMapPin, FiTruck, FiArrowLeft, FiAlertTriangle, FiPlus, FiX } from "react-icons/fi";
 import DeliveryModal from './DeliveryModal';
 
 export default function Inventory() {
@@ -10,6 +11,11 @@ export default function Inventory() {
   
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isDeliveryModalOpen, setIsDeliveryModalOpen] = useState(false);
+
+  // Stany dla dodawania nowej lokacji
+  const [isAddLocationModalOpen, setIsAddLocationModalOpen] = useState(false);
+  const [newLocation, setNewLocation] = useState({ name: "", type: "cafe" });
+  const [isSubmittingLocation, setIsSubmittingLocation] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
@@ -27,13 +33,28 @@ export default function Inventory() {
     }
   };
 
-  useEffect(() => { fetchData(); }, []);
+  useEffect(() => { fetchData(); },[]);
+
+  const handleAddLocation = async (e) => {
+      e.preventDefault();
+      setIsSubmittingLocation(true);
+      try {
+          await api.post("locations", newLocation);
+          setIsAddLocationModalOpen(false);
+          setNewLocation({ name: "", type: "cafe" });
+          fetchData(); // Odświeża listę, nowa lokacja pojawi się od razu
+      } catch (err) {
+          console.error(err);
+          alert("Wystąpił błąd podczas dodawania nowej placówki.");
+      } finally {
+          setIsSubmittingLocation(false);
+      }
+  };
 
   if (loading) return <div className="text-(--medium-shade) font-bold text-center mt-20">Ładowanie magazynów...</div>;
 
   // Widok Szczegółowy Konkretnego Magazynu
   if (selectedLocation) {
-      // Łączymy globalne produkty z inwentarzem wybranej lokacji
       const localStock = globalProducts.map(gp => {
           const invRecord = selectedLocation.Inventories?.find(i => i.productId === gp.id);
           return { ...gp, currentStock: invRecord ? invRecord.stockQuantity : 0 };
@@ -48,7 +69,7 @@ export default function Inventory() {
                   <FiArrowLeft /> Wróć do przeglądu lokacji
               </button>
 
-              <div className="flex justify-between items-end mb-4">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-4">
                   <div>
                       <h1 className="text-3xl font-serif font-bold text-[#F2EAE1] flex items-center gap-3">
                           <FiMapPin className="text-(--medium-shade)" /> {selectedLocation.name}
@@ -57,14 +78,14 @@ export default function Inventory() {
                   </div>
                   <button
                       onClick={() => setIsDeliveryModalOpen(true)}
-                      className="bg-(--medium-shade) hover:brightness-110 text-[#24201d] px-5 py-3 rounded-xl font-bold flex items-center gap-2 transition-all cursor-pointer shadow-md"
+                      className="bg-(--medium-shade) hover:brightness-110 text-[#24201d] px-5 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
                   >
-                      <FiTruck /> Zarejestruj dostawę
+                      <FiTruck size={20} /> Zarejestruj dostawę
                   </button>
               </div>
 
-              <div className="bg-[#46382E] border border-[#5C4A3D] rounded-3xl shadow-xl overflow-hidden">
-                <table className="w-full text-left text-sm text-[#F2EAE1]">
+              <div className="bg-[#46382E] border border-[#5C4A3D] rounded-3xl shadow-xl overflow-x-auto">
+                <table className="w-full text-left text-sm text-[#F2EAE1] min-w-[600px]">
                   <thead className="bg-[#352A21] text-(--medium-shade) uppercase text-xs tracking-wider border-b border-[#5C4A3D]">
                     <tr>
                       <th className="p-6 font-bold">NAZWA PRODUKTU</th>
@@ -106,11 +127,17 @@ export default function Inventory() {
   // Widok Główny: Kafelki Lokacji
   return (
     <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500 not-lg:pt-20">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
         <div>
             <h1 className="text-3xl font-serif font-bold text-[#F2EAE1]">Zasoby i Magazyny</h1>
-            <p className="text-[#F2EAE1]/60 font-medium text-sm mt-1">Wybierz placówkę, aby sprawdzić stan towaru</p>
+            <p className="text-[#F2EAE1]/60 font-medium text-sm mt-1">Wybierz placówkę lub dodaj nową, aby zarządzać asortymentem</p>
         </div>
+        <button
+            onClick={() => setIsAddLocationModalOpen(true)}
+            className="bg-(--medium-shade) hover:brightness-110 text-[#24201d] px-5 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
+        >
+            <FiPlus size={20} /> Dodaj Placówkę
+        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -156,6 +183,51 @@ export default function Inventory() {
               );
           })}
       </div>
+
+      {/* Modal dodawania nowej lokacji */}
+      {isAddLocationModalOpen && createPortal(
+          <div className="fixed inset-0 z-9999 flex items-center justify-center p-4">
+              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-in fade-in" onClick={() => setIsAddLocationModalOpen(false)}></div>
+              <div className="relative z-10 w-full max-w-md bg-[#24201d] border border-white/10 rounded-3xl flex flex-col shadow-2xl animate-in zoom-in-95">
+                  <div className="flex justify-between items-center p-6 border-b border-white/10 bg-[#2D231C] rounded-t-3xl">
+                      <h2 className="text-xl font-serif font-bold text-white flex items-center gap-2">
+                          <FiPlus className="text-(--medium-shade)" /> Nowa Placówka
+                      </h2>
+                      <button onClick={() => setIsAddLocationModalOpen(false)} className="text-white/50 hover:text-white transition-colors cursor-pointer"><FiX size={24} /></button>
+                  </div>
+
+                  <form onSubmit={handleAddLocation} className="p-6 flex flex-col gap-5 text-white">
+                      <div>
+                          <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Nazwa lokacji</label>
+                          <input 
+                              type="text" required placeholder="np. Kawiarnia Rynek"
+                              value={newLocation.name} onChange={(e) => setNewLocation({...newLocation, name: e.target.value})} 
+                              className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) transition-colors" 
+                          />
+                      </div>
+                      <div>
+                          <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Typ placówki</label>
+                          <select 
+                              value={newLocation.type} onChange={(e) => setNewLocation({...newLocation, type: e.target.value})} 
+                              className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) cursor-pointer"
+                          >
+                              <option value="cafe">Kawiarnia (Sprzedaż / Odbiór)</option>
+                              <option value="warehouse">Magazyn (Wysyłki internetowe)</option>
+                          </select>
+                      </div>
+
+                      <div className="flex gap-3 mt-4">
+                          <button type="button" onClick={() => setIsAddLocationModalOpen(false)} className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-xl font-bold cursor-pointer transition-colors">Anuluj</button>
+                          <button type="submit" disabled={isSubmittingLocation || !newLocation.name} className="flex-1 py-3 bg-(--medium-shade) hover:brightness-110 text-[#24201d] rounded-xl font-bold cursor-pointer transition-colors disabled:opacity-50">
+                              {isSubmittingLocation ? "Tworzenie..." : "Utwórz"}
+                          </button>
+                      </div>
+                  </form>
+              </div>
+          </div>,
+          document.body
+      )}
+
     </div>
   );
 }

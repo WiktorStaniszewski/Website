@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import api from "src/services/api"; 
-import { FaLock, FaExclamationTriangle, FaSpinner, FaCheck } from "react-icons/fa";
+import { FaLock, FaExclamationTriangle, FaSpinner, FaCheck, FaKey } from "react-icons/fa";
 
 export default function SecurityTab() {
     const [isLoading, setIsLoading] = useState(false);
     const [status, setStatus] = useState(null); 
     const [serverMessage, setServerMessage] = useState("");
-    const [passwords, setPasswords] = useState({ current: "", new: "", confirm: "" });
+    const[passwords, setPasswords] = useState({ current: "", new: "", confirm: "" });
 
     const handleUpdatePassword = async (e) => {
         e.preventDefault();
@@ -44,79 +44,78 @@ export default function SecurityTab() {
         }
     };
 
+    const inputClass = "w-full bg-[#1a1715] border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-white/20 focus:outline-none focus:border-(--medium-shade) focus:ring-1 focus:ring-(--medium-shade)/50 transition-all duration-300";
+
     return (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-lg">
-            <h2 className="text-3xl font-serif mb-6 border-b border-white/10 pb-4">Bezpieczeństwo</h2>
+            <div className="mb-10 pb-6 border-b border-white/5">
+                <span className="text-(--medium-shade) uppercase tracking-[0.2em] text-xs font-bold">Ustawienia</span>
+                <h2 className="text-4xl font-serif font-bold text-white mt-2">Bezpieczeństwo</h2>
+            </div>
             
-            <form onSubmit={handleUpdatePassword} className="flex flex-col gap-5 text-white">
-                <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-widest opacity-70 ml-1 font-bold">Obecne hasło</label>
+            <form onSubmit={handleUpdatePassword} className="flex flex-col gap-6">
+                <div className="space-y-2 relative group">
+                    <label className="text-xs uppercase tracking-widest text-(--medium-shade) ml-1 font-bold">Obecne hasło</label>
                     <div className="relative">
-                        {passwords.current === "" && (
-                            <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 text-lg pointer-events-none transition-opacity duration-300" />
-                        )}
+                        <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-(--medium-shade) transition-colors duration-300" />
                         <input 
                             type="password" 
                             required 
+                            placeholder="Wpisz obecne hasło"
                             value={passwords.current} 
                             onChange={e => setPasswords({...passwords, current: e.target.value})} 
-                            className="w-full bg-black/30 border border-white/10 rounded-xl py-3 pr-4 focus:outline-none focus:border-(--medium-shade) transition-all duration-300" 
-                            style={{ paddingLeft: passwords.current === "" ? "2.8rem" : "1rem" }}
+                            className={inputClass} 
                         />
                     </div>
                 </div>
                 
-                <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-widest opacity-70 ml-1 font-bold">Nowe hasło</label>
+                <div className="space-y-2 relative group">
+                    <label className="text-xs uppercase tracking-widest text-(--medium-shade) ml-1 font-bold">Nowe hasło</label>
                     <div className="relative">
-                        {passwords.new === "" && (
-                            <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 text-lg pointer-events-none transition-opacity duration-300" />
-                        )}
+                        <FaKey className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-(--medium-shade) transition-colors duration-300" />
                         <input 
                             type="password" 
                             required 
+                            placeholder="Minimum 6 znaków"
                             value={passwords.new} 
                             onChange={e => setPasswords({...passwords, new: e.target.value})} 
-                            className={`w-full bg-black/30 border rounded-xl py-3 pr-4 focus:outline-none transition-all duration-300 ${status === 'mismatch' ? 'border-red-500' : 'border-white/10 focus:border-(--medium-shade)'}`} 
-                            style={{ paddingLeft: passwords.new === "" ? "2.8rem" : "1rem" }}
+                            className={`${inputClass} ${status === 'mismatch' ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/50' : ''}`} 
                         />
                     </div>
                 </div>
                 
-                <div className="space-y-2">
-                    <label className="text-xs uppercase tracking-widest opacity-70 ml-1 font-bold">Potwierdź nowe hasło</label>
+                <div className="space-y-2 relative group">
+                    <label className="text-xs uppercase tracking-widest text-(--medium-shade) ml-1 font-bold">Potwierdź nowe hasło</label>
                     <div className="relative">
-                        {passwords.confirm === "" && (
-                            <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 text-lg pointer-events-none transition-opacity duration-300" />
-                        )}
+                        <FaKey className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-(--medium-shade) transition-colors duration-300" />
                         <input 
                             type="password" 
                             required 
+                            placeholder="Powtórz nowe hasło"
                             value={passwords.confirm} 
                             onChange={e => setPasswords({...passwords, confirm: e.target.value})} 
-                            className={`w-full bg-black/30 border rounded-xl py-3 pr-4 focus:outline-none transition-all duration-300 ${status === 'mismatch' ? 'border-red-500' : 'border-white/10 focus:border-(--medium-shade)'}`} 
-                            style={{ paddingLeft: passwords.confirm === "" ? "2.8rem" : "1rem" }}
+                            className={`${inputClass} ${status === 'mismatch' ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/50' : ''}`} 
                         />
                     </div>
                 </div>
 
                 {(status === 'mismatch' || status === 'error') && (
-                    <div className="text-red-400 text-sm font-bold flex items-center gap-2 mt-1 bg-red-500/10 p-3 rounded-lg border border-red-500/20 animate-in fade-in">
-                        <FaExclamationTriangle /> {serverMessage}
+                    <div className="text-red-400 text-sm font-bold flex items-center gap-3 mt-2 bg-red-500/10 p-4 rounded-xl border border-red-500/20 animate-in fade-in">
+                        <FaExclamationTriangle className="text-lg shrink-0" /> {serverMessage}
                     </div>
                 )}
 
                 <button 
                     type="submit" 
                     disabled={isLoading} 
-                    className="mt-4 bg-(--80-shade) hover:bg-(--button-hover-bg) text-[#24201d] py-3.5 px-6 rounded-xl font-bold shadow-[0_0_15px_rgba(143,120,93,0.3)] transition-all flex justify-center items-center gap-2 cursor-pointer disabled:opacity-50"
+                    className="mt-6 bg-(--medium-shade) hover:brightness-110 text-[#1a1715] py-4 px-6 rounded-2xl font-bold uppercase tracking-widest text-sm shadow-[0_0_20px_rgba(143,120,93,0.2)] transition-all flex justify-center items-center gap-2 cursor-pointer disabled:opacity-50 hover:-translate-y-0.5"
                 >
-                    {isLoading ? <FaSpinner className="animate-spin" /> : "Zaktualizuj hasło"}
+                    {isLoading ? <FaSpinner className="animate-spin text-xl" /> : "Zaktualizuj hasło"}
                 </button>
 
                 {status === 'success' && (
-                    <div className="bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-xl flex items-center justify-center gap-2 text-sm font-bold shadow-lg animate-in zoom-in-95">
-                        <FaCheck /> Hasło zostało pomyślnie zmienione!
+                    <div className="bg-green-500/10 border border-green-500/20 text-green-400 p-4 rounded-xl flex items-center justify-center gap-3 text-sm font-bold shadow-lg animate-in zoom-in-95 mt-2">
+                        <FaCheck className="text-lg shrink-0" /> Hasło zostało pomyślnie zmienione!
                     </div>
                 )}
             </form>

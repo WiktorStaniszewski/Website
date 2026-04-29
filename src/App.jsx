@@ -21,10 +21,12 @@ import About from 'src/pages/About/About';
 import Menus from 'pages/Menu/Menus';
 import Recruitment from 'pages/Recruitment';
 import Shop from 'pages/Shop/Shop';
+import ProductPage from 'pages/Shop/ProductPage';
 import Blog from 'pages/Blog';
 import Cart from './pages/Cart/Cart';
 import Checkout from 'pages/Checkout/Checkout';
 import OrderSuccess from 'pages/Checkout/OrderSuccess';
+import OrderPendingPayment from 'pages/Checkout/OrderPendingPayment';
 
 import LoginPage from './pages/Login/LoginPage';
 import RegisterPage from './pages/Register/RegisterPage'; 
@@ -69,7 +71,7 @@ export default function App() {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname !== '/checkout' && location.pathname !== '/order-success') {
+    if (location.pathname !== '/checkout' && location.pathname !== '/order-success' && location.pathname !== '/order-pending') {
       const expiryString = localStorage.getItem('somnium_checkout_expires');
       const sessionId = localStorage.getItem('somnium_session_id');
 
@@ -84,7 +86,7 @@ export default function App() {
         localStorage.removeItem('somnium_checkout_expires');
       }
     }
-  }, [location.pathname]);
+  },[location.pathname]);
 
   return (
     <ViewportProvider>
@@ -98,10 +100,18 @@ export default function App() {
             <Route path="about" element={<PageWrapper><About /></PageWrapper>} />
             <Route path="menu" element={<PageWrapper><Menus /></PageWrapper>} />
             <Route path="recruitment" element={<PageWrapper><Recruitment /></PageWrapper>} />
+            
             <Route path="shop" element={<PageWrapper><Shop /></PageWrapper>} />
+            <Route path="shop/:id" element={<PageWrapper><ProductPage /></PageWrapper>} />
+            
             <Route path="blog" element={<PageWrapper><Blog /></PageWrapper>} />
             <Route path="cart" element={<PageWrapper><Cart /></PageWrapper>} />
             <Route path="order-success" element={<PageWrapper><OrderSuccess /></PageWrapper>} />
+            <Route path="order-pending" element={
+              <ProtectedRoute>
+                <PageWrapper><OrderPendingPayment /></PageWrapper>
+              </ProtectedRoute>
+            } />
             
             <Route path="checkout" element={
               <ProtectedRoute>

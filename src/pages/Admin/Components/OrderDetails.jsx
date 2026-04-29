@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "services/api"; 
-import { FiArrowLeft, FiUser, FiTruck, FiBox, FiCheckCircle } from "react-icons/fi";
+import { FiArrowLeft, FiUser, FiTruck, FiBox, FiCheckCircle, FiLink, FiDownload } from "react-icons/fi";
+import PasswordPromptModal from "src/components/PasswordPromptModal";
 
 export default function OrderDetails() {
   const { id } = useParams();
@@ -9,9 +10,14 @@ export default function OrderDetails() {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updatingStatus, setUpdatingStatus] = useState(false);
-  const [statusMessage, setStatusMessage] = useState(null);
-  const statusWeights = { 'new': 0, 'processing': 1, 'shipped': 2, 'completed': 3, 'cancelled': 99 };
+  const[statusMessage, setStatusMessage] = useState(null);
+  
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [pendingStatus, setPendingStatus] = useState(null);
+
+  const statusWeights = { 'pending_payment': -1, 'new': 0, 'processing': 1, 'shipped': 2, 'completed': 3, 'cancelled': 99 };
   const isTerminalState = order?.status === 'completed' || order?.status === 'cancelled';
+  const isPendingPayment = order?.status === 'pending_payment';
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -29,6 +35,17 @@ export default function OrderDetails() {
 
   const handleStatusChange = async (e) => {
     const newStatus = e.target.value;
+    
+    if (newStatus === 'cancelled') {
+        setPendingStatus(newStatus);
+        setPasswordModalOpen(true);
+        return;
+    }
+
+    await executeStatusUpdate(newStatus);
+  };
+
+  const executeStatusUpdate = async (newStatus) => {
     setUpdatingStatus(true);
     setStatusMessage(null);
 
@@ -44,13 +61,25 @@ export default function OrderDetails() {
       setTimeout(() => setStatusMessage(null), 3000);
     } finally {
       setUpdatingStatus(false);
+      setPendingStatus(null);
     }
   };
 
+  const handlePasswordSubmit = async (password) => {
+      await api.post('auth/verify-password', { password }); // throws error caught by modal
+      setPasswordModalOpen(false);
+      await executeStatusUpdate(pendingStatus);
+  };
+
   const isOptionDisabled = (val) => {
+      if (val === order?.status) return false;
       if (isTerminalState) return true;
-      if (val === 'cancelled' && order?.status === 'shipped') return true;
-      return statusWeights[val] < statusWeights[order?.status];
+      if (val === 'cancelled') return false;
+      
+      const currentWeight = statusWeights[order?.status];
+      const targetWeight = statusWeights[val];
+      
+      return targetWeight !== currentWeight + 1;
   };
 
   const getOptionClass = (val) => {
@@ -89,11 +118,12 @@ export default function OrderDetails() {
                 <select 
                     value={order.status}
                     onChange={handleStatusChange}
-                    disabled={updatingStatus || isTerminalState}
+                    disabled={updatingStatus || isTerminalState || isPendingPayment}
                     className={`ml-auto px-4 py-2 bg-[#46382E] text-[#F2EAE1] border border-[#5C4A3D] rounded-full text-sm font-bold tracking-wider focus:outline-none focus:border-(--medium-shade)
-                        ${(updatingStatus || isTerminalState) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                        ${(updatingStatus || isTerminalState || isPendingPayment) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                     `}
                 >
+                    <option value="pending_payment" disabled className="hidden">Oczekuje na płatność</option>
                     <option value="new" disabled={isOptionDisabled('new')} className={getOptionClass('new')}>
                         Nowe (Przyjęte)
                     </option>
@@ -133,9 +163,10 @@ export default function OrderDetails() {
               <FiTruck className="text-(--medium-shade)" /> Dostawa
             </h2>
             <div className="space-y-2 text-sm text-[#F2EAE1]/80">
+              {/* OPTYMALIZACJA: Dynamiczne wyciąganie nazwy lokacji */}
               <p className="font-bold text-[#F2EAE1] text-base">
                 {order.shipping?.method === 'pickup' 
-                  ? `Odbiór: ${order.Location?.name || 'Kawiarnia'}` 
+                  ? `Odbiór: ${order.Location?.name || 'Nieznana placówka'}` 
                   : (order.shipping?.details?.label || order.shipping?.method)}
               </p>
               <p>{order.customer?.address}</p>
@@ -146,6 +177,34 @@ export default function OrderDetails() {
             </div>
           </div>
         </div>
+
+        {/* Sekcja Integracji */}
+        {order.integrations && (order.integrations.shipping || order.integrations.payment) && (
+            <div className="lg:col-span-1 bg-[#46382E] border border-[#5C4A3D] p-6 rounded-3xl shadow-lg">
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2 border-b border-[#5C4A3D] pb-3 text-[#F2EAE1]">
+                  <FiLink className="text-(--medium-shade)" /> Integracje Zewnętrzne
+                </h2>
+                <div className="space-y-4 text-sm text-[#F2EAE1]/80">
+                  {order.integrations.shipping?.trackingNumber && (
+                      <div className="bg-[#352A21] p-3 rounded-xl border border-[#5C4A3D]">
+                          <p className="text-xs uppercase tracking-widest text-[#F2EAE1]/50 mb-1">InPost / Kurier</p>
+                          <p className="font-mono text-[#F2EAE1] mb-2">{order.integrations.shipping.trackingNumber}</p>
+                          {order.integrations.shipping.labelUrl && (
+                              <a href={order.integrations.shipping.labelUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-(--medium-shade) hover:text-white transition-colors">
+                                  <FiDownload /> Pobierz etykietę PDF
+                              </a>
+                          )}
+                      </div>
+                  )}
+                  {order.integrations.payment?.transactionId && (
+                      <div className="bg-[#352A21] p-3 rounded-xl border border-[#5C4A3D]">
+                          <p className="text-xs uppercase tracking-widest text-[#F2EAE1]/50 mb-1">Przelewy24 / Płatność</p>
+                          <p className="font-mono text-[#F2EAE1] text-xs break-all">{order.integrations.payment.transactionId}</p>
+                      </div>
+                  )}
+                </div>
+            </div>
+        )}
 
         <div className="lg:col-span-2 bg-[#46382E] border border-[#5C4A3D] p-6 rounded-3xl shadow-lg">
           <h2 className="text-xl font-bold mb-6 flex items-center gap-2 border-b border-[#5C4A3D] pb-3 text-[#F2EAE1]">
@@ -188,6 +247,14 @@ export default function OrderDetails() {
         </div>
 
       </div>
+
+      <PasswordPromptModal 
+          isOpen={passwordModalOpen} 
+          onClose={() => { setPasswordModalOpen(false); setPendingStatus(null); }} 
+          onSubmit={handlePasswordSubmit}
+          title="Anulowanie zamówienia"
+          description="Podaj hasło administratora, aby potwierdzić anulowanie zamówienia."
+      />
     </div>
   );
 }

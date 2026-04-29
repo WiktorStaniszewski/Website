@@ -5,11 +5,17 @@ import { FaCoffee, FaStar, FaUserFriends, FaRegCheckCircle } from 'react-icons/f
 export default function Recruitment() {
   return (
     <div className='min-h-screen pt-32 pb-20 px-4 md:px-8 flex flex-col items-center relative overflow-hidden bg-(--80-shade)'>
-       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-(--medium-shade)/20 rounded-full blur-[150px] pointer-events-none mix-blend-screen"></div>
-       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-(--medium-shade)/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
+       <div 
+           className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full pointer-events-none"
+           style={{ background: 'radial-gradient(circle, var(--medium-shade) 0%, transparent 60%)', opacity: 0.2 }}
+       ></div>
+       <div 
+           className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none"
+           style={{ background: 'radial-gradient(circle, var(--medium-shade) 0%, transparent 60%)', opacity: 0.1 }}
+       ></div>
 
-       <section className='max-w-4xl w-full animate-in fade-in slide-in-from-bottom-8 duration-700 relative z-10'>
-          <div className='bg-white/10 backdrop-blur-md border border-white/20 rounded-[2.5rem] p-8 md:p-12 shadow-2xl mb-12 relative overflow-hidden'>
+       <section className='max-w-4xl w-full animate-in fade-in slide-in-from-bottom-8 duration-700 relative z-10 will-change-transform'>
+          <div className='bg-white/10 backdrop-blur-sm border border-white/20 rounded-[2.5rem] p-8 md:p-12 shadow-2xl mb-12 relative overflow-hidden'>
             <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-(--medium-shade) to-transparent opacity-60"></div>
             
             <div className="text-center mb-10">

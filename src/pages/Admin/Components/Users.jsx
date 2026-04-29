@@ -7,9 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "src/context/AuthProvider";
 
 export default function Users() {
-  const [users, setUsers] = useState([]);
+  const[users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [locations, setLocations] = useState([]);
+  const[locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   
@@ -40,7 +40,8 @@ export default function Users() {
       
       if (Array.isArray(usersRes)) setUsers(usersRes);
       if (Array.isArray(ordersRes)) setOrders(ordersRes);
-      if (Array.isArray(locsRes)) setLocations(locsRes.filter(l => l.type === 'cafe'));
+      // OPTYMALIZACJA: Pobieramy WSZYSTKIE placówki (w tym nowo dodane i magazyny)
+      if (Array.isArray(locsRes)) setLocations(locsRes);
     } catch (e) {
       console.error(e);
     } finally {
@@ -48,7 +49,7 @@ export default function Users() {
     }
   };
 
-  useEffect(() => { fetchData(); }, []);
+  useEffect(() => { fetchData(); },[]);
 
   const requestRoleChange = (id, currentRole) => {
       if (currentRole === 'super_admin') return; 
@@ -88,9 +89,11 @@ export default function Users() {
       return { ...u, hasPendingOrder };
   });
 
+  // OPTYMALIZACJA: Wyszukiwanie użytkowników także po przypisanej do nich lokacji
   const filteredUsers = usersWithOrderInfo.filter(u => 
       u.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      u.email?.toLowerCase().includes(searchTerm.toLowerCase())
+      u.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (u.Location && u.Location.name.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const superAdminUsers = filteredUsers.filter(u => u.role === 'super_admin');
@@ -116,7 +119,7 @@ export default function Users() {
             <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-(--medium-shade)" />
             <input 
                 type="text" 
-                placeholder="Szukaj (nazwa, email)..." 
+                placeholder="Szukaj (nazwa, email, placówka)..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full bg-[#46382E] border border-[#5C4A3D] rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-(--medium-shade) text-[#F2EAE1] placeholder-[#F2EAE1]/30 transition-colors"
@@ -173,7 +176,8 @@ export default function Users() {
                   {u.username} {isMe && <span className="text-xs text-red-400 ml-2">(Ty)</span>}
                 </p>
                 <div className="flex items-center gap-2 text-sm text-[#F2EAE1]/50 mt-1">
-                    <FiMapPin /> {u.Location ? u.Location.name : "Brak przypisanej kawiarni (Widzi wszystkie)"}
+                    {/* OPTYMALIZACJA: Dynamiczne wyciąganie nazwy lokacji z relacji */}
+                    <FiMapPin /> {u.Location ? u.Location.name : "Wszystkie placówki (Globalnie)"}
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -183,7 +187,7 @@ export default function Users() {
                     setLocationModal({ isOpen: true, userId: u.id, currentLocationId: u.locationId || "" });
                   }}
                   className="p-3 bg-[#46382E] hover:bg-(--medium-shade)/20 hover:text-(--medium-shade) text-[#F2EAE1]/70 rounded-xl transition-all cursor-pointer"
-                  title="Przypisz kawiarnię"
+                  title="Przypisz placówkę"
                 >
                   <FiEdit2 />
                 </button>
@@ -265,7 +269,7 @@ export default function Users() {
         <div className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
           <div className="bg-[#24201d] w-full max-w-sm rounded-3xl border border-white/10 shadow-2xl p-6 flex flex-col items-center animate-in zoom-in-95">
             <h3 className="text-xl font-bold text-white mb-2">Miejsce pracy</h3>
-            <p className="text-white/60 mb-6 text-sm text-center">Do której kawiarni przypisać tego pracownika?</p>
+            <p className="text-white/60 mb-6 text-sm text-center">Do której placówki przypisać tego pracownika?</p>
             
             <select 
                 value={locationModal.currentLocationId}
@@ -273,7 +277,12 @@ export default function Users() {
                 className="w-full bg-black/50 border border-white/20 rounded-xl p-3 text-white focus:outline-none focus:border-(--medium-shade) mb-6"
             >
                 <option value="">Brak / Odznacz (Widzi wszystkie)</option>
-                {locations.map(loc => <option key={loc.id} value={loc.id}>{loc.name}</option>)}
+                {/* OPTYMALIZACJA: Dynamiczne renderowanie wszystkich lokacji wraz z ich typem */}
+                {locations.map(loc => (
+                    <option key={loc.id} value={loc.id}>
+                        {loc.name} ({loc.type === 'warehouse' ? 'Magazyn' : 'Kawiarnia'})
+                    </option>
+                ))}
             </select>
 
             <div className="flex gap-3 w-full">
@@ -288,51 +297,33 @@ export default function Users() {
         </div>, document.body
       )}
 
+      {/* Modal potwiedzenia roli (Bez zmian) */}
       {confirmModal.isOpen && createPortal(
         <div className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
           <div className="bg-[#24201d] w-full max-w-sm rounded-3xl border border-white/10 shadow-2xl p-6 flex flex-col items-center text-center animate-in zoom-in-95">
-            
             <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
-              confirmModal.currentRole === 'admin' 
-                ? 'bg-red-500/10 text-red-400 border border-red-500/20' 
-                : 'bg-(--medium-shade)/10 text-(--medium-shade) border border-(--medium-shade)/20'
+              confirmModal.currentRole === 'admin' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-(--medium-shade)/10 text-(--medium-shade) border border-(--medium-shade)/20'
             }`}>
               {confirmModal.currentRole === 'admin' ? <FiAlertTriangle size={32} /> : <FaUserShield size={32} />}
             </div>
-            
-            <h3 className="text-xl font-bold text-white mb-2">
-              Zmienić uprawnienia?
-            </h3>
+            <h3 className="text-xl font-bold text-white mb-2">Zmienić uprawnienia?</h3>
             <p className="text-white/60 mb-8 leading-relaxed text-sm">
               {confirmModal.currentRole === 'admin' 
                 ? "Czy na pewno chcesz odebrać temu użytkownikowi prawa administratora? Straci on dostęp do panelu." 
                 : "Czy na pewno chcesz nadać temu użytkownikowi pełne prawa administratora?"}
             </p>
-            
             <div className="flex gap-3 w-full">
-              <button 
-                onClick={() => setConfirmModal({ isOpen: false, userId: null, currentRole: null })}
-                className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold transition-colors cursor-pointer"
-              >
+              <button onClick={() => setConfirmModal({ isOpen: false, userId: null, currentRole: null })} className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold transition-colors cursor-pointer">
                 Anuluj
               </button>
-              <button 
-                onClick={executeRoleChange}
-                className={`flex-1 py-3 font-bold rounded-xl transition-all cursor-pointer shadow-lg ${
-                  confirmModal.currentRole === 'admin'
-                    ? 'bg-red-500/50 hover:bg-red-600/80 text-white'
-                    : 'bg-(--80-shade) hover:bg-(--button-hover-bg) text-[#24201d]'
-                }`}
-              >
+              <button onClick={executeRoleChange} className={`flex-1 py-3 font-bold rounded-xl transition-all cursor-pointer shadow-lg ${confirmModal.currentRole === 'admin' ? 'bg-red-500/50 hover:bg-red-600/80 text-white' : 'bg-(--80-shade) hover:bg-(--button-hover-bg) text-[#24201d]'}`}>
                 Potwierdź
               </button>
             </div>
-
           </div>
         </div>,
         document.body
       )}
-
     </div>
   );
 }

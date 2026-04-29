@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { FiCheckCircle, FiCopy, FiBox, FiArrowRight } from "react-icons/fi";
+import { FiCheckCircle, FiCopy, FiBox, FiArrowRight, FiCreditCard } from "react-icons/fi";
 import { useState } from "react";
 
 export default function OrderSuccess() {
@@ -8,6 +8,7 @@ export default function OrderSuccess() {
   const [copied, setCopied] = useState(false);
 
   const trackingNumber = location.state?.trackingNumber;
+  const integrations = location.state?.integrations;
 
   const copyToClipboard = () => {
     if (trackingNumber) {
@@ -52,6 +53,21 @@ export default function OrderSuccess() {
                     </button>
                 </div>
                 {copied && <p className="text-green-400 text-xs mt-2 font-bold absolute bottom-3 w-full text-center left-0">Skopiowano!</p>}
+            </div>
+        )}
+
+        {/* Sekcja Płatności P24 */}
+        {integrations?.payment?.paymentUrl && (
+            <div className="bg-[#24201d] border border-(--medium-shade) rounded-3xl p-6 mb-10 shadow-[0_0_20px_rgba(143,120,93,0.2)]">
+                <p className="text-sm opacity-80 mb-4 font-bold text-white">Opłać swoje zamówienie, abyśmy mogli je zrealizować:</p>
+                <a 
+                    href={integrations.payment.paymentUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto py-4 px-8 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2 mx-auto shadow-lg hover:scale-105"
+                >
+                    <FiCreditCard size={20} /> Opłać przez Przelewy24
+                </a>
             </div>
         )}
 
