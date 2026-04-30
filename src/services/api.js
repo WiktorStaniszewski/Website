@@ -52,7 +52,10 @@ const api = {
 
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.message || `Request failed with status ${res.status}`);
+        const err = new Error(errorData.message || `Request failed with status ${res.status}`);
+        err.status = res.status;
+        err.data = errorData;
+        throw err;
       }
 
       return await res.json();

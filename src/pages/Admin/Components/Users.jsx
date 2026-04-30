@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import api from "src/services/api"; 
 import { FaUserShield, FaUser, FaSearch, FaBox, FaCrown } from "react-icons/fa";
-import { FiFilter, FiAlertTriangle, FiMapPin, FiEdit2 } from "react-icons/fi";
+import { FiFilter, FiAlertTriangle, FiMapPin, FiEdit2, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import usePagination from "src/hooks/usePagination";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "src/context/AuthProvider";
 
@@ -40,7 +41,6 @@ export default function Users() {
       
       if (Array.isArray(usersRes)) setUsers(usersRes);
       if (Array.isArray(ordersRes)) setOrders(ordersRes);
-      // OPTYMALIZACJA: Pobieramy WSZYSTKIE placówki (w tym nowo dodane i magazyny)
       if (Array.isArray(locsRes)) setLocations(locsRes);
     } catch (e) {
       console.error(e);
@@ -89,7 +89,6 @@ export default function Users() {
       return { ...u, hasPendingOrder };
   });
 
-  // OPTYMALIZACJA: Wyszukiwanie użytkowników także po przypisanej do nich lokacji
   const filteredUsers = usersWithOrderInfo.filter(u => 
       u.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       u.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -103,6 +102,12 @@ export default function Users() {
   if (sortPendingFirst) {
       customerUsers.sort((a, b) => (b.hasPendingOrder === true) - (a.hasPendingOrder === true));
   }
+
+  const customerPagination = usePagination(customerUsers, { 
+    itemsPerPage: 10, 
+    storageKey: 'admin_users_page',
+    filterFingerprint: searchTerm
+  });
 
   if (loading) return <div className="text-(--medium-shade) font-bold text-center mt-20">Ładowanie użytkowników...</div>;
 
@@ -176,7 +181,6 @@ export default function Users() {
                   {u.username} {isMe && <span className="text-xs text-red-400 ml-2">(Ty)</span>}
                 </p>
                 <div className="flex items-center gap-2 text-sm text-[#F2EAE1]/50 mt-1">
-                    {/* OPTYMALIZACJA: Dynamiczne wyciąganie nazwy lokacji z relacji */}
                     <FiMapPin /> {u.Location ? u.Location.name : "Wszystkie placówki (Globalnie)"}
                 </div>
               </div>
@@ -228,7 +232,7 @@ export default function Users() {
         </div>
 
         <div className="flex flex-col gap-4">
-          {customerUsers.length === 0 ? <p className="text-[#F2EAE1]/50 text-sm">Brak wyników w tej sekcji.</p> : customerUsers.map(u => (
+          {customerUsers.length === 0 ? <p className="text-[#F2EAE1]/50 text-sm">Brak wyników w tej sekcji.</p> : customerPagination.visibleItems.map(u => (
             <div 
               key={u.id} 
               onClick={() => navigate(`/admin/users/${u.id}`)}
@@ -263,6 +267,47 @@ export default function Users() {
             </div>
           ))}
         </div>
+
+        {customerPagination.totalPages > 1 && (
+            <div className="flex justify-center items-center mt-8 gap-2">
+                <button
+                    onClick={() => customerPagination.goToPage(customerPagination.currentPage - 1)}
+                    disabled={customerPagination.currentPage <= 1}
+                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/15 text-white border border-[#5C4A3D] transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                >
+                    <FiChevronLeft />
+                </button>
+
+                {customerPagination.getPageNumbers().map((page, idx) => (
+                    page === '...' ? (
+                        <span key={`dots-${idx}`} className="w-8 text-center text-white/40 text-sm select-none">…</span>
+                    ) : (
+                        <button
+                            key={page}
+                            onClick={() => customerPagination.goToPage(page)}
+                            className={`w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all cursor-pointer ${page === customerPagination.currentPage
+                                ? 'bg-(--medium-shade) text-[#24201d] shadow-[0_0_15px_rgba(143,120,93,0.3)] scale-110'
+                                : 'bg-white/5 hover:bg-white/15 text-white border border-[#5C4A3D]'
+                            }`}
+                        >
+                            {page}
+                        </button>
+                    )
+                ))}
+
+                <button
+                    onClick={() => customerPagination.goToPage(customerPagination.currentPage + 1)}
+                    disabled={customerPagination.currentPage >= customerPagination.totalPages}
+                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/15 text-white border border-[#5C4A3D] transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                >
+                    <FiChevronRight />
+                </button>
+
+                <span className="ml-4 text-xs text-white/40 font-bold hidden sm:inline">
+                    {customerPagination.startIndex + 1}–{Math.min(customerPagination.startIndex + customerPagination.itemsPerPage, customerPagination.totalItems)} z {customerPagination.totalItems}
+                </span>
+            </div>
+        )}
       </div>
 
       {locationModal.isOpen && createPortal(
@@ -277,7 +322,6 @@ export default function Users() {
                 className="w-full bg-black/50 border border-white/20 rounded-xl p-3 text-white focus:outline-none focus:border-(--medium-shade) mb-6"
             >
                 <option value="">Brak / Odznacz (Widzi wszystkie)</option>
-                {/* OPTYMALIZACJA: Dynamiczne renderowanie wszystkich lokacji wraz z ich typem */}
                 {locations.map(loc => (
                     <option key={loc.id} value={loc.id}>
                         {loc.name} ({loc.type === 'warehouse' ? 'Magazyn' : 'Kawiarnia'})
@@ -297,7 +341,6 @@ export default function Users() {
         </div>, document.body
       )}
 
-      {/* Modal potwiedzenia roli (Bez zmian) */}
       {confirmModal.isOpen && createPortal(
         <div className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
           <div className="bg-[#24201d] w-full max-w-sm rounded-3xl border border-white/10 shadow-2xl p-6 flex flex-col items-center text-center animate-in zoom-in-95">

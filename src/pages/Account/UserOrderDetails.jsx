@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "services/api";
 import { FaArrowLeft, FaBox, FaTruck, FaMapMarkerAlt, FaSearchLocation, FaUser, FaCoffee, FaCreditCard } from "react-icons/fa";
 import PaymentSimulationModal from "src/components/PaymentSimulationModal";
+import ConfirmModal from "src/components/ConfirmModal";
 
 export default function UserOrderDetails() {
   const { id } = useParams();
@@ -10,6 +11,21 @@ export default function UserOrderDetails() {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [simulationModalOpen, setSimulationModalOpen] = useState(false);
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+
+  const executeCancelOrder = async () => {
+    setCancelModalOpen(false);
+    setCancelling(true);
+    try {
+      await api.put(`orders/${order.id}/cancel`);
+      setOrder({ ...order, status: 'cancelled' });
+    } catch (e) {
+      alert(e.message || "Błąd podczas anulowania zamówienia");
+    } finally {
+      setCancelling(false);
+    }
+  };
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -111,11 +127,19 @@ export default function UserOrderDetails() {
                     <FaCreditCard size={18} />
                     Opłać przez Przelewy24
                 </button>
+                <button 
+                    onClick={() => setCancelModalOpen(true)}
+                    disabled={cancelling}
+                    className="relative z-10 w-full sm:w-auto px-8 py-4 bg-red-500/10 hover:bg-red-500/20 text-red-500 font-bold uppercase tracking-widest text-sm rounded-2xl transition-all flex items-center justify-center gap-3 border border-red-500/30 disabled:opacity-50 cursor-pointer"
+                >
+                    {cancelling ? 'Anulowanie...' : 'Anuluj zamówienie'}
+                </button>
             </div>
         )}
 
         {/* DANE LOGISTYCZNE */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
           <div className="bg-[#24201d]/70 border border-white/5 p-8 rounded-3xl shadow-xl">
             <h2 className="text-lg uppercase tracking-widest text-(--medium-shade) font-bold mb-6 flex items-center gap-3 border-b border-white/5 pb-4">
               <div className="p-2 bg-(--medium-shade)/10 rounded-lg">
@@ -125,10 +149,15 @@ export default function UserOrderDetails() {
             </h2>
             <div className="space-y-2 font-light">
               <p className="font-serif text-2xl text-white mb-3">
-                 {isPickup ? `Somnium Roastery` : (order.shipping?.details?.label || order.shipping?.method)}
+                 {isPickup ? `Somnium Roastery` : (order.shipping?.method === 'paczkomat' ? 'Paczkomat InPost' : order.shipping?.details?.label || order.shipping?.method)}
               </p>
               {isPickup && <p className="text-white/60 text-sm">ul. Przykładowa 12, Kraków</p>}
-              <div className="inline-block mt-2 px-3 py-1 bg-[#1a1715]/50 rounded-lg border border-white/5 text-sm">
+              {!isPickup && order.shipping?.pointId && (
+                  <p className="text-(--medium-shade) font-bold bg-(--medium-shade)/10 px-3 py-1 rounded-lg inline-block text-sm border border-(--medium-shade)/20">
+                      ID Punktu: {order.shipping.pointId}
+                  </p>
+              )}
+              <div className="block mt-2 px-3 py-1 bg-[#1a1715]/50 rounded-lg border border-white/5 text-sm w-fit">
                   Koszt dostawy: <span className="font-bold text-white ml-1">{order.shipping?.cost === 0 ? 'Gratis' : `${order.shipping?.cost} PLN`}</span>
               </div>
             </div>
@@ -213,6 +242,15 @@ export default function UserOrderDetails() {
               setSimulationModalOpen(false);
               setOrder({ ...order, status: 'new' });
           }}
+      />
+      <ConfirmModal 
+          isOpen={cancelModalOpen}
+          onClose={() => setCancelModalOpen(false)}
+          onConfirm={executeCancelOrder}
+          title="Anulować zamówienie?"
+          description="Ta operacja jest nieodwracalna. Twoja rezerwacja produktów zostanie zwolniona."
+          confirmText="Tak, anuluj"
+          cancelText="Wróć"
       />
     </div>
   );

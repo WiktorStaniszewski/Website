@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "services/api"; 
-import { FiChevronRight, FiBox, FiChevronDown, FiCheck, FiMapPin, FiSearch } from "react-icons/fi";
+import { FiChevronRight, FiBox, FiChevronDown, FiCheck, FiMapPin, FiSearch, FiChevronLeft } from "react-icons/fi";
+import usePagination from "src/hooks/usePagination";
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
@@ -9,8 +10,6 @@ export default function AdminOrders() {
   const [isArchivedOpen, setIsArchivedOpen] = useState(false);
   
   const[searchQuery, setSearchQuery] = useState("");
-  const [visibleActiveCount, setVisibleActiveCount] = useState(10);
-  const [visibleArchivedCount, setVisibleArchivedCount] = useState(10);
   
   const navigate = useNavigate();
 
@@ -28,12 +27,8 @@ export default function AdminOrders() {
     fetchOrders();
   },[]);
 
-  useEffect(() => {
-      setVisibleActiveCount(10);
-      setVisibleArchivedCount(10);
-  }, [searchQuery]);
 
-  const statusWeights = { 'pending_payment': -1, 'new': 0, 'processing': 1, 'shipped': 2, 'completed': 3, 'cancelled': 99 };
+  const statusWeights = { 'new': 0, 'processing': 1, 'shipped': 2, 'pending_payment': 3, 'completed': 4, 'cancelled': 5 };
 
   const searchedOrders = orders.filter(o => {
       if (!searchQuery) return true;
@@ -56,6 +51,18 @@ export default function AdminOrders() {
 
   archivedOrders.sort((a, b) => {
       return new Date(b.createdAt || b.date).getTime() - new Date(a.createdAt || a.date).getTime();
+  });
+
+  const activePagination = usePagination(activeOrders, { 
+    itemsPerPage: 10, 
+    storageKey: 'admin_active_orders_page',
+    filterFingerprint: searchQuery
+  });
+
+  const archivedPagination = usePagination(archivedOrders, { 
+    itemsPerPage: 10, 
+    storageKey: 'admin_archived_orders_page',
+    filterFingerprint: searchQuery
   });
 
 
@@ -138,15 +145,10 @@ export default function AdminOrders() {
                 </div>
             ) : (
                 <div className="flex flex-col gap-4">
-                    {activeOrders.slice(0, visibleActiveCount).map(renderOrderRow)}
+                    {activePagination.visibleItems.map(renderOrderRow)}
                     
-                    {activeOrders.length > visibleActiveCount && (
-                        <button 
-                            onClick={() => setVisibleActiveCount(prev => prev + 10)}
-                            className="w-full py-3 mt-2 border border-white/10 rounded-xl text-white/50 hover:text-white hover:bg-white/5 transition-all font-bold text-sm cursor-pointer"
-                        >
-                            Załaduj kolejne 10 ({activeOrders.length - visibleActiveCount} pozostało)
-                        </button>
+                    {activePagination.totalPages > 1 && (
+                        <PaginationControls pagination={activePagination} />
                     )}
                 </div>
             )}
@@ -169,15 +171,10 @@ export default function AdminOrders() {
                         <p className="text-sm opacity-50 italic text-center py-4">Brak zakończonych zamówień.</p>
                     ) : (
                         <div className="flex flex-col gap-4">
-                            {archivedOrders.slice(0, visibleArchivedCount).map(renderOrderRow)}
+                            {archivedPagination.visibleItems.map(renderOrderRow)}
                             
-                            {archivedOrders.length > visibleArchivedCount && (
-                                <button 
-                                    onClick={() => setVisibleArchivedCount(prev => prev + 10)}
-                                    className="w-full py-3 mt-2 border border-white/10 rounded-xl text-white/50 hover:text-white hover:bg-white/5 transition-all font-bold text-sm cursor-pointer"
-                                >
-                                    Załaduj kolejne 10 ({archivedOrders.length - visibleArchivedCount} pozostało)
-                                </button>
+                            {archivedPagination.totalPages > 1 && (
+                                <PaginationControls pagination={archivedPagination} />
                             )}
                         </div>
                     )}
@@ -188,4 +185,49 @@ export default function AdminOrders() {
       </div>
     </div>
   );
+}
+
+function PaginationControls({ pagination }) {
+    const { currentPage, totalPages, goToPage, getPageNumbers, startIndex, totalItems, itemsPerPage } = pagination;
+    
+    return (
+        <div className="flex justify-center items-center mt-6 gap-2">
+            <button
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage <= 1}
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/15 text-white border border-white/10 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+            >
+                <FiChevronLeft />
+            </button>
+
+            {getPageNumbers().map((page, idx) => (
+                page === '...' ? (
+                    <span key={`dots-${idx}`} className="w-8 text-center text-white/40 text-sm select-none">…</span>
+                ) : (
+                    <button
+                        key={page}
+                        onClick={() => goToPage(page)}
+                        className={`w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all cursor-pointer ${page === currentPage
+                            ? 'bg-(--medium-shade) text-[#24201d] shadow-[0_0_15px_rgba(143,120,93,0.3)] scale-110'
+                            : 'bg-white/5 hover:bg-white/15 text-white border border-white/10'
+                        }`}
+                    >
+                        {page}
+                    </button>
+                )
+            ))}
+
+            <button
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage >= totalPages}
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/15 text-white border border-white/10 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+            >
+                <FiChevronRight />
+            </button>
+
+            <span className="ml-4 text-xs text-white/40 font-bold hidden sm:inline">
+                {startIndex + 1}–{Math.min(startIndex + itemsPerPage, totalItems)} z {totalItems}
+            </span>
+        </div>
+    );
 }

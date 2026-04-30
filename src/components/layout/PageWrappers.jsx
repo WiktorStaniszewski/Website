@@ -24,33 +24,64 @@ const LayoutWrapper = ({ children }) => {
     </Motion.div>
   )
 }
-const PageWrapper = ({ children }) => {
-  const fadeVariants = {
-    initial: {
-      opacity: 0,
-      filter: "blur(5px)",
-    },
-    animate: {
-      opacity: 1,
-      filter: "blur(0px)",
-      transition: {
-        duration: 0.4,
-        ease: "easeInOut"
+const PageWrapper = ({ children, animation = "slideUp" }) => {
+  const variants = {
+    slideUp: {
+      initial: { opacity: 0, y: 15 },
+      animate: { 
+        opacity: 1, 
+        y: 0,
+        transition: { 
+          duration: 0.4, 
+          ease: [0.25, 1, 0.5, 1] 
+        } 
+      },
+      exit: { 
+        opacity: 0, 
+        y: -15,
+        transition: { 
+          duration: 0.3, 
+          ease: [0.25, 1, 0.5, 1] 
+        } 
       }
     },
-    exit: {
-      opacity: 0,
-      filter: "blur(5px)", 
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut"
+    slideRight: {
+      initial: { opacity: 0, x: 30 },
+      animate: { 
+        opacity: 1, 
+        x: 0,
+        transition: { 
+          duration: 0.4, 
+          ease: [0.25, 1, 0.5, 1] 
+        } 
+      },
+      exit: { 
+        opacity: 0, 
+        x: -30,
+        transition: { 
+          duration: 0.3, 
+          ease: [0.25, 1, 0.5, 1] 
+        } 
+      }
+    },
+    fade: {
+      initial: { opacity: 0 },
+      animate: { 
+        opacity: 1,
+        transition: { duration: 0.4 } 
+      },
+      exit: { 
+        opacity: 0,
+        transition: { duration: 0.3 } 
       }
     }
   };
 
+  const currentVariant = variants[animation] || variants.slideUp;
+
   return (
     <Motion.div
-      variants={fadeVariants}
+      variants={currentVariant}
       initial="initial"
       animate="animate"
       exit="exit"

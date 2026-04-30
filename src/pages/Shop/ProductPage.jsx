@@ -82,9 +82,8 @@ export default function ProductPage() {
     };
 
     return (
-        <div className="min-h-screen bg-(--80-shade) pt-32 pb-24 lg:pb-12">
+        <div className="min-h-screen bg-(--80-shade) pt-32 pb-40 lg:pb-12">
             
-            {/* Nawigacja Top (Usunięto sticky, by nie nachodziło na globalny Header) */}
             <div className="max-w-6xl mx-auto px-4 lg:px-12 mb-8 flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
                 <button 
                     onClick={() => navigate(-1)} 
@@ -104,7 +103,7 @@ export default function ProductPage() {
                 <div className="w-full lg:w-1/2 relative">
                     <div className="aspect-square bg-white/5 backdrop-blur-md rounded-[2.5rem] overflow-hidden relative border border-white/20 flex items-center justify-center p-8 shadow-2xl">
                         {isSoldOut && (
-                            <div className="absolute top-6 left-6 z-10 bg-red-500/90 text-white text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-xl shadow-lg border border-red-400/50">
+                            <div className="absolute top-6 left-6 z-20 bg-red-500/90 text-white text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-xl shadow-lg border border-red-400/50">
                                 Wyprzedane
                             </div>
                         )}
@@ -198,7 +197,6 @@ export default function ProductPage() {
     );
 }
 
-// Komponent pomocniczy dla formularza powiadomień
 const WaitlistForm = ({ email, setEmail, status, onSubmit, isMobile }) => (
     <div className={`w-full ${isMobile ? '' : 'bg-white/10 backdrop-blur-md p-6 rounded-3xl border border-white/20 shadow-lg'}`}>
         {!isMobile && <h4 className="text-red-400 font-bold flex items-center gap-2 mb-3 text-sm"><FiAlertTriangle /> Produkt chwilowo niedostępny</h4>}
@@ -210,10 +208,9 @@ const WaitlistForm = ({ email, setEmail, status, onSubmit, isMobile }) => (
         ) : (
             <form onSubmit={onSubmit} className="flex gap-2 w-full">
                 <div className="relative flex-1">
-                    <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-(--font-color)/40" />
                     <input 
-                        type="email" required placeholder="Powiadom mnie" value={email} onChange={(e) => setEmail(e.target.value)}
-                        className="w-full bg-white/20 border border-white/20 rounded-xl py-3 pl-12 pr-4 text-(--font-color) placeholder:text-(--font-color)/50 focus:outline-none focus:border-(--medium-shade) text-sm shadow-inner transition-colors"
+                        type="email" required placeholder="✉ Twój e-mail" value={email} onChange={(e) => setEmail(e.target.value)}
+                        className="w-full bg-white/20 border border-white/20 rounded-xl py-3 px-4 text-(--font-color) placeholder:text-(--font-color)/50 focus:outline-none focus:border-(--medium-shade) text-sm shadow-inner transition-colors"
                     />
                 </div>
                 <button type="submit" disabled={status === 'loading'} className="bg-(--medium-shade) hover:brightness-110 text-[#24201d] px-6 rounded-xl font-bold text-sm transition-all shadow-md cursor-pointer disabled:opacity-50">

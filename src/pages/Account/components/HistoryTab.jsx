@@ -1,19 +1,39 @@
 import React from 'react';
-import { FaBox, FaChevronRight, FaCheck, FaSpinner, FaTimes } from "react-icons/fa";
+import { FaBox, FaChevronRight, FaCheck, FaSpinner, FaTimes, FaChevronLeft } from "react-icons/fa";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import usePagination from 'src/hooks/usePagination';
 
 export default function HistoryTab({ orders, loading, navigate }) {
     
     const sortedOrders = [...orders].sort((a, b) => {
-        const isAActive = a.status !== 'completed' && a.status !== 'cancelled';
-        const isBActive = b.status !== 'completed' && b.status !== 'cancelled';
+        const getWeight = (s) => {
+            if (s === 'pending_payment') return 0;
+            if (['processing', 'shipped', 'new'].includes(s)) return 1;
+            if (s === 'completed') return 2;
+            if (s === 'cancelled') return 3;
+            return 4;
+        };
 
-        if (isAActive && !isBActive) return -1;
-        if (!isAActive && isBActive) return 1;
+        const weightA = getWeight(a.status);
+        const weightB = getWeight(b.status);
+
+        if (weightA !== weightB) return weightA - weightB;
 
         const dateA = new Date(a.createdAt || a.date).getTime();
         const dateB = new Date(b.createdAt || b.date).getTime();
         return dateB - dateA;
     });
+
+    const {
+        visibleItems,
+        totalPages,
+        currentPage,
+        goToPage,
+        getPageNumbers,
+        startIndex,
+        totalItems,
+        itemsPerPage
+    } = usePagination(sortedOrders, { itemsPerPage: 10, storageKey: 'history_page' });
 
     const getStatusStyle = (status) => {
         switch(status) {
@@ -37,7 +57,7 @@ export default function HistoryTab({ orders, loading, navigate }) {
                 </div>
             ) : sortedOrders.length > 0 ? (
                 <div className="flex flex-col gap-5 overflow-y-auto pr-2 custom-scrollbar">
-                    {sortedOrders.map((order) => (
+                    {visibleItems.map((order) => (
                         <div 
                             key={order.id} 
                             onClick={() => navigate(`/account/orders/${order.id}`)} 
@@ -48,7 +68,6 @@ export default function HistoryTab({ orders, loading, navigate }) {
                                 }
                             `}
                         >
-                            {/* Subtelny akcent po lewej dla aktywnych zamówień */}
                             {order.status !== 'completed' && order.status !== 'cancelled' && (
                                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-(--medium-shade)"></div>
                             )}
@@ -93,6 +112,48 @@ export default function HistoryTab({ orders, loading, navigate }) {
                     <button onClick={() => navigate('/shop')} className="mt-8 px-8 py-3 bg-(--medium-shade) hover:brightness-110 text-[#1a1715] font-bold uppercase tracking-widest text-sm rounded-2xl transition-all cursor-pointer hover:-translate-y-0.5">
                         Przejdź do sklepu
                     </button>
+                </div>
+            )}
+
+            {/* Paginacja */}
+            {totalPages > 1 && (
+                <div className="flex justify-center items-center mt-12 gap-2 animate-in fade-in duration-500">
+                    <button
+                        onClick={() => goToPage(currentPage - 1)}
+                        disabled={currentPage <= 1}
+                        className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/15 text-white border border-white/10 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                        <FiChevronLeft />
+                    </button>
+
+                    {getPageNumbers().map((page, idx) => (
+                        page === '...' ? (
+                            <span key={`dots-${idx}`} className="w-8 text-center text-white/40 text-sm select-none">…</span>
+                        ) : (
+                            <button
+                                key={page}
+                                onClick={() => goToPage(page)}
+                                className={`w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all cursor-pointer ${page === currentPage
+                                    ? 'bg-(--medium-shade) text-[#24201d] shadow-[0_0_15px_rgba(143,120,93,0.3)] scale-110'
+                                    : 'bg-white/5 hover:bg-white/15 text-white border border-white/10'
+                                }`}
+                            >
+                                {page}
+                            </button>
+                        )
+                    ))}
+
+                    <button
+                        onClick={() => goToPage(currentPage + 1)}
+                        disabled={currentPage >= totalPages}
+                        className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/15 text-white border border-white/10 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                        <FiChevronRight />
+                    </button>
+
+                    <span className="ml-4 text-xs text-white/40 font-bold">
+                        {startIndex + 1}–{Math.min(startIndex + itemsPerPage, totalItems)} z {totalItems}
+                    </span>
                 </div>
             )}
         </div>

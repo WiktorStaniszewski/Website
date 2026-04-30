@@ -51,7 +51,6 @@ function Card({ product }) {
                     className={`w-full h-full object-contain drop-shadow-xl transition-transform duration-700 ${isSoldOut ? '' : 'group-hover:scale-110'}`}
                     onError={(e) => { e.target.src = 'https://placehold.co/150x150?text=Brak+foto'; }}
                 />
-                {/* Delikatny cień na dole zdjęcia dla płynnego przejścia */}
                 <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-black/10 to-transparent pointer-events-none"></div>
             </div>
             
@@ -61,12 +60,20 @@ function Card({ product }) {
                     {product.name}
                 </h3>
                 
-                <div className="text-xs text-(--font-color)/60 flex flex-col gap-1.5 mb-4">
-                    {product.company && <p className="uppercase tracking-widest font-bold opacity-70">{product.company}</p>}
-                    {product.flavours && <p className="truncate"><strong className="text-(--medium-shade) font-normal">Nuty:</strong> {product.flavours}</p>}
+                <div className="text-xs text-(--font-color)/60 flex flex-col gap-2 mb-4">
+                    {product.company && <p className="uppercase tracking-widest font-bold opacity-70 mb-1">{product.company}</p>}
+                    {product.flavours && (
+                        <div className="flex flex-wrap gap-1.5">
+                            {product.flavours.split(',').slice(0, 3).map((flavor, idx) => (
+                                <span key={idx} className="px-2 py-1 bg-white/5 border border-white/10 rounded-lg text-[10px] text-(--medium-shade) font-medium backdrop-blur-sm">
+                                    {flavor.trim()}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </div>
                 
-                {/* Cena i przycisk (zawsze na samym dole) */}
+                {/* Cena i przycisk */}
                 <div className="mt-auto flex items-end justify-between border-t border-white/10 pt-4">
                     <div className="flex flex-col">
                         <span className="text-[10px] uppercase tracking-widest text-(--font-color)/40 font-bold mb-0.5">Cena</span>

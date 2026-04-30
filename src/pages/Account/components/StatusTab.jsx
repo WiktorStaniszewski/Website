@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import api from "src/services/api";
-import { FaSpinner, FaSearch, FaBoxOpen } from "react-icons/fa";
+import { FaSpinner, FaSearch, FaBoxOpen, FaChevronDown } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
+import { useAuth } from "src/context/AuthProvider";
 
 export default function StatusTab() {
     const [searchParams] = useSearchParams();
     const urlTrackingNumber = searchParams.get("track") || "";
 
     const [searchId, setSearchId] = useState(urlTrackingNumber);
-    const[trackingResult, setTrackingResult] = useState(null);
+    const [trackingResult, setTrackingResult] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [orders, setOrders] = useState([]);
+    const [loadingOrders, setLoadingOrders] = useState(true);
     const [error, setError] = useState(null);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const performSearch = async (trackingNumber) => {
         if (!trackingNumber) return;
@@ -34,11 +38,49 @@ export default function StatusTab() {
         performSearch(searchId);
     };
 
+    const fetchOrders = async () => {
+        try {
+            const res = await api.get('orders/my-orders');
+            const trackable = res.filter(o => o.trackingNumber);
+            setOrders(trackable);
+        } catch (err) {
+            console.error("Błąd pobierania zamówień:", err);
+        } finally {
+            setLoadingOrders(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchOrders();
+    }, []);
+
     useEffect(() => {
         if (urlTrackingNumber) {
+            setSearchId(urlTrackingNumber);
             performSearch(urlTrackingNumber);
         }
-    },[urlTrackingNumber]);
+    }, [urlTrackingNumber]);
+
+    const getStatusLabel = (status) => {
+        switch (status) {
+            case 'new': return 'Przyjęto';
+            case 'processing': return 'W realizacji';
+            case 'shipped': return 'Wysłano';
+            case 'completed': return 'Dostarczono';
+            case 'cancelled': return 'Anulowano';
+            case 'pending_payment': return 'Oczekiwanie na płatność';
+            default: return status;
+        }
+    };
+
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'completed': return 'text-green-400';
+            case 'cancelled': return 'text-red-400';
+            case 'pending_payment': return 'text-yellow-500';
+            default: return 'text-(--medium-shade)';
+        }
+    };
 
     const isPickup = trackingResult?.isPickup;
 
@@ -79,20 +121,81 @@ export default function StatusTab() {
             <div className="bg-[#1a1715]/60 p-6 sm:p-10 rounded-3xl border border-white/5 shadow-2xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-(--medium-shade) rounded-full opacity-5 blur-3xl pointer-events-none"></div>
                 
-                <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4 mb-6 relative z-10">
-                    <div className="relative flex-1">
-                        <FaSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-white/30 text-lg" />
-                        <input 
-                            type="text" 
-                            value={searchId} 
-                            onChange={(e) => setSearchId(e.target.value)} 
-                            placeholder="Wpisz numer przesyłki (np. SOM-A1B2C3)" 
-                            className="w-full bg-[#24201d] border border-white/10 py-4 pl-14 pr-6 rounded-2xl focus:outline-none focus:border-(--medium-shade) focus:ring-1 focus:ring-(--medium-shade)/50 transition-all text-lg text-white uppercase tracking-widest" 
-                        />
+                <form onSubmit={handleSearch} className="relative z-20 mb-6">
+                    <p className="text-xs uppercase tracking-widest text-white/40 font-bold mb-3 ml-2">Wybierz przesyłkę z listy</p>
+                    
+                    <div className="flex flex-col md:flex-row gap-4">
+                        <div className="relative flex-1">
+                            <button
+                                type="button"
+                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                className="w-full bg-[#24201d] border border-white/10 py-4 pl-6 pr-14 rounded-2xl focus:outline-none focus:border-(--medium-shade) text-left transition-all group cursor-pointer"
+                            >
+                                {searchId ? (
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] uppercase tracking-widest text-(--medium-shade) font-bold">Wybrana przesyłka</span>
+                                        <span className="text-white font-bold tracking-widest truncate">{searchId}</span>
+                                    </div>
+                                ) : (
+                                    <span className="text-white/30 text-lg">Wybierz swoje zamówienie...</span>
+                                )}
+                                <FaChevronDown className={`absolute right-6 top-1/2 -translate-y-1/2 text-white/20 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                            </button>
+
+                            {isDropdownOpen && (
+                                <div className="absolute top-full left-0 w-full mt-2 bg-[#24201d] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200 max-h-[300px] overflow-y-auto custom-scrollbar">
+                                    {loadingOrders ? (
+                                        <div className="p-8 text-center text-white/30">
+                                            <FaSpinner className="animate-spin inline-block mr-2" /> Ładowanie listy...
+                                        </div>
+                                    ) : orders.length === 0 ? (
+                                        <div className="p-8 text-center text-white/30 italic">
+                                            Nie masz jeszcze żadnych wysłanych zamówień.
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-col">
+                                            {orders.map((order) => (
+                                                <button
+                                                    key={order.id}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setSearchId(order.trackingNumber);
+                                                        setIsDropdownOpen(false);
+                                                    }}
+                                                    className="w-full p-4 border-b border-white/5 hover:bg-white/5 transition-colors text-left flex flex-col gap-1 group cursor-pointer"
+                                                >
+                                                    <div className="flex justify-between items-start">
+                                                        <span className="text-(--medium-shade) font-bold tracking-widest text-sm">{order.trackingNumber}</span>
+                                                        <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md bg-white/5 border border-white/5 ${getStatusColor(order.status)}`}>
+                                                            {getStatusLabel(order.status)}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center text-xs">
+                                                        <span className="text-white/70 font-medium truncate max-w-[180px]">
+                                                            {order.items?.[0]?.name || "Przesyłka"}
+                                                        </span>
+                                                        <span className="text-white/30">
+                                                            {new Date(order.createdAt || order.date).toLocaleDateString('pl-PL')}
+                                                        </span>
+                                                    </div>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                        <button 
+                            type="submit" 
+                            disabled={loading || !searchId} 
+                            className="bg-(--medium-shade) hover:brightness-110 text-[#1a1715] px-10 py-4 rounded-2xl font-bold uppercase tracking-widest text-sm transition-all cursor-pointer flex justify-center items-center disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-0.5 shadow-lg active:scale-95"
+                        >
+                            {loading ? <FaSpinner className="animate-spin text-xl" /> : "Śledź Paczkę"}
+                        </button>
                     </div>
-                    <button type="submit" disabled={loading} className="bg-(--medium-shade) hover:brightness-110 text-[#1a1715] px-8 py-4 rounded-2xl font-bold uppercase tracking-widest text-sm transition-all cursor-pointer flex justify-center items-center disabled:opacity-50 hover:-translate-y-0.5">
-                        {loading ? <FaSpinner className="animate-spin text-xl" /> : "Szukaj"}
-                    </button>
+
+                    {isDropdownOpen && <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)}></div>}
                 </form>
                 
                 {error && (

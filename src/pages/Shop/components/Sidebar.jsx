@@ -84,7 +84,7 @@ const SidebarContent = ({ filters }) => {
                 </span>
             </div>
             
-            <div className="px-2">
+            <div className="px-2" style={{ touchAction: 'none' }}>
                 <ReactSlider
                     className="w-full h-1 bg-white/10 rounded-full flex items-center"
                     thumbClassName="w-5 h-5 bg-(--medium-shade) rounded-full shadow-[0_0_10px_rgba(143,120,93,0.8)] cursor-grab outline-none flex items-center justify-center hover:scale-110 transition-transform"
@@ -133,11 +133,5 @@ export default function Sidebar({ filters, isFilterMenuOpen, toggleFilterMenu })
     );
   }
 
-  return (
-    <aside className="hidden lg:flex flex-col w-full max-w-[280px] sticky top-56 mt-25 rounded-2xl bg-[#24201d]/20">
-        <div className="backdrop-brightness-95 border border-white/10 p-6 rounded-2xl shadow-lg h-full overflow-hidden flex flex-col">
-            <SidebarContent filters={filters} />
-        </div>
-    </aside>
-  );
+  return null;
 }

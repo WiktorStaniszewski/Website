@@ -66,7 +66,7 @@ export default function OrderDetails() {
   };
 
   const handlePasswordSubmit = async (password) => {
-      await api.post('auth/verify-password', { password }); // throws error caught by modal
+      await api.post('auth/verify-password', { password });
       setPasswordModalOpen(false);
       await executeStatusUpdate(pendingStatus);
   };
@@ -163,7 +163,6 @@ export default function OrderDetails() {
               <FiTruck className="text-(--medium-shade)" /> Dostawa
             </h2>
             <div className="space-y-2 text-sm text-[#F2EAE1]/80">
-              {/* OPTYMALIZACJA: Dynamiczne wyciąganie nazwy lokacji */}
               <p className="font-bold text-[#F2EAE1] text-base">
                 {order.shipping?.method === 'pickup' 
                   ? `Odbiór: ${order.Location?.name || 'Nieznana placówka'}` 
@@ -171,6 +170,11 @@ export default function OrderDetails() {
               </p>
               <p>{order.customer?.address}</p>
               <p>{order.customer?.zip} {order.customer?.city}</p>
+              {order.shipping?.pointId && (
+                  <p className="mt-2 text-(--medium-shade) font-bold bg-(--medium-shade)/10 px-3 py-1 rounded-lg inline-block text-xs border border-(--medium-shade)/20 uppercase tracking-widest">
+                      ID Punktu: {order.shipping.pointId}
+                  </p>
+              )}
               <p className="mt-4 pt-4 border-t border-[#5C4A3D]">
                 Koszt: <span className="font-bold text-[#F2EAE1]">{order.shipping?.cost} PLN</span>
               </p>

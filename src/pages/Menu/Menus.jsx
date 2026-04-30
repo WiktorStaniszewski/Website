@@ -146,7 +146,7 @@ function Menus() {
     };
 
     return (
-        <div className="relative min-h-screen pt-32 pb-20 px-4 lg:px-8 bg-(--80-shade) overflow-hidden">
+        <div className="relative min-h-screen pt-32 pb-20 px-4 lg:px-8 overflow-hidden">
             <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 60%)' }}></div>
             <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, var(--medium-shade) 0%, transparent 60%)', opacity: 0.15 }}></div>
 
@@ -211,7 +211,6 @@ function Menus() {
                 )}
             </div>
             
-            {/* MODAL POTWIERDZENIA USUNIĘCIA KATEGORII */}
             {categoryToDelete && createPortal(
                 <div className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
                     <div className="bg-[#24201d] w-full max-w-sm rounded-3xl border border-white/10 shadow-2xl p-6 flex flex-col items-center text-center animate-in zoom-in-95">

@@ -5,7 +5,7 @@ export const filterByQuery = (products, query) => {
   );
 };
 
-export const filterByAll = (products, { category, flavors, company, purpose, processing, priceRange }) => {
+export const filterByAll = (products, { category, flavors, company, purpose, processing, priceRange, showOnlyAvailable }) => {
   let filtered = products;
 
   if (category) filtered = filtered.filter(p => p.category === category);
@@ -23,6 +23,13 @@ export const filterByAll = (products, { category, flavors, company, purpose, pro
     filtered = filtered.filter(p => p.processingMethod && p.processingMethod.toLowerCase().includes(processing.toLowerCase()));
   }
 
+  if (showOnlyAvailable) {
+    filtered = filtered.filter(p => {
+      const stockVal = p.availableStock !== undefined ? p.availableStock : (p.stockQuantity || 0);
+      return Number(stockVal) > 0;
+    });
+  }
+  
   if (priceRange && priceRange.length === 2) {
       const [min, max] = priceRange;
       filtered = filtered.filter(p => {

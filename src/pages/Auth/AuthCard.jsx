@@ -26,7 +26,7 @@ export default function AuthCard({ onSuccess }) {
       });
 
       if (response && response.token) {
-        login(response);
+        login({ ...response, rememberMe });
         if (onSuccess) onSuccess();
       } else {
         setServerError("Nieznany błąd logowania.");
@@ -34,10 +34,10 @@ export default function AuthCard({ onSuccess }) {
 
     } catch (err) {
       console.error("Login error:", err);
-      if (err.response?.status === 409) {
+      if (err.status === 409) {
           setConflictModalOpen(true);
       } else {
-          setServerError(err.response?.data?.message || err.message || "Błąd logowania.");
+          setServerError(err.data?.message || err.message || "Błąd logowania.");
       }
     } finally {
       setIsLoading(false);

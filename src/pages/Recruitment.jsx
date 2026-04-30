@@ -4,7 +4,7 @@ import { FaCoffee, FaStar, FaUserFriends, FaRegCheckCircle } from 'react-icons/f
 
 export default function Recruitment() {
   return (
-    <div className='min-h-screen pt-32 pb-20 px-4 md:px-8 flex flex-col items-center relative overflow-hidden bg-(--80-shade)'>
+    <div className='min-h-screen pt-32 pb-20 px-4 md:px-8 flex flex-col items-center relative overflow-hidden'>
        <div 
            className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full pointer-events-none"
            style={{ background: 'radial-gradient(circle, var(--medium-shade) 0%, transparent 60%)', opacity: 0.2 }}

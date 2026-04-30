@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import api from 'src/services/api';
-import { FiTruck, FiBox, FiArrowLeft, FiClock, FiPlusCircle, FiEdit, FiFileText, FiInfo, FiEye, FiMapPin } from 'react-icons/fi';
+import { FiTruck, FiBox, FiArrowLeft, FiClock, FiPlusCircle, FiEdit, FiFileText, FiInfo, FiEye, FiMapPin, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import usePagination from 'src/hooks/usePagination';
 
 import DeliveryModal from './DeliveryModal'; 
 
@@ -14,6 +15,17 @@ export default function AdminDeliveries() {
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
     const [isDeliveryModalOpen, setIsDeliveryModalOpen] = useState(false);
+
+    const {
+        visibleItems,
+        totalPages,
+        currentPage,
+        goToPage,
+        getPageNumbers,
+        startIndex,
+        totalItems,
+        itemsPerPage
+    } = usePagination(deliveries, { itemsPerPage: 10, storageKey: 'admin_deliveries_page' });
 
     useEffect(() => {
         fetchDeliveries();
@@ -167,7 +179,7 @@ export default function AdminDeliveries() {
                         {deliveries.length === 0 && (
                             <tr><td colSpan="4" className="p-8 text-center text-[#F2EAE1]/50">Brak zarejestrowanych dostaw.</td></tr>
                         )}
-                        {deliveries.map((delivery) => (
+                        {visibleItems.map((delivery) => (
                             <tr 
                                 key={delivery.id} 
                                 onClick={() => setSelectedDelivery(delivery)}
@@ -203,6 +215,48 @@ export default function AdminDeliveries() {
                     </tbody>
                 </table>
             </div>
+
+            {/* Paginacja */}
+            {totalPages > 1 && (
+                <div className="flex justify-center items-center mt-12 gap-2 animate-in fade-in duration-500">
+                    <button
+                        onClick={() => goToPage(currentPage - 1)}
+                        disabled={currentPage <= 1}
+                        className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/15 text-white border border-[#5C4A3D] transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                        <FiChevronLeft />
+                    </button>
+
+                    {getPageNumbers().map((page, idx) => (
+                        page === '...' ? (
+                            <span key={`dots-${idx}`} className="w-8 text-center text-white/40 text-sm select-none">…</span>
+                        ) : (
+                            <button
+                                key={page}
+                                onClick={() => goToPage(page)}
+                                className={`w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all cursor-pointer ${page === currentPage
+                                    ? 'bg-(--medium-shade) text-[#24201d] shadow-[0_0_15px_rgba(143,120,93,0.3)] scale-110'
+                                    : 'bg-white/5 hover:bg-white/15 text-white border border-[#5C4A3D]'
+                                }`}
+                            >
+                                {page}
+                            </button>
+                        )
+                    ))}
+
+                    <button
+                        onClick={() => goToPage(currentPage + 1)}
+                        disabled={currentPage >= totalPages}
+                        className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/15 text-white border border-[#5C4A3D] transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                        <FiChevronRight />
+                    </button>
+
+                    <span className="ml-4 text-xs text-white/40 font-bold hidden sm:inline">
+                        {startIndex + 1}–{Math.min(startIndex + itemsPerPage, totalItems)} z {totalItems}
+                    </span>
+                </div>
+            )}
 
             {hoveredDelivery && hoveredDelivery.DeliveryActions && !isDeliveryModalOpen && createPortal(
                 <div 

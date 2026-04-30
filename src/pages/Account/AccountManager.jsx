@@ -22,7 +22,6 @@ export default function AccountManager() {
 
   const handleLogout = () => {
       logout();
-      navigate("/"); 
   };
 
   useEffect(() => {
@@ -51,11 +50,11 @@ export default function AccountManager() {
   ];
 
   return (
-    <div className="min-h-screen pt-32 pb-20 px-4 md:px-8 text-(--font-color) bg-[#1a1715]/5">
+    <div className="min-h-screen pt-32 pb-20 px-4 md:px-8 text-(--font-color)">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
         
         <aside className="h-fit lg:sticky lg:top-32 space-y-4 z-20">
-            <div className="bg-[#24201d]/60 p-6 rounded-3xl border border-white/5 shadow-2xl flex items-center gap-4 relative overflow-hidden">
+            <div className="bg-black/20 backdrop-blur-md p-6 rounded-3xl border border-white/5 shadow-2xl flex items-center gap-4 relative overflow-hidden">
                 <div className="w-14 h-14 rounded-full border-2 border-(--medium-shade) p-0.5 shrink-0 overflow-hidden">
                     <img 
                         src={user?.image || `https://api.dicebear.com/7.x/initials/svg?seed=${user?.firstName || user?.username}&backgroundColor=8f785d`} 
@@ -69,12 +68,12 @@ export default function AccountManager() {
                 </div>
             </div>
 
-            <nav className="bg-[#24201d]/60 p-3 rounded-3xl border border-white/5 shadow-2xl flex flex-col gap-1">
+            <nav className="bg-black/20 backdrop-blur-md p-3 rounded-3xl border border-white/5 shadow-2xl flex flex-col gap-1">
                 {tabs.map((tab) => (
                     <button
                         key={tab.id}
                         onClick={() => setSearchParams({ tab: tab.id })}
-                        className={`flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 group cursor-pointer text-left relative overflow-hidden ${
+                        className={`flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 group text-left relative overflow-hidden cursor-pointer ${
                             activeTab === tab.id 
                             ? "bg-(--medium-shade)/10 text-(--medium-shade) font-bold" 
                             : "hover:bg-white/5 text-white/60 hover:text-white"
@@ -97,7 +96,7 @@ export default function AccountManager() {
             </nav>
         </aside>
 
-        <main className="min-h-[600px] bg-[#24201d]/60 border border-white/5 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden z-10">
+        <main className="min-h-[600px] bg-black/25 backdrop-blur-md border border-white/5 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden z-10">
             <div 
                 className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full pointer-events-none"
                 style={{ background: 'radial-gradient(circle, var(--medium-shade) 0%, transparent 60%)', opacity: 0.05 }}

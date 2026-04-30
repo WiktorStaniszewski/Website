@@ -1,6 +1,6 @@
 export default function Input({ title, value, handleChange, number, checked }) {
   return (
-    <label className="group flex items-center cursor-pointer py-2 select-none relative transition-all duration-300">
+    <label className="group flex items-center cursor-pointer py-2.5 select-none relative transition-all duration-300">
       <input
         className="peer sr-only"
         onChange={handleChange}

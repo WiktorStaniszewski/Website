@@ -11,8 +11,7 @@ const AboutHero = () => (
                 alt="Somnium Cafe Interior" 
                 className='w-full h-full object-cover object-center scale-105 opacity-80 animate-in fade-in duration-1000' 
             />
-            {/* Lighter Gradient: Fades to transparent at top, and matches the next section color (#382f27) at bottom */}
-            <div className="absolute inset-0 bg-linear-to-t from-[#382f27] via-[#24201d]/50 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-(--darker-bg) via-transparent to-transparent" />
         </div>
 
         <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto space-y-8 animate-in slide-in-from-bottom-8 duration-1000 fill-mode-both">
@@ -36,8 +35,7 @@ const AboutHero = () => (
 );
 
 const StorySection = () => (
-    // Changed bg to --80-shade (#382f27) for a lighter brown look
-    <section className="relative py-24 px-6 md:px-12 bg-(--80-shade)">
+    <section className="relative py-24 px-6 md:px-12 natural-bg border-y border-white/5">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             {/* Text Content */}
             <div className="space-y-8 animate-in slide-in-from-left duration-1000">
@@ -48,7 +46,6 @@ const StorySection = () => (
                     </h2>
                 </div>
                 
-                {/* Lighter Glass: bg-white/10 instead of /5 */}
                 <div className="bg-white/10 backdrop-blur-md p-8 rounded-3xl border border-white/20 shadow-xl hover:bg-white/15 transition-colors duration-500">
                     <p className="text-lg leading-relaxed text-(--font-color)">
                         Nasza nazwa – <strong>"Somnium"</strong> – nawiązuje do jednego z kluczowych aspektów kawy: jej struktury, pełni i bogactwa smaku. 
@@ -67,7 +64,6 @@ const StorySection = () => (
                     alt="Coffee Beans" 
                     className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
                 />
-                {/* Lighter gradient overlay on image */}
                 <div className="absolute inset-0 bg-linear-to-t from-[#382f27] via-transparent to-transparent opacity-90"></div>
                 <div className="absolute bottom-10 left-10 right-10">
                      <p className="text-3xl font-serif italic text-white drop-shadow-lg border-l-4 border-(--medium-shade) pl-4">
@@ -80,13 +76,10 @@ const StorySection = () => (
 );
 
 const FeaturesSection = () => (
-    // Changed bg to --90-shade (#3f352c) for slight contrast but still lighter than original
-    <section className="py-24 px-6 bg-(--90-shade) border-t border-white/10">
+    <section className="py-24 px-6 border-t border-white/10">
         <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                 {/* Visual Side */}
                  <div className="order-2 lg:order-1 flex justify-center relative">
-                    {/* Brighter Glow */}
                     <div className="absolute inset-0 bg-(--medium-shade) blur-[100px] opacity-20 rounded-full"></div>
                     <div className="relative w-full max-w-md aspect-square rounded-[3rem] overflow-hidden border border-white/20 shadow-2xl rotate-3 hover:rotate-0 transition-all duration-700 bg-[#24201d]">
                          <img 
@@ -119,7 +112,6 @@ const FeaturesSection = () => (
                             { icon: <FaLightbulb />, text: "Kreatywność" },
                             { icon: <FaHeart />, text: "Bez Napinki" }
                         ].map((item, i) => (
-                            // Brighter cards: bg-white/10 -> hover:bg-white/20
                             <div key={i} className="flex flex-col items-center justify-center p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 hover:border-(--medium-shade) hover:bg-white/20 transition-all duration-300 group cursor-default shadow-lg">
                                 <span className="text-3xl text-(--medium-shade) mb-3 group-hover:scale-110 transition-transform brightness-110">{item.icon}</span>
                                 <span className="text-xs font-bold uppercase tracking-wider text-(--font-color)">{item.text}</span>
@@ -133,7 +125,7 @@ const FeaturesSection = () => (
 );
 
 const PartnersSection = () => (
-    <section className="py-24 px-4 bg-(--80-shade) relative overflow-hidden border-t border-white/10">
+    <section className="py-24 px-4 relative overflow-hidden border-t border-white/10 natural-bg">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-linear-to-r from-transparent via-(--medium-shade) to-transparent opacity-30"></div>
         
         <div className="max-w-7xl mx-auto flex flex-col items-center relative z-10">
@@ -150,11 +142,11 @@ const PartnersSection = () => (
 
 export default function About() {
     return (
-        <main className="w-full min-h-screen bg-(--80-shade)">
+        <div className="w-full min-h-screen">
             <AboutHero />
             <StorySection />
             <FeaturesSection />
             <PartnersSection />
-        </main>
+        </div>
     )
 }

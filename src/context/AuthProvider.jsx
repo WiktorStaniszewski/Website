@@ -9,43 +9,34 @@ function SessionManager({ logout, setToken }) {
     const [showPrompt, setShowPrompt] = useState(false);
     const [timeLeft, setTimeLeft] = useState(300);
     const lastActivityRef = useRef(Date.now());
-    const promptTimerRef = useRef(null);
     const killTimerRef = useRef(null);
     const checkIntervalRef = useRef(null);
 
-    const INACTIVITY_LIMIT = 55 * 60 * 1000;
-    const KILL_AFTER_PROMPT = 300; 
+    const isRemembered = localStorage.getItem("somnium_remember_me") === "true";
+    const TOTAL_SESSION_TIME = isRemembered ? 24 * 60 * 60 * 1000 : 60 * 60 * 1000;
+    const INACTIVITY_LIMIT = TOTAL_SESSION_TIME - (5 * 60 * 1000); 
+    const KILL_AFTER_PROMPT = 300;
 
-    const handleForcedLogout = useCallback((reason) => {
+    const handleForcedLogout = useCallback(async (reason) => {
+        try {
+            await api.post('auth/logout', {}).catch(() => {});
+        } catch (_) {}
         localStorage.removeItem("somnium_user");
         localStorage.removeItem("somnium_token");
         localStorage.removeItem("somnium_cart");
         localStorage.removeItem("session_start");
-        const baseUrl = import.meta.env.BASE_URL || '/';
-        const targetUrl = `${baseUrl}login?reason=${reason}`.replace(/([^:])(\/\/+)/g, '$1/');
-        window.location.href = targetUrl;
+        localStorage.removeItem("somnium_session_id");
+        localStorage.removeItem("somnium_checkout_expires");
+        
+        const baseUrl = window.location.origin + window.location.pathname;
+        window.location.href = `${baseUrl}#/login?reason=${reason}`;
+        window.location.reload(); 
     }, []);
 
-    const resetActivity = useCallback(() => {
-        lastActivityRef.current = Date.now();
-
-        if (showPrompt) {
-            setShowPrompt(false);
-            if (killTimerRef.current) {
-                clearInterval(killTimerRef.current);
-                killTimerRef.current = null;
-            }
-        }
-    }, [showPrompt]);
-
     useEffect(() => {
-        const events = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'];
-        events.forEach(evt => window.addEventListener(evt, resetActivity, { passive: true }));
 
-        return () => {
-            events.forEach(evt => window.removeEventListener(evt, resetActivity));
-        };
-    }, [resetActivity]);
+        return () => {};
+    }, []);
 
     useEffect(() => {
         const pingInterval = setInterval(() => {
@@ -57,31 +48,49 @@ function SessionManager({ logout, setToken }) {
         }, 5 * 60 * 1000);
 
         checkIntervalRef.current = setInterval(() => {
-            const idleTime = Date.now() - lastActivityRef.current;
+            const sessionStart = parseInt(localStorage.getItem("session_start") || Date.now());
+            const elapsed = Date.now() - sessionStart;
 
-            if (idleTime >= INACTIVITY_LIMIT && !showPrompt) {
+            if (elapsed >= INACTIVITY_LIMIT && !showPrompt) {
                 setShowPrompt(true);
                 setTimeLeft(KILL_AFTER_PROMPT);
-
-                killTimerRef.current = setInterval(() => {
-                    setTimeLeft(prev => {
-                        if (prev <= 1) {
-                            clearInterval(killTimerRef.current);
-                            handleForcedLogout('timeout');
-                            return 0;
-                        }
-                        return prev - 1;
-                    });
-                }, 1000);
             }
-        }, 30 * 1000);
+        }, 10 * 1000); 
 
         return () => {
             clearInterval(pingInterval);
             clearInterval(checkIntervalRef.current);
-            if (killTimerRef.current) clearInterval(killTimerRef.current);
         };
-    }, [handleForcedLogout, showPrompt]);
+    }, [handleForcedLogout, showPrompt, INACTIVITY_LIMIT]);
+
+    useEffect(() => {
+        if (!showPrompt) {
+            if (killTimerRef.current) {
+                clearInterval(killTimerRef.current);
+                killTimerRef.current = null;
+            }
+            return;
+        }
+
+        killTimerRef.current = setInterval(() => {
+            setTimeLeft(prev => {
+                if (prev <= 1) {
+                    clearInterval(killTimerRef.current);
+                    killTimerRef.current = null;
+                    handleForcedLogout('timeout');
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
+        return () => {
+            if (killTimerRef.current) {
+                clearInterval(killTimerRef.current);
+                killTimerRef.current = null;
+            }
+        };
+    }, [showPrompt, handleForcedLogout]);
 
     const extendSession = async () => {
         try {
@@ -89,7 +98,7 @@ function SessionManager({ logout, setToken }) {
             if (res.token) {
                 setToken(res.token);
             }
-            lastActivityRef.current = Date.now();
+            localStorage.setItem("session_start", Date.now().toString());
             setShowPrompt(false);
             if (killTimerRef.current) {
                 clearInterval(killTimerRef.current);
@@ -130,88 +139,102 @@ function SessionManager({ logout, setToken }) {
 }
 
 export function AuthProvider({ children }) {
-   const [user, setUser] = useState(null);
-   const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-   useEffect(() => {
-      const initializeAuth = () => {
-         try {
-            const savedUser = localStorage.getItem("somnium_user");
-            const savedToken = localStorage.getItem("somnium_token");
+    useEffect(() => {
+        const initializeAuth = () => {
+            try {
+                const savedUser = localStorage.getItem("somnium_user");
+                const savedToken = localStorage.getItem("somnium_token");
 
-            if (savedUser && savedToken) {
-               setUser(JSON.parse(savedUser));
-            } else {
-               localStorage.removeItem("somnium_user");
-               localStorage.removeItem("somnium_token");
+                if (savedUser && savedToken) {
+                    setUser(JSON.parse(savedUser));
+                } else {
+                    localStorage.removeItem("somnium_user");
+                    localStorage.removeItem("somnium_token");
+                }
+            } catch (error) {
+                console.error("Auth initialization failed:", error);
+                localStorage.removeItem("somnium_user");
+                localStorage.removeItem("somnium_token");
+            } finally {
+                setLoading(false);
             }
-         } catch (error) {
-            console.error("Auth initialization failed:", error);
-            localStorage.removeItem("somnium_user");
-            localStorage.removeItem("somnium_token");
-         } finally {
-            setLoading(false);
-         }
-      };
+        };
 
-      initializeAuth();
-   }, []);
+        initializeAuth();
+    }, []);
 
-   const login = useCallback((authResponse) => {
-      const { user, token } = authResponse;
-      
-      if (!user || !token) {
-          console.error("Invalid login response structure", authResponse);
-          return;
-      }
+    const login = useCallback((authResponse) => {
+        const { user, token } = authResponse;
 
-      setUser(user);
-      localStorage.setItem("somnium_user", JSON.stringify(user));
-      localStorage.setItem("somnium_token", token);
-      localStorage.setItem("session_start", Date.now().toString()); 
-   }, []);
+        if (!user || !token) {
+            console.error("Invalid login response structure", authResponse);
+            return;
+        }
 
-   const logout = useCallback(() => {
-      localStorage.removeItem("somnium_user");
-      localStorage.removeItem("somnium_token");
-      localStorage.removeItem("somnium_cart"); 
-      localStorage.removeItem("session_start");
-      setUser(null);
-   }, []);
+        setUser(user);
+        localStorage.setItem("somnium_user", JSON.stringify(user));
+        localStorage.setItem("somnium_token", token);
+        localStorage.setItem("somnium_remember_me", authResponse.rememberMe ? "true" : "false");
+        localStorage.setItem("session_start", Date.now().toString());
+    }, []);
 
-   const setToken = useCallback((newToken) => {
-      localStorage.setItem("somnium_token", newToken);
-   }, []);
+    const logout = useCallback(async () => {
+        try {
+            await api.post('auth/logout', {}).catch(e => console.warn("Backend logout failed or session already gone"));
+        } catch (e) {
+            console.error("Błąd podczas wylogowywania (API):", e);
+        }
+        localStorage.removeItem("somnium_user");
+        localStorage.removeItem("somnium_token");
+        localStorage.removeItem("somnium_cart");
+        localStorage.removeItem("session_start");
+        localStorage.removeItem("somnium_remember_me");
+        localStorage.removeItem("somnium_session_id");
+        localStorage.removeItem("somnium_checkout_expires");
+        
+        setUser(null);
+        
+        const baseUrl = window.location.origin + window.location.pathname;
+        window.location.href = baseUrl + "#/login";
+        window.location.reload();
+    }, []);
 
-   const updateUser = useCallback((updatedUserData) => {
-      setUser(updatedUserData);
-      localStorage.setItem("somnium_user", JSON.stringify(updatedUserData));
-   }, []);
+    const setToken = useCallback((newToken) => {
+        localStorage.setItem("somnium_token", newToken);
+    }, []);
 
-   const value = {
-      user,
-      isAuthenticated: !!user,
-      login,
-      logout,
-      setToken,
-      updateUser,
-      loading,
-      isAdmin: user?.role === 'super_admin' || user?.role === 'admin',
-      isSuperAdmin: user?.role === 'super_admin', 
-   };
+    const updateUser = useCallback((updatedUserData) => {
+        setUser(updatedUserData);
+        localStorage.setItem("somnium_user", JSON.stringify(updatedUserData));
+    }, []);
 
-   return (
-      <AuthContext.Provider value={value}>
-         {!loading && children}
-         {user && <SessionManager logout={logout} setToken={setToken} />}
-      </AuthContext.Provider>
-   );
+    const value = {
+        user,
+        isAuthenticated: !!user,
+        login,
+        logout,
+        setToken,
+        updateUser,
+        loading,
+        isAdmin: user?.role === 'super_admin' || user?.role === 'admin',
+        isSuperAdmin: user?.role === 'super_admin',
+    };
+
+    return (
+        <AuthContext.Provider value={value}>
+            {!loading && children}
+            {user && <SessionManager logout={logout} setToken={setToken} />}
+        </AuthContext.Provider>
+    );
 }
 
 export const useAuth = () => {
-   const context = useContext(AuthContext);
-   if (!context) {
-      throw new Error("useAuth must be used within an AuthProvider");
-   }
-   return context;
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error("useAuth must be used within an AuthProvider");
+    }
+    return context;
 };

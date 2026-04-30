@@ -4,6 +4,7 @@ import Products from 'src/pages/Shop/components/ProductList'
 import Navigation from 'pages/shop/components/ShopNavigation'
 import Recommended from 'pages/shop/components/RecommendedSection'
 import Sidebar from 'src/pages/Shop/components/Sidebar'
+import FilterBar from 'src/pages/Shop/components/FilterBar'
 
 import { useShopFilters } from 'pages/shop/hooks/useShopFilters'
 import { useToggle } from '@uidotdev/usehooks'
@@ -17,26 +18,39 @@ export default function Shop() {
     const [isFilterMenuOpen, toggleFilterMenu] = useToggle(false);
 
     return (
-        <main className='w-screen flex justify-center pt-25'>
-            <div className='lg:grid lg:grid-cols-[1fr_3fr_1fr_0fr] lg:gap-0 lg:grid-rows-[auto_auto_1fr] lg:w-8/10 xl:w-75/100 mx-0 flex justify-center flex-col w-9/10'>
+        <main className='w-screen flex justify-center pt-25 min-h-screen'>
+            <div className='flex flex-col w-full max-w-7xl px-4 lg:px-12'>
                 
-                <div className='lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-6 lg:h-fit'>
-                    <Sidebar
-                        filters={filters} 
-                        isFilterMenuOpen={isFilterMenuOpen} 
-                        toggleFilterMenu={toggleFilterMenu}
-                    />
+                {/* Mobile Sidebar (Drawer) */}
+                <Sidebar
+                    filters={filters} 
+                    isFilterMenuOpen={isFilterMenuOpen} 
+                    toggleFilterMenu={toggleFilterMenu}
+                />
+                
+                {/* Shop Header: Search & Navigation */}
+                <div className="mt-4 mb-8">
+                    <Navigation filters={filters} toggleFilterMenu={toggleFilterMenu} />
                 </div>
-                
-                <div className='lg:col-start-2 lg:col-end-5 lg:row-start-2 lg:row-end-3 '>
+
+                <div className="flex flex-col gap-2">
+                    <FilterBar filters={filters} />
+                </div>
+
+                <div className='mb-6 mt-4'>
                     <Recommended filters={filters} />
                 </div>
-                
-                <div className="lg:col-start-2 lg:col-end-5 lg:row-start-3 lg:row-end-6">
+
+                <div className="flex flex-col gap-2">
                     <Products filters={filters} />
                 </div>
                 
-                <div className={`lg:col-start-1 lg:col-end-5 lg:row-start-1 lg:row-end-2 bottom-0 not-lg:sticky not-lg:bottom-15 not-lg:z-9999 ${visible ? 'not-lg:w-75/100' : 'not-lg:w-full'} transition-all duration-300 ease-in-out`}>
+                {/* Mobile Floating Action Button / Navigation */}
+                <div className={`lg:hidden fixed bottom-14 left-0 z-9999 px-4 transition-all duration-500 ease-in-out ${
+                    visible 
+                        ? 'w-[75%] translate-y-0 opacity-100' 
+                        : 'w-full translate-y-24 opacity-0 pointer-events-none'
+                }`}>
                     <Navigation filters={filters} toggleFilterMenu={toggleFilterMenu} />
                 </div>
 
