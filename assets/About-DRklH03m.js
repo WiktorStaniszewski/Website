@@ -1,4 +1,4 @@
-import{j as e,F as r,a as i,b as o}from"./index-4IC1JREA.js";function l({name:a,url:t}){return e.jsx("a",{href:t,target:"_blank",rel:"noopener noreferrer",className:"cursor-pointer group",children:e.jsxs("div",{className:`\r
+import{j as e,F as r,a as i,b as o}from"./index-C3J1tQ4T.js";function l({name:a,url:t}){return e.jsx("a",{href:t,target:"_blank",rel:"noopener noreferrer",className:"cursor-pointer group",children:e.jsxs("div",{className:`\r
                 flex items-center justify-center flex-col \r
                 bg-white/5 backdrop-blur-sm border border-white/5 rounded-3xl\r
                 p-4 transition-all duration-300 ease-out\r
