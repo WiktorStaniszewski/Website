@@ -1,0 +1,1 @@
+const r=t=>t?t.startsWith("http")||t.startsWith("blob:")||t.startsWith("data:")?t:/^\d{10,}-/.test(t)?`http://localhost:5000/images/products/${t}`:t.includes("images/")?t.startsWith("/")?t.substring(1):t:`images/tempProducts/${t}`:"https://placehold.co/150x150?text=Brak+foto";export{r as g};
