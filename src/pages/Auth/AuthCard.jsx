@@ -1,17 +1,29 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "src/context/AuthProvider";
-import { Link } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import api from "src/services/api"; 
 import ConfirmModal from "src/components/ConfirmModal";
+import { useAuth } from "src/context/AuthProvider";
 
 export default function AuthCard({ onSuccess }) {
+  const [searchParams] = useSearchParams();
+  const reason = searchParams.get("reason");
   const [serverError, setServerError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors }, getValues } = useForm();
   const { login, logout, user } = useAuth(); 
   const [conflictModalOpen, setConflictModalOpen] = useState(false);
+
+  const getReasonMessage = () => {
+    switch(reason) {
+      case 'session_invalidated': return 'Twoje dane sesji zostały usunięte lub zmodyfikowane. Zaloguj się ponownie.';
+      case 'timeout': return 'Sesja wygasła z powodu nieaktywności.';
+      case 'session_expired': return 'Twoja sesja wygasła. Zaloguj się ponownie.';
+      case 'extend_failed': return 'Nie udało się przedłużyć sesji. Zaloguj się ponownie.';
+      default: return null;
+    }
+  };
 
   const onSubmit = async (data, force = false) => {
     setIsLoading(true);
@@ -104,6 +116,12 @@ export default function AuthCard({ onSuccess }) {
               <input {...register("rememberMe")} type="checkbox" id="rememberMe" className="cursor-pointer" />
               <label htmlFor="rememberMe" className="cursor-pointer select-none">Zapamiętaj mnie</label>
             </div>
+
+            {getReasonMessage() && !serverError && (
+              <div className="w-full bg-(--medium-shade)/10 text-(--medium-shade) text-sm p-3 rounded-xl text-center border border-(--medium-shade)/30">
+                {getReasonMessage()}
+              </div>
+            )}
 
             {serverError && (
               <div className="w-full bg-red-500/20 text-red-200 text-sm p-3 rounded-xl text-center border border-red-500/30">

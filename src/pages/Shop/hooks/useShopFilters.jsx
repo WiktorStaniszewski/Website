@@ -34,6 +34,13 @@ export function useShopFilters() {
     fetchProducts();
   }, []);
 
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(query), 300);
+    return () => clearTimeout(timer);
+  }, [query]);
+
   const handleInputChange = useCallback((e) => setQuery(e.target.value), []);
   
   const handleCategoryChange = useCallback((value) => { 
@@ -82,7 +89,7 @@ export function useShopFilters() {
         purpose: selectedPurpose, processing: selectedProcessing, priceRange: priceRange,
         showOnlyAvailable: showOnlyAvailable
       },
-      query
+      debouncedQuery
     );
 
     filtered = [...filtered].sort((a, b) => {
@@ -97,7 +104,7 @@ export function useShopFilters() {
     });
 
     return filtered;
-  }, [products, selectedCategory, selectedFlavors, selectedCompany, selectedPurpose, selectedProcessing, priceRange, query, sortBy, showOnlyAvailable]);
+  }, [products, selectedCategory, selectedFlavors, selectedCompany, selectedPurpose, selectedProcessing, priceRange, debouncedQuery, sortBy, showOnlyAvailable]);
 
   return {
     query, filteredProducts, loading, error,

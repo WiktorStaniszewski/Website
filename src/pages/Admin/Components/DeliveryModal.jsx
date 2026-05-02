@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { FiX, FiPlus, FiBox, FiEdit2, FiUploadCloud, FiTrash2 } from "react-icons/fi";
 import api from "services/api";
+import SomniumSelect from "components/ui/SomniumSelect";
 
 export default function DeliveryModal({ isOpen, onClose, onSuccess }) {
   const [step, setStep] = useState(1);
@@ -241,104 +242,115 @@ export default function DeliveryModal({ isOpen, onClose, onSuccess }) {
                         <input type="text" value={deliveryData.name} onChange={(e) => setDeliveryData({...deliveryData, name: e.target.value})} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade)" />
                     </div>
                     <div>
-                        <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Cel dostawy (Magazyn)</label>
-                        <select value={deliveryData.locationId} onChange={(e) => setDeliveryData({...deliveryData, locationId: e.target.value})} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) cursor-pointer">
-                            <option value="" disabled>Wybierz placówkę...</option>
-                            {locations.map(loc => <option key={loc.id} value={loc.id}>{loc.name} ({loc.type})</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Notatki (opcjonalnie)</label>
-                        <textarea value={deliveryData.notes} onChange={(e) => setDeliveryData({...deliveryData, notes: e.target.value})} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) resize-none" rows="2" />
-                    </div>
-                    
-                    <button 
-                        onClick={() => setStep(2)} disabled={!deliveryData.locationId || !deliveryData.name}
-                        className="w-full py-3 bg-(--medium-shade) text-[#24201d] font-bold rounded-xl mt-4 disabled:opacity-50 transition-colors cursor-pointer"
-                    >
-                        Przejdź do dodawania towaru
-                    </button>
+                    <SomniumSelect 
+                        label="Cel dostawy (Magazyn)"
+                        placeholder="Wybierz placówkę..."
+                        options={locations.map(loc => ({
+                            label: `${loc.name} (${loc.type === 'warehouse' ? 'Magazyn' : 'Kawiarnia'})`,
+                            value: String(loc.id)
+                        }))}
+                        value={String(deliveryData.locationId)}
+                        onChange={(val) => setDeliveryData({...deliveryData, locationId: val})}
+                    />
                 </div>
+                <div>
+                    <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Notatki (opcjonalnie)</label>
+                    <textarea value={deliveryData.notes} onChange={(e) => setDeliveryData({...deliveryData, notes: e.target.value})} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) resize-none" rows="2" />
+                </div>
+                
+                <button 
+                    onClick={() => setStep(2)} disabled={!deliveryData.locationId || !deliveryData.name}
+                    className="w-full py-3 bg-(--medium-shade) text-[#24201d] font-bold rounded-xl mt-4 disabled:opacity-50 transition-colors cursor-pointer"
+                >
+                    Przejdź do dodawania towaru
+                </button>
             </div>
+        </div>
 
-            {step === 2 && (
-                <div className="flex flex-col gap-6 animate-in slide-in-from-right-4">
-                    
-                    {!activeForm ? (
-                        <>
-                            <div className="flex gap-4">
-                                <button onClick={() => setActiveForm('ADD_STOCK')} className="flex-1 p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer">
-                                    <FiPlus className="text-2xl text-(--medium-shade)" />
-                                    <span className="font-bold text-sm">Dodaj sztuki (Istniejący produkt)</span>
-                                </button>
-                                <button onClick={() => setActiveForm('CREATE_PRODUCT')} className="flex-1 p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer">
-                                    <FiBox className="text-2xl text-(--medium-shade)" />
-                                    <span className="font-bold text-sm">Utwórz całkowicie nowy produkt</span>
-                                </button>
-                            </div>
+        {step === 2 && (
+            <div className="flex flex-col gap-6 animate-in slide-in-from-right-4">
+                
+                {!activeForm ? (
+                    <>
+                        <div className="flex gap-4">
+                            <button onClick={() => setActiveForm('ADD_STOCK')} className="flex-1 p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer">
+                                <FiPlus className="text-2xl text-(--medium-shade)" />
+                                <span className="font-bold text-sm">Dodaj sztuki (Istniejący produkt)</span>
+                            </button>
+                            <button onClick={() => setActiveForm('CREATE_PRODUCT')} className="flex-1 p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer">
+                                <FiBox className="text-2xl text-(--medium-shade)" />
+                                <span className="font-bold text-sm">Utwórz całkowicie nowy produkt</span>
+                            </button>
+                        </div>
 
-                            {actions.length > 0 && (
-                                <div className="mt-4">
-                                    <h3 className="font-bold text-lg mb-3 border-b border-white/10 pb-2">Zawartość Dostawy:</h3>
-                                    <div className="space-y-2">
-                                        {actions.map(action => (
-                                            <div key={action.id} className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-xl">
-                                                <div>
-                                                    <span className={`text-xs font-bold px-2 py-1 rounded border mr-3
-                                                        ${action.type === 'ADD_STOCK' ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-blue-500/10 text-blue-400 border-blue-500/20'}`}>
-                                                        {action.type === 'ADD_STOCK' ? '+ SZTUKI' : 'NOWY PRODUKT'}
-                                                    </span>
-                                                    <span className="font-bold">{action.productName}</span>
-                                                    {action.type === 'ADD_STOCK' && <span className="ml-2 text-white/50">+{action.quantity} szt.</span>}
-                                                </div>
-                                                <button onClick={() => removeAction(action.id)} className="text-red-400 hover:text-red-300 p-2 cursor-pointer"><FiTrash2 /></button>
+                        {actions.length > 0 && (
+                            <div className="mt-4">
+                                <h3 className="font-bold text-lg mb-3 border-b border-white/10 pb-2">Zawartość Dostawy:</h3>
+                                <div className="space-y-2">
+                                    {actions.map(action => (
+                                        <div key={action.id} className="flex justify-between items-center p-3 bg-white/5 border border-white/10 rounded-xl">
+                                            <div>
+                                                <span className={`text-xs font-bold px-2 py-1 rounded border mr-3
+                                                    ${action.type === 'ADD_STOCK' ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-blue-500/10 text-blue-400 border-blue-500/20'}`}>
+                                                    {action.type === 'ADD_STOCK' ? '+ SZTUKI' : 'NOWY PRODUKT'}
+                                                </span>
+                                                <span className="font-bold">{action.productName}</span>
+                                                {action.type === 'ADD_STOCK' && <span className="ml-2 text-white/50">+{action.quantity} szt.</span>}
                                             </div>
-                                        ))}
-                                    </div>
+                                            <button onClick={() => removeAction(action.id)} className="text-red-400 hover:text-red-300 p-2 cursor-pointer"><FiTrash2 /></button>
+                                        </div>
+                                    ))}
                                 </div>
-                            )}
-                        </>
-                    ) : (
-                        <form onSubmit={handleAddAction} className="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col gap-4 animate-in zoom-in-95">
-                            <div className="flex justify-between items-center mb-2 border-b border-white/10 pb-2">
-                                <h3 className="font-bold text-(--medium-shade)">
-                                    {activeForm === 'ADD_STOCK' ? 'Dodaj stan magazynowy' : 'Definiowanie nowego produktu'}
-                                </h3>
-                                <button type="button" onClick={closeSubForm} className="text-white/50 hover:text-white"><FiX /></button>
                             </div>
+                        )}
+                    </>
+                ) : (
+                    <form onSubmit={handleAddAction} className="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col gap-4 animate-in zoom-in-95">
+                        <div className="flex justify-between items-center mb-2 border-b border-white/10 pb-2">
+                            <h3 className="font-bold text-(--medium-shade)">
+                                {activeForm === 'ADD_STOCK' ? 'Dodaj stan magazynowy' : 'Definiowanie nowego produktu'}
+                            </h3>
+                            <button type="button" onClick={closeSubForm} className="text-white/50 hover:text-white"><FiX /></button>
+                        </div>
 
-                            {activeForm === 'ADD_STOCK' && (
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="text-xs font-bold opacity-70 uppercase">Wybierz produkt</label>
-                                        <select required value={selectedProductId} onChange={(e) => setSelectedProductId(e.target.value)} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade)">
-                                            <option value="" disabled>Z listy...</option>
-                                            {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="text-xs font-bold opacity-70 uppercase">Ilość dostarczona</label>
-                                        <input type="number" required min="1" name="stockQuantity" value={formData.stockQuantity} onChange={handleInputChange} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade)" />
-                                    </div>
+                        {activeForm === 'ADD_STOCK' && (
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <SomniumSelect 
+                                        label="Wybierz produkt"
+                                        placeholder="Z listy..."
+                                        options={products.map(p => ({ label: p.name, value: String(p.id) }))}
+                                        value={String(selectedProductId)}
+                                        onChange={(val) => setSelectedProductId(val)}
+                                    />
                                 </div>
-                            )}
+                                <div>
+                                    <label className="text-xs font-bold opacity-70 uppercase">Ilość dostarczona</label>
+                                    <input type="number" required min="1" name="stockQuantity" value={formData.stockQuantity} onChange={handleInputChange} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade)" />
+                                </div>
+                            </div>
+                        )}
 
-                            {activeForm === 'CREATE_PRODUCT' && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="md:col-span-2">
-                                        <label className="text-xs font-bold opacity-70 uppercase">Nazwa Produktu</label>
-                                        <input type="text" required name="name" value={formData.name} onChange={handleInputChange} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade)" />
-                                    </div>
-                                    <div>
-                                        <label className="text-xs font-bold opacity-70 uppercase">Kategoria</label>
-                                        <select name="category" value={formData.category} onChange={handleInputChange} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) font-bold">
-                                            <option value="Ziarna">Ziarna do kawy</option>
-                                            <option value="Zaparzacze">Zaparzacze</option>
-                                            <option value="Herbaty">Herbaty / Matcha</option>
-                                            <option value="Filtry">Filtry</option>
-                                            <option value="Kubki">Kubki</option>
-                                        </select>
-                                    </div>
+                        {activeForm === 'CREATE_PRODUCT' && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="md:col-span-2">
+                                    <label className="text-xs font-bold opacity-70 uppercase">Nazwa Produktu</label>
+                                    <input type="text" required name="name" value={formData.name} onChange={handleInputChange} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade)" />
+                                </div>
+                                <div>
+                                    <SomniumSelect 
+                                        label="Kategoria"
+                                        options={[
+                                            { label: "Ziarna do kawy", value: "Ziarna" },
+                                            { label: "Zaparzacze", value: "Zaparzacze" },
+                                            { label: "Herbaty / Matcha", value: "Herbaty" },
+                                            { label: "Filtry", value: "Filtry" },
+                                            { label: "Kubki", value: "Kubki" }
+                                        ]}
+                                        value={formData.category}
+                                        onChange={(val) => setFormData(prev => ({ ...prev, category: val }))}
+                                    />
+                                </div>
                                     <div className="grid grid-cols-2 gap-2">
                                         <div>
                                             <label className="text-xs font-bold opacity-70 uppercase">Cena (PLN)</label>

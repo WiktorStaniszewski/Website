@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "services/api"; 
 import { FiArrowLeft, FiUser, FiTruck, FiBox, FiCheckCircle, FiLink, FiDownload } from "react-icons/fi";
 import PasswordPromptModal from "src/components/PasswordPromptModal";
+import SomniumSelect from "components/ui/SomniumSelect";
+import AdminPageLayout from "./AdminPageLayout";
 
 export default function OrderDetails() {
   const { id } = useParams();
@@ -90,60 +92,43 @@ export default function OrderDetails() {
   if (!order) return <div className="text-red-400 text-center mt-20">Nie znaleziono zamówienia.</div>;
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 pb-5 pt-20">
-      <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
-        <div className="flex items-center gap-4">
-            <button 
-            onClick={() => navigate('/admin/orders')}
-            className="p-3 bg-[#46382E] border border-[#5C4A3D] hover:bg-[#5C4A3D] rounded-xl transition-colors cursor-pointer text-[#F2EAE1]"
-            >
-            <FiArrowLeft size={20} />
-            </button>
-            <div>
-            <h1 className="text-3xl font-serif font-bold text-[#F2EAE1]">
-                Zamówienie {order.trackingNumber || `#${order.id}`}
-            </h1>
-            <p className="text-sm opacity-50 mt-1 text-[#F2EAE1]/70">Złożone: {order.date}</p>
-            </div>
-        </div>
-
-        <div className="flex flex-col items-end gap-1">
-            <div className="flex items-center gap-2">
-                {statusMessage && (
-                    <span className={`text-xs font-bold flex items-center gap-1 animate-in fade-in ${statusMessage.includes('Błąd') ? 'text-red-400' : 'text-green-400'}`}>
-                        <FiCheckCircle /> {statusMessage}
-                    </span>
-                )}
-                
-                <select 
-                    value={order.status}
-                    onChange={handleStatusChange}
-                    disabled={updatingStatus || isTerminalState || isPendingPayment}
-                    className={`ml-auto px-4 py-2 bg-[#46382E] text-[#F2EAE1] border border-[#5C4A3D] rounded-full text-sm font-bold tracking-wider focus:outline-none focus:border-(--medium-shade)
-                        ${(updatingStatus || isTerminalState || isPendingPayment) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-                    `}
+    <AdminPageLayout
+        title={`Zamówienie ${order.trackingNumber || `#${order.id}`}`}
+        subtitle={`Złożone: ${order.date}`}
+        actions={
+            <div className="flex flex-col md:flex-row md:items-center gap-4 w-full md:w-auto">
+                <button 
+                    onClick={() => navigate('/admin/orders')}
+                    className="p-3 bg-[#46382E] border border-[#5C4A3D] hover:bg-[#5C4A3D] rounded-xl transition-colors cursor-pointer text-[#F2EAE1] flex items-center justify-center gap-2 font-bold"
                 >
-                    <option value="pending_payment" disabled className="hidden">Oczekuje na płatność</option>
-                    <option value="new" disabled={isOptionDisabled('new')} className={getOptionClass('new')}>
-                        Nowe (Przyjęte)
-                    </option>
-                    <option value="processing" disabled={isOptionDisabled('processing')} className={getOptionClass('processing')}>
-                        W realizacji (Spakowane)
-                    </option>
-                    <option value="shipped" disabled={isOptionDisabled('shipped')} className={getOptionClass('shipped')}>
-                        Wysłane
-                    </option>
-                    <option value="completed" disabled={isOptionDisabled('completed')} className={getOptionClass('completed')}>
-                        Dostarczone
-                    </option>
-                    <option value="cancelled" disabled={isOptionDisabled('cancelled')} className={getOptionClass('cancelled')}>
-                        Anulowane
-                    </option>
-                </select>
-            </div>
-        </div>
-      </div>
+                    <FiArrowLeft size={20} /> <span className="md:hidden">Wróć</span>
+                </button>
 
+                <div className="flex items-center gap-2 w-full md:w-auto justify-end">
+                    {statusMessage && (
+                        <span className={`text-xs font-bold flex items-center gap-1 animate-in fade-in ${statusMessage.includes('Błąd') ? 'text-red-400' : 'text-green-400'}`}>
+                            <FiCheckCircle /> {statusMessage}
+                        </span>
+                    )}
+                    
+                    <SomniumSelect 
+                        className="flex-1 md:min-w-[200px]"
+                        value={order.status}
+                        onChange={(val) => handleStatusChange({ target: { value: val } })}
+                        disabled={updatingStatus || isTerminalState || isPendingPayment}
+                        options={[
+                            { label: "Oczekuje na płatność", value: "pending_payment", disabled: true },
+                            { label: "Nowe (Przyjęte)", value: "new", disabled: isOptionDisabled('new') },
+                            { label: "W realizacji (Spakowane)", value: "processing", disabled: isOptionDisabled('processing') },
+                            { label: "Wysłane", value: "shipped", disabled: isOptionDisabled('shipped') },
+                            { label: "Dostarczone", value: "completed", disabled: isOptionDisabled('completed') },
+                            { label: "Anulowane", value: "cancelled", disabled: isOptionDisabled('cancelled') }
+                        ].filter(opt => opt.value !== 'pending_payment' || order.status === 'pending_payment')}
+                    />
+                </div>
+            </div>
+        }
+    >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         <div className="space-y-6 lg:col-span-1">
@@ -210,6 +195,33 @@ export default function OrderDetails() {
             </div>
         )}
 
+        {/* FEEDBACK SECTION */}
+        {order.feedback && (
+            <div className={`lg:col-span-1 border p-6 rounded-3xl shadow-lg relative overflow-hidden animate-in zoom-in-95 bg-[#46382E]
+                ${order.feedback.everythingOk ? 'border-green-500/30' : 'border-red-500/50 shadow-[0_0_20px_rgba(239,68,68,0.1)]'}`}>
+                <div className={`absolute top-0 right-0 w-32 h-32 rounded-full opacity-10 blur-2xl pointer-events-none ${order.feedback.everythingOk ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2 border-b border-[#5C4A3D] pb-3 text-[#F2EAE1]">
+                  <FiCheckCircle className={order.feedback.everythingOk ? 'text-green-400' : 'text-red-400'} /> 
+                  Opinia Klienta
+                </h2>
+                <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                        <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest ${order.feedback.everythingOk ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                            {order.feedback.everythingOk ? 'Wszystko OK' : 'Zgłoszono uwagi'}
+                        </div>
+                        <span className="text-[10px] text-white/30 uppercase tracking-widest font-mono">
+                            {new Date(order.feedback.submittedAt).toLocaleString('pl-PL')}
+                        </span>
+                    </div>
+                    {order.feedback.comment && (
+                        <div className={`p-4 bg-black/20 rounded-2xl border italic text-sm text-white/80 ${order.feedback.everythingOk ? 'border-white/5' : 'border-red-500/20 text-red-100/70'}`}>
+                            "{order.feedback.comment}"
+                        </div>
+                    )}
+                </div>
+            </div>
+        )}
+
         <div className="lg:col-span-2 bg-[#46382E] border border-[#5C4A3D] p-6 rounded-3xl shadow-lg">
           <h2 className="text-xl font-bold mb-6 flex items-center gap-2 border-b border-[#5C4A3D] pb-3 text-[#F2EAE1]">
             <FiBox className="text-(--medium-shade)" /> Zamówione Produkty
@@ -259,6 +271,6 @@ export default function OrderDetails() {
           title="Anulowanie zamówienia"
           description="Podaj hasło administratora, aby potwierdzić anulowanie zamówienia."
       />
-    </div>
+    </AdminPageLayout>
   );
 }

@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "services/api";
-import { FaArrowLeft, FaBox, FaTruck, FaMapMarkerAlt, FaSearchLocation, FaUser, FaCoffee, FaCreditCard } from "react-icons/fa";
+import { getProductImageUrl } from 'src/utils/imageHelpers';
+import { FaArrowLeft, FaBox, FaTruck, FaMapMarkerAlt, FaSearchLocation, FaUser, FaCoffee, FaCreditCard, FaSpinner } from "react-icons/fa";
 import PaymentSimulationModal from "src/components/PaymentSimulationModal";
 import ConfirmModal from "src/components/ConfirmModal";
+
 
 export default function UserOrderDetails() {
   const { id } = useParams();
@@ -13,6 +15,10 @@ export default function UserOrderDetails() {
   const [simulationModalOpen, setSimulationModalOpen] = useState(false);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [cancelling, setCancelling] = useState(false);
+  
+  const [feedback, setFeedback] = useState({ comment: "", everythingOk: true });
+  const [submittingFeedback, setSubmittingFeedback] = useState(false);
+  const [feedbackSubmitted, setFeedbackSubmitted] = useState(!!order?.feedback);
 
   const executeCancelOrder = async () => {
     setCancelModalOpen(false);
@@ -40,6 +46,39 @@ export default function UserOrderDetails() {
     };
     fetchOrderDetails();
   }, [id]);
+
+  useEffect(() => {
+    if (order?.feedback) {
+        setFeedbackSubmitted(true);
+    }
+  }, [order]);
+
+  const handleFeedbackSubmit = async (e) => {
+      e.preventDefault();
+      setSubmittingFeedback(true);
+      try {
+          const res = await api.put(`orders/${order.id}/feedback`, null, feedback);
+          setOrder(res.order);
+          setFeedbackSubmitted(true);
+      } catch (err) {
+          alert(err.message || "Błąd podczas przesyłania opinii");
+      } finally {
+          setSubmittingFeedback(false);
+      }
+  };
+
+  const canLeaveFeedback = () => {
+    if (order?.status !== 'completed') return false;
+    if (order?.feedback) return false;
+    
+    const history = Array.isArray(order.statusHistory) ? order.statusHistory : [];
+    const completedHistory = history.find(h => h.status === 'completed');
+    if (!completedHistory) return false;
+    
+    const completedDate = new Date(completedHistory.timestamp);
+    const diffDays = (new Date() - completedDate) / (1000 * 60 * 60 * 24);
+    return diffDays <= 3;
+  };
 
   if (loading) return (
       <div className="min-h-screen pt-40 flex flex-col items-center justify-center text-(--medium-shade) font-serif text-2xl gap-4">
@@ -94,8 +133,79 @@ export default function UserOrderDetails() {
           </div>
         </div>
 
-        {/* TRACKING BANNER */}
-        {order.status !== 'cancelled' && (
+        {/* FEEDBACK SECTION */}
+        {order.status === 'completed' && (
+            <div className={`bg-[#24201d]/70 border ${feedbackSubmitted ? 'border-green-500/30' : 'border-(--medium-shade)/50'} rounded-3xl p-8 shadow-xl relative overflow-hidden transition-all duration-500`}>
+                <div className={`absolute top-0 right-0 w-64 h-64 ${feedbackSubmitted ? 'bg-green-500' : 'bg-(--medium-shade)'} rounded-full opacity-5 blur-3xl pointer-events-none`}></div>
+                
+                {feedbackSubmitted ? (
+                    <div className="text-center py-4 animate-in fade-in zoom-in-95">
+                        <div className="w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-500/30">
+                            <FaCoffee size={24} />
+                        </div>
+                        <h3 className="text-2xl font-serif font-bold text-white mb-2">Dziękujemy za Twoją opinię!</h3>
+                        <p className="text-white/60">Twoje potwierdzenie pomaga nam dbać o najwyższą jakość dostaw Somnium.</p>
+                        {order.feedback?.comment && (
+                            <div className="mt-6 p-4 bg-black/20 rounded-2xl italic text-sm text-white/80 max-w-lg mx-auto border border-white/5">
+                                "{order.feedback.comment}"
+                            </div>
+                        )}
+                    </div>
+                ) : canLeaveFeedback() ? (
+                    <form onSubmit={handleFeedbackSubmit} className="relative z-10">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-white/5 pb-6">
+                            <div>
+                                <h3 className="text-2xl font-serif font-bold text-white mb-1">Dostawa zakończona!</h3>
+                                <p className="text-sm text-white/50">Potwierdź czy wszystko dotarło zgodnie z oczekiwaniami.</p>
+                            </div>
+                            <div className="flex bg-black/30 p-1.5 rounded-2xl border border-white/5">
+                                <button 
+                                    type="button"
+                                    onClick={() => setFeedback({ ...feedback, everythingOk: true })}
+                                    className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${feedback.everythingOk ? 'bg-green-500 text-white shadow-lg' : 'text-white/30 hover:text-white/60'}`}
+                                >
+                                    Wszystko OK
+                                </button>
+                                <button 
+                                    type="button"
+                                    onClick={() => setFeedback({ ...feedback, everythingOk: false })}
+                                    className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${!feedback.everythingOk ? 'bg-red-500 text-white shadow-lg' : 'text-white/30 hover:text-white/60'}`}
+                                >
+                                    Są uwagi
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <label className="text-xs uppercase tracking-widest text-white/40 font-bold ml-1">Komentarz (opcjonalnie)</label>
+                            <textarea 
+                                value={feedback.comment}
+                                onChange={(e) => setFeedback({ ...feedback, comment: e.target.value })}
+                                placeholder="Podziel się swoimi wrażeniami z tej dostawy..."
+                                className="w-full bg-black/30 border border-white/10 rounded-2xl p-5 text-white focus:outline-none focus:border-(--medium-shade) transition-all resize-none min-h-[120px] placeholder:text-white/10"
+                            />
+                        </div>
+
+                        <div className="mt-8 flex justify-end">
+                            <button 
+                                type="submit"
+                                disabled={submittingFeedback}
+                                className="bg-(--medium-shade) hover:brightness-110 text-[#1a1715] px-10 py-4 rounded-2xl font-bold uppercase tracking-widest text-sm transition-all cursor-pointer shadow-lg active:scale-95 disabled:opacity-50 flex items-center gap-3"
+                            >
+                                {submittingFeedback ? <FaSpinner className="animate-spin" /> : 'Prześlij opinię'}
+                            </button>
+                        </div>
+                    </form>
+                ) : (
+                    <div className="text-center py-4 opacity-50 italic">
+                        Czas na przesłanie opinii (3 dni) wygasł.
+                    </div>
+                )}
+            </div>
+        )}
+
+        {/* TRACKING BANNER (Only if not completed or just completed) */}
+        {order.status !== 'cancelled' && order.status !== 'completed' && (
             <div className="bg-linear-to-r from-[#24201d]/70 to-[#1a1715]/70 border border-(--medium-shade)/30 rounded-3xl p-8 flex flex-col sm:flex-row justify-between items-center gap-6 shadow-[0_10px_40px_rgba(0,0,0,0.4)] relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-(--medium-shade) rounded-full opacity-10 blur-3xl pointer-events-none"></div>
                 <div className="relative z-10 text-center sm:text-left">
@@ -190,10 +300,7 @@ export default function UserOrderDetails() {
           
           <div className="flex flex-col gap-5">
             {order.items?.map((item, idx) => {
-               const imageName = item.image || item.img;
-               const finalImageSrc = imageName?.includes('images/')
-                   ? (imageName.startsWith('/') ? imageName : `/${imageName}`)
-                   : `images/tempProducts/${imageName}`;
+               const finalImageSrc = getProductImageUrl(item.image || item.img);
 
                return (
                 <div key={idx} className="flex flex-col sm:flex-row items-start sm:items-center gap-6 bg-[#1a1715]/50 p-5 rounded-2xl border border-white/5 hover:border-(--medium-shade)/30 transition-colors group">

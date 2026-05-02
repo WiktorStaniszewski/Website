@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FiArrowLeft, FiAlertTriangle, FiMail, FiCheck, FiCoffee, FiInfo } from "react-icons/fi";
 import { AddToCartButton } from "./components/ShopButtons";
+import { getProductImageUrl } from 'src/utils/imageHelpers';
 import api from 'services/api';
 import { useAuth } from 'context/AuthProvider';
 
@@ -65,11 +66,7 @@ export default function ProductPage() {
     const isSoldOut = available <= 0;
     const isLowStock = available > 0 && available <= 5;
 
-    const getImageUrl = (imageName) => {
-        if (!imageName) return 'https://placehold.co/400x400?text=Brak+foto';
-        if (/^\d{10,}-/.test(imageName)) return `http://localhost:5000/images/products/${imageName}`;
-        return `images/tempProducts/${imageName}`;
-    };
+    const getImageUrl = (imageName) => getProductImageUrl(imageName);
 
     const SpecItem = ({ label, value }) => {
         if (!value) return null;
@@ -107,7 +104,6 @@ export default function ProductPage() {
                                 Wyprzedane
                             </div>
                         )}
-                        {/* Subtelny glow pod zdjęciem */}
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-(--medium-shade) rounded-full opacity-20 blur-[80px] pointer-events-none"></div>
                         
                         <img 
@@ -125,7 +121,6 @@ export default function ProductPage() {
                         <p className="text-xl text-(--medium-shade) font-bold">{product.company}</p>
                     </div>
 
-                    {/* Profil Sensoryczny */}
                     {product.flavours && (
                         <div>
                             <h3 className="text-xs uppercase tracking-widest text-(--font-color)/50 font-bold mb-3 flex items-center gap-2"><FiCoffee /> Profil Sensoryczny</h3>
@@ -161,7 +156,6 @@ export default function ProductPage() {
                         </div>
                     )}
 
-                    {/* Sekcja Desktop Add to Cart (ukryta na mobile, przeniesiona na sticky bar) */}
                     <div className="hidden lg:block mt-auto border-t border-white/10 pt-8">
                         <div className="flex justify-between items-end mb-6">
                             <span className="text-sm uppercase text-(--font-color)/50 tracking-widest font-bold">Cena</span>

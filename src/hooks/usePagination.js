@@ -19,6 +19,7 @@ export default function usePagination(items, { itemsPerPage = 10, storageKey = n
     });
 
     const prevFingerprintRef = useRef(filterFingerprint);
+    const isMounted = useRef(false);
 
     useEffect(() => {
         const currentFingerprintStr = JSON.stringify(filterFingerprint);
@@ -46,10 +47,21 @@ export default function usePagination(items, { itemsPerPage = 10, storageKey = n
         items.slice(startIndex, startIndex + itemsPerPage),
     [items, startIndex, itemsPerPage]);
 
-    const goToPage = (page) => {
+    const goToPage = (page, scrollBehavior = 'smooth') => {
         const clamped = Math.max(1, Math.min(page, totalPages));
-        setCurrentPage(clamped);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        if (clamped !== safePage) {
+            setCurrentPage(clamped);
+        }
+
+        if (scrollBehavior && scrollBehavior !== 'none') {
+            setTimeout(() => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: scrollBehavior === 'none' ? 'auto' : scrollBehavior
+                });
+            }, 50);
+        }
     };
 
     const getPageNumbers = () => {

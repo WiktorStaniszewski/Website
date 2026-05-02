@@ -7,7 +7,7 @@ import { useViewport } from 'hooks/useViewport';
 import { useCart } from 'src/context/CartProvider';
 import SearchInput from './SearchInput';
 
-export default function Navigation({filters, toggleFilterMenu}) {
+function Navigation({filters, toggleFilterMenu}) {
   const { isMobile } = useViewport();
   const { cartCount } = useCart();
   
@@ -83,3 +83,5 @@ export default function Navigation({filters, toggleFilterMenu}) {
       </nav> 
   )
 }
+
+export default React.memo(Navigation);

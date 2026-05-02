@@ -5,7 +5,7 @@ export default function ConfirmModal({ isOpen, onClose, onConfirm, title, descri
     if (!isOpen) return null;
 
     return createPortal(
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+        <div className="fixed inset-0 z-10000 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
             <div className="bg-[#24201d] w-full max-w-sm rounded-3xl border border-white/10 shadow-2xl p-6 flex flex-col items-center text-center animate-in zoom-in-95 relative">
                 <button 
                     onClick={onClose} 
@@ -27,7 +27,7 @@ export default function ConfirmModal({ isOpen, onClose, onConfirm, title, descri
                     <button type="button" onClick={onClose} className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold transition-colors cursor-pointer">
                         {cancelText}
                     </button>
-                    <button type="button" onClick={onConfirm} className="flex-1 py-3 font-bold rounded-xl transition-all cursor-pointer shadow-lg bg-[var(--medium-shade)] hover:brightness-110 text-[#24201d]">
+                    <button type="button" onClick={onConfirm} className="flex-1 py-3 font-bold rounded-xl transition-all cursor-pointer shadow-lg bg-(--medium-shade) hover:brightness-110 text-[#24201d]">
                         {confirmText}
                     </button>
                 </div>

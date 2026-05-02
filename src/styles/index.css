@@ -52,3 +52,26 @@ code {
     --font-h2: 30px;
     --font-h1: 48px;
 }
+
+.custom-scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.custom-scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.pb-safe-area {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.skeleton-bg {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes skeleton-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .5; }
+}

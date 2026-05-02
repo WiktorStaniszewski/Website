@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import api from 'src/services/api';
 import { FiTruck, FiBox, FiArrowLeft, FiClock, FiPlusCircle, FiEdit, FiFileText, FiInfo, FiEye, FiMapPin, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import usePagination from 'src/hooks/usePagination';
+import AdminPageLayout, { SkeletonRow } from './AdminPageLayout';
 
 import DeliveryModal from './DeliveryModal'; 
 
@@ -71,18 +72,21 @@ export default function AdminDeliveries() {
         }
     };
 
-    if (loading) return <div className="text-(--medium-shade) font-bold text-center mt-20">Ładowanie historii dostaw...</div>;
-
+    
     if (selectedDelivery) {
         return (
-            <div className="space-y-6 animate-in slide-in-from-right-8 duration-500 overflow-x-auto not-lg:pt-20">
-                <button 
-                    onClick={() => setSelectedDelivery(null)}
-                    className="flex items-center gap-2 text-[#F2EAE1]/60 hover:text-(--medium-shade) transition-colors font-bold cursor-pointer w-max"
-                >
-                    <FiArrowLeft /> Wróć do listy dostaw
-                </button>
-
+            <AdminPageLayout
+                title={selectedDelivery.name}
+                subtitle={`Zarejestrowano: ${new Date(selectedDelivery.createdAt).toLocaleString('pl-PL')}`}
+                actions={
+                    <button 
+                        onClick={() => setSelectedDelivery(null)}
+                        className="flex items-center justify-center gap-2 px-5 py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl transition-all cursor-pointer font-bold w-full md:w-auto"
+                    >
+                        <FiArrowLeft /> Powrót
+                    </button>
+                }
+            >
                 <div className="bg-[#46382E] border border-[#5C4A3D] rounded-3xl p-6 md:p-8 shadow-xl">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#5C4A3D] pb-6 mb-6">
                         <div>
@@ -144,80 +148,89 @@ export default function AdminDeliveries() {
                     onClose={() => setIsDeliveryModalOpen(false)} 
                     onSuccess={() => fetchDeliveries()} 
                 />
-            </div>
+            </AdminPageLayout>
         );
     }
 
     return (
-        <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500 relative not-lg:pt-20 overflow-x-auto pb-10">
-            
-            <div className="flex justify-between items-end">
-                <div>
-                    <h1 className="text-3xl font-serif font-bold text-[#F2EAE1]">Historia Dostaw</h1>
-                    <p className="text-[#F2EAE1]/60 font-medium text-sm mt-1">Śledź wszystkie przyjęcia i zmiany w magazynie</p>
-                </div>
+        <AdminPageLayout
+            title="Historia Dostaw"
+            subtitle="Śledź wszystkie przyjęcia i zmiany w magazynie"
+            actions={
                 <button
                     onClick={() => setIsDeliveryModalOpen(true)}
-                    className="bg-(--medium-shade) hover:brightness-110 text-[#24201d] px-5 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer w-12 h-12 sm:w-auto sm:h-auto shrink-0"
+                    className="bg-(--medium-shade) hover:brightness-110 text-[#24201d] px-5 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer w-full md:w-auto shrink-0"
                 >
-                    <FiTruck size={20} className="shrink-0" /> <span className="hidden sm:inline">Rejestruj Dostawę</span>
+                    <FiTruck size={20} className="shrink-0" /> <span className="">Rejestruj Dostawę</span>
                 </button>
-            </div>
-
-            <div className="rounded-3xl border border-[#5C4A3D] overflow-hidden bg-[#46382E] shadow-xl">
-                <table className="w-full text-left text-sm text-[#F2EAE1]">
-                    <thead className="bg-[#352A21] text-(--medium-shade) uppercase text-xs tracking-wider border-b border-[#5C4A3D]">
-                        <tr>
-                            <th className="p-6 font-bold">DATA</th>
-                            <th className="p-6 font-bold">IDENTYFIKATOR DOSTAWY</th>
-                            <th className="p-6 font-bold">CEL DOSTAWY</th>
-                            <th className="p-6 font-bold">ZMIANY</th>
-                            <th className="p-6 font-bold hidden md:table-cell">NOTATKI</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#846f60] bg-(--medium-shade)/10">
-                        {deliveries.length === 0 && (
-                            <tr><td colSpan="4" className="p-8 text-center text-[#F2EAE1]/50">Brak zarejestrowanych dostaw.</td></tr>
-                        )}
-                        {visibleItems.map((delivery) => (
-                            <tr 
-                                key={delivery.id} 
-                                onClick={() => setSelectedDelivery(delivery)}
-                                onMouseMove={(e) => handleMouseMove(e, delivery)}
-                                onMouseLeave={handleMouseLeave}
-                                className="hover:bg-[#5C4A3D]/80 transition-colors cursor-pointer group"
-                            >
-                                <td className="p-6 text-[#F2EAE1]/60 font-medium whitespace-nowrap">
-                                    {new Date(delivery.createdAt).toLocaleDateString('pl-PL', { day: '2-digit', month: 'short', year: 'numeric' })}
-                                </td>
-                                <td className="p-6 font-bold text-[#F2EAE1] flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-lg bg-[#352A21] border border-[#5C4A3D] flex items-center justify-center group-hover:bg-(--medium-shade)/20 group-hover:text-(--medium-shade) transition-colors">
-                                        <FiTruck />
-                                    </div>
-                                    {delivery.name}
-                                </td>
-                                <td className="p-6 font-bold text-[#F2EAE1]/80">
-                                    {delivery.Location ? (
-                                        <span className="flex items-center gap-2">
-                                            {delivery.Location.type === 'warehouse' ? <FiBox className="text-(--medium-shade)" /> : <FiMapPin className="text-(--medium-shade)" />}
-                                            {delivery.Location.name}
-                                        </span>
-                                    ) : "Brak danych"}
-                                </td>
-                                <td className="p-6 font-mono font-bold text-(--medium-shade)">
-                                    {delivery.DeliveryActions?.length || 0} operacji
-                                </td>
-                                <td className="p-6 text-[#F2EAE1]/50 truncate max-w-xs hidden md:table-cell">
-                                    {delivery.notes || "—"}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            }
+        >
+            <div className="rounded-[2.5rem] border border-white/5 overflow-hidden bg-[#24201d]/60 backdrop-blur-xl shadow-xl p-2 sm:p-8 min-h-[400px]">
+                {loading ? (
+                    <SkeletonRow count={5} />
+                ) : (
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left text-sm text-[#F2EAE1] min-w-[700px]">
+                            <thead className="text-(--medium-shade) uppercase text-[10px] tracking-[0.3em] font-black border-b border-white/5">
+                                <tr>
+                                    <th className="p-6">Data</th>
+                                    <th className="p-6">Identyfikator</th>
+                                    <th className="p-6">Cel Dostawy</th>
+                                    <th className="p-6">Zmiany</th>
+                                    <th className="p-6 hidden md:table-cell">Notatki</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/5">
+                                {deliveries.length === 0 && (
+                                    <tr><td colSpan="5" className="p-8 text-center text-[#F2EAE1]/30 italic">Brak zarejestrowanych dostaw.</td></tr>
+                                )}
+                                {visibleItems.map((delivery) => (
+                                    <tr 
+                                        key={delivery.id} 
+                                        onClick={() => setSelectedDelivery(delivery)}
+                                        onMouseMove={(e) => handleMouseMove(e, delivery)}
+                                        onMouseLeave={handleMouseLeave}
+                                        className="hover:bg-white/5 transition-all duration-300 cursor-pointer group"
+                                    >
+                                        <td className="p-6 text-white/50 font-bold whitespace-nowrap">
+                                            {new Date(delivery.createdAt).toLocaleDateString('pl-PL', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                        </td>
+                                        <td className="p-6">
+                                            <div className="flex items-center gap-3">
+                                                <div className="hidden sm:flex w-10 h-10 rounded-xl bg-white/5 border border-white/10 items-center justify-center group-hover:bg-(--medium-shade) group-hover:text-[#24201d] transition-all">
+                                                    <FiTruck size={18} />
+                                                </div>
+                                                <span className="font-bold text-base">{delivery.name}</span>
+                                            </div>
+                                        </td>
+                                        <td className="p-6">
+                                            {delivery.Location ? (
+                                                <div className="flex items-center gap-2">
+                                                    <div className="hidden sm:flex p-1.5 rounded-md bg-white/5 text-(--medium-shade)">
+                                                        {delivery.Location.type === 'warehouse' ? <FiBox size={14} /> : <FiMapPin size={14} />}
+                                                    </div>
+                                                    <span className="font-bold text-white/80">{delivery.Location.name}</span>
+                                                </div>
+                                            ) : "—"}
+                                        </td>
+                                        <td className="p-6">
+                                            <span className="px-3 py-1 bg-(--medium-shade)/10 text-(--medium-shade) rounded-full text-[10px] font-black uppercase tracking-widest">
+                                                {delivery.DeliveryActions?.length || 0} operacji
+                                            </span>
+                                        </td>
+                                        <td className="p-6 text-white/30 text-xs italic truncate max-w-xs hidden md:table-cell">
+                                            {delivery.notes || "—"}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
 
             {/* Paginacja */}
-            {totalPages > 1 && (
+            {!loading && totalPages > 1 && (
                 <div className="flex justify-center items-center mt-12 gap-2 animate-in fade-in duration-500">
                     <button
                         onClick={() => goToPage(currentPage - 1)}
@@ -303,6 +316,6 @@ export default function AdminDeliveries() {
                 onClose={() => setIsDeliveryModalOpen(false)} 
                 onSuccess={() => fetchDeliveries()} 
             />
-        </div>
+        </AdminPageLayout>
     );
 }

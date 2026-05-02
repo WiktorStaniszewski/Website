@@ -10,6 +10,8 @@ const HeroSection = () => (
             <img
                 src="images/tlo1.jpg"
                 alt="Somnium Cafe Interior"
+                fetchPriority="high"
+                loading="eager"
                 className='w-full h-full object-cover object-center scale-105 animate-in fade-in duration-1000'
             />
             <div className="absolute inset-0 bg-linear-to-t from-(--darker-bg) via-(--darker-bg)/40 to-black/20" />
@@ -58,7 +60,7 @@ const HeroSection = () => (
     </div>
 );
 
-const FeatureIcons = () => (
+const FeatureIcons = React.memo(() => (
     <div className="w-full py-12 border-b border-white/10 relative z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.4)]">
         <div className="flex flex-wrap justify-center gap-8 md:gap-24 text-(--font-color)">
             <div className="flex flex-col items-center gap-2 group cursor-default">
@@ -81,9 +83,9 @@ const FeatureIcons = () => (
             </div>
         </div>
     </div>
-);
+));
 
-const CategoryCard = ({ title, icon: Icon, to, description }) => (
+const CategoryCard = React.memo(({ title, icon: Icon, to, description }) => (
     <NavLink
         to={to}
         className="group relative flex flex-col items-center p-8 bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl transition-all duration-500 hover:bg-white/10 hover:border-(--medium-shade)/50 hover:-translate-y-2 overflow-hidden cursor-pointer"
@@ -98,7 +100,7 @@ const CategoryCard = ({ title, icon: Icon, to, description }) => (
             Sprawdź <FiArrowRight />
         </div>
     </NavLink>
-);
+));
 
 const ShopCategoriesSection = () => {
     const categories = [
@@ -151,7 +153,7 @@ const ShopCategoriesSection = () => {
     );
 };
 
-const QuestionField = ({ title, content, isOpen, onClick }) => {
+const QuestionField = React.memo(({ title, content, isOpen, onClick }) => {
     return (
         <div
             onClick={onClick}
@@ -181,9 +183,9 @@ const QuestionField = ({ title, content, isOpen, onClick }) => {
             </div>
         </div>
     )
-}
+});
 
-const FAQSection = () => {
+const FAQSection = React.memo(() => {
     const [openIndex, setOpenIndex] = useState(0);
 
     const questions = [
@@ -228,7 +230,7 @@ const FAQSection = () => {
             </div>
         </div>
     );
-}
+});
 
 export default function Home() {
     return (

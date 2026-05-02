@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 import { useCart } from 'context/CartProvider';
+import { getProductImageUrl } from 'src/utils/imageHelpers';
+import ConfirmModal from 'src/components/ConfirmModal';
 
 import { FiTrash2, FiMinus, FiPlus, FiArrowLeft, FiAlertCircle, FiX } from "react-icons/fi";
 import { FaSpinner } from "react-icons/fa";
@@ -12,14 +14,9 @@ export default function Cart() {
 
   const [isCheckingStock, setIsCheckingStock] = useState(false);
   const [missingItems, setMissingItems] = useState([]);
+  const [confirmRemove, setConfirmRemove] = useState({ isOpen: false, itemId: null, itemName: "" });
 
-  const getImageUrl = (imageName) => {
-    if (!imageName) return 'https://placehold.co/150x150?text=Brak+foto';
-    if (/^\d{10,}-/.test(imageName)) {
-        return `http://localhost:5000/images/products/${imageName}`;
-    }
-    return `images/tempProducts/${imageName}`;
-  };
+  const getImageUrl = (imageName) => getProductImageUrl(imageName);
 
   const handleProceedToCheckout = async () => {
     setIsCheckingStock(true);
@@ -57,6 +54,21 @@ export default function Cart() {
     } finally {
         setIsCheckingStock(false);
     }
+  };
+
+  const handleRemoveRequest = (item) => {
+    setConfirmRemove({
+      isOpen: true,
+      itemId: item.id,
+      itemName: item.name || item.title
+    });
+  };
+
+  const confirmRemoval = () => {
+    if (confirmRemove.itemId) {
+      removeFromCart(confirmRemove.itemId);
+    }
+    setConfirmRemove({ isOpen: false, itemId: null, itemName: "" });
   };
 
   if (loading) {
@@ -133,7 +145,7 @@ export default function Cart() {
                 </div>
 
                 <button 
-                  onClick={() => removeFromCart(item.id)}
+                  onClick={() => handleRemoveRequest(item)}
                   className="text-gray-400 hover:text-red-500 transition-colors p-2 cursor-pointer hover:bg-red-50 rounded-full"
                   title="Usuń produkt"
                 >
@@ -222,6 +234,16 @@ export default function Cart() {
         </div>,
         document.body
       )}
+
+      <ConfirmModal 
+        isOpen={confirmRemove.isOpen}
+        onClose={() => setConfirmRemove({ isOpen: false, itemId: null, itemName: "" })}
+        onConfirm={confirmRemoval}
+        title="Usuń z koszyka"
+        description={`Czy na pewno chcesz usunąć produkt "${confirmRemove.itemName}" z koszyka?`}
+        confirmText="Usuń"
+        cancelText="Anuluj"
+      />
     </div>
   );
 }

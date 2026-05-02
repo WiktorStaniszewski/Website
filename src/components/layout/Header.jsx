@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from 'src/context/AuthProvider';
 import { useCart } from 'src/context/CartProvider'; 
 
-import { FaBars, FaTimes, FaShoppingBag, FaUser, FaSignInAlt, FaCog } from "react-icons/fa";
+import { FaBars, FaTimes, FaShoppingBag, FaUser, FaSignInAlt, FaCog, FaSignOutAlt } from "react-icons/fa";
 
 export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const { isAuthenticated, isAdmin } = useAuth();
+    const { isAuthenticated, isAdmin, logout } = useAuth();
+    const navigate = useNavigate();
     
     const { cartCount = 0 } = useCart() || {};
 
@@ -39,22 +40,24 @@ export default function Header() {
         setIsMobileMenuOpen(false);
     }, [location]);
 
-    const navLinks = [
-        { name: "Home", path: "/" },
-        { name: "Menu", path: "/menu" },
-        { name: "Sklep", path: "/shop" },
-        { name: "O nas", path: "/about" },
-        { name: "Rekrutacja", path: "/recruitment" },
-    ];
-
-    if (isAdmin) {
-        navLinks.push({ name: "Dashboard", path: "/admin" });
-    }
+    const navLinks = React.useMemo(() => {
+        const links = [
+            { name: "Home", path: "/" },
+            { name: "Menu", path: "/menu" },
+            { name: "Sklep", path: "/shop" },
+            { name: "O nas", path: "/about" },
+            { name: "Rekrutacja", path: "/recruitment" },
+        ];
+        if (isAdmin) {
+            links.push({ name: "Dashboard", path: "/admin" });
+        }
+        return links;
+    }, [isAdmin]);
 
     return (
         <>
             <header 
-                className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 border-b ${
+                className={`fixed top-0 left-0 w-full z-60 transition-all duration-500 border-b ${
                     isScrolled 
                     ? "bg-[#24201d]/80 backdrop-blur-md py-3 border-white/10 shadow-lg" 
                     : "bg-transparent py-6 border-transparent"
@@ -101,7 +104,7 @@ export default function Header() {
 
                         <NavLink 
                             to={isAuthenticated ? "/account" : "/login"} 
-                            className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-(--medium-shade) hover:border-(--medium-shade) hover:text-[#24201d] transition-all duration-300 group"
+                            className="flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-(--medium-shade) hover:border-(--medium-shade) hover:text-[#24201d] transition-all duration-300 group min-w-[100px] cursor-pointer"
                         >
                             {isAuthenticated ? <FaUser /> : <FaSignInAlt />}
                             <span className="text-xs uppercase font-bold tracking-wider">
@@ -120,7 +123,7 @@ export default function Header() {
             </header>
 
             <div 
-                className={`fixed inset-0 z-40 bg-[#24201d] transition-all duration-500 ease-in-out lg:hidden flex flex-col justify-center items-center gap-8 ${
+                className={`fixed inset-0 z-50 bg-[#24201d] transition-all duration-500 ease-in-out lg:hidden flex flex-col justify-center items-center gap-8 ${
                     isMobileMenuOpen 
                     ? "opacity-100 visible translate-y-0" 
                     : "opacity-0 invisible -translate-y-10"
@@ -165,6 +168,18 @@ export default function Header() {
                             {isAuthenticated ? "Profil" : "Zaloguj"}
                         </span>
                     </NavLink>
+
+                    {isAuthenticated && (
+                        <button 
+                            onClick={() => { logout(); navigate("/"); }}
+                            className="flex flex-col items-center gap-2 text-red-400/70 hover:text-red-400 transition-colors cursor-pointer"
+                        >
+                            <div className="p-4 bg-red-500/5 rounded-full border border-red-500/10">
+                                <FaSignOutAlt size={20} />
+                            </div>
+                            <span className="text-xs uppercase tracking-widest opacity-70">Wyloguj</span>
+                        </button>
+                    )}
                 </div>
             </div>
         </>

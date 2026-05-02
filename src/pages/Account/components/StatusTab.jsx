@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import api from "src/services/api";
 import { FaSpinner, FaSearch, FaBoxOpen, FaChevronDown } from "react-icons/fa";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "src/context/AuthProvider";
 
 export default function StatusTab() {
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
+    const location = useLocation();
     const urlTrackingNumber = searchParams.get("track") || "";
 
     const [searchId, setSearchId] = useState(urlTrackingNumber);
@@ -25,6 +27,12 @@ export default function StatusTab() {
 
         try {
             const res = await api.get(`orders/track/${trackingNumber.trim()}`);
+            
+            if (res.status === 'completed' && res.id) {
+                navigate(`/account/orders/${res.id}`);
+                return;
+            }
+
             setTrackingResult(res);
         } catch (err) {
             setError("Nie znaleziono zamówienia o podanym numerze.");

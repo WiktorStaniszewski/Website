@@ -17,7 +17,10 @@ const getSessionId = () => {
 };
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+    const saved = localStorage.getItem('somnium_cart');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [loading, setLoading] = useState(true);
   const [popupMessage, setPopupMessage] = useState(null);
 
@@ -27,7 +30,7 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     let isMounted = true; 
     const fetchOrMergeCart = async () => {
-      setLoading(true);
+      if (cartItems.length === 0) setLoading(true);
       try {
         let initialItems = [];
         if (isAuthenticated && localStorage.getItem('somnium_token')) {
@@ -74,7 +77,6 @@ export const CartProvider = ({ children }) => {
     return true; 
   };
 
-  // NAPRAWIANIE KOSZYKA (Automatycznie modyfikuje ilości lub wyrzuca produkty na podstawie danych z serwera)
   const correctCartItems = async (missingItemsArray) => {
       let newItems = [...cartItems];
       missingItemsArray.forEach(missing => {
@@ -99,7 +101,6 @@ export const CartProvider = ({ children }) => {
         const maxAvailable = prodData.stockQuantity || 0;
 
         if (existingItem) {
-            // SPRAWDZAMY CZY ŁĄCZNA ILOŚĆ NIE PRZEKRACZA MAX
             if (existingItem.quantity + 1 > maxAvailable) {
                 setPopupMessage({ title: "Brak na magazynie", desc: `Nie możesz dodać więcej! W magazynie zostało tylko ${maxAvailable} szt.` });
                 return false;

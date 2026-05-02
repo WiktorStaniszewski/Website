@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { FiChevronDown, FiCheck, FiX } from 'react-icons/fi';
 import ReactSlider from 'react-slider';
 
-const Dropdown = ({ label, children, isOpen, onToggle, isActive }) => {
+const Dropdown = React.memo(({ label, children, isOpen, onToggle, isActive }) => {
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -44,9 +44,9 @@ const Dropdown = ({ label, children, isOpen, onToggle, isActive }) => {
       )}
     </div>
   );
-};
+});
 
-export default function FilterBar({ filters }) {
+function FilterBar({ filters }) {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   const toggleDropdown = useCallback((name) => {
@@ -265,3 +265,5 @@ export default function FilterBar({ filters }) {
     </div>
   );
 }
+
+export default React.memo(FilterBar);

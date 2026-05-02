@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { AddToCartButton } from './ShopButtons';
 import { FiAlertTriangle } from 'react-icons/fi';
+import { getProductImageUrl } from 'src/utils/imageHelpers';
 
 function Card({ product }) {
     const navigate = useNavigate();
@@ -13,11 +14,7 @@ function Card({ product }) {
         navigate(`/shop/${product.id || product.slug}`);
     };
 
-    const getImageUrl = (imageName) => {
-        if (!imageName) return 'https://placehold.co/150x150?text=Brak+foto';
-        if (/^\d{10,}-/.test(imageName)) return `http://localhost:5000/images/products/${imageName}`;
-        return `images/tempProducts/${imageName}`;
-    };
+    const getImageUrl = (imageName) => getProductImageUrl(imageName);
 
     return (
         <section 
@@ -48,6 +45,7 @@ function Card({ product }) {
                 <img 
                     src={getImageUrl(product.image || product.img)} 
                     alt={product.name} 
+                    loading="lazy"
                     className={`w-full h-full object-contain drop-shadow-xl transition-transform duration-700 ${isSoldOut ? '' : 'group-hover:scale-110'}`}
                     onError={(e) => { e.target.src = 'https://placehold.co/150x150?text=Brak+foto'; }}
                 />

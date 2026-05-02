@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FiSend, FiAlertCircle, FiCheckCircle } from 'react-icons/fi';
+import SomniumSelect from 'src/components/ui/SomniumSelect';
 
 export default function BugReportSection() {
     const [status, setStatus] = useState('idle'); 
@@ -56,21 +57,23 @@ export default function BugReportSection() {
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs uppercase tracking-widest font-bold text-white/40 ml-1">Typ zgłoszenia</label>
-                                    <select 
-                                        className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-(--medium-shade) transition-colors appearance-none"
+                                    <SomniumSelect 
+                                        label="Typ zgłoszenia"
+                                        options={[
+                                            { label: "Błąd na stronie", value: "bug" },
+                                            { label: "Problem z wyglądem", value: "ui" },
+                                            { label: "Sugestia ulepszenia", value: "feature" },
+                                            { label: "Inne", value: "other" }
+                                        ]}
                                         value={formData.type}
-                                        onChange={(e) => setFormData({...formData, type: e.target.value})}
-                                    >
-                                        <option value="bug">Błąd na stronie</option>
-                                        <option value="ui">Problem z wyglądem</option>
-                                        <option value="feature">Sugestia ulepszenia</option>
-                                        <option value="other">Inne</option>
-                                    </select>
+                                        onChange={(val) => setFormData({...formData, type: val})}
+                                    />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs uppercase tracking-widest font-bold text-white/40 ml-1">E-mail (opcjonalnie)</label>
+                                    <label htmlFor="bug-contact" className="text-xs uppercase tracking-widest font-bold text-white/40 ml-1">E-mail (opcjonalnie)</label>
                                     <input 
+                                        id="bug-contact"
+                                        name="contact"
                                         type="email" 
                                         placeholder="twoj@email.com"
                                         className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-(--medium-shade) transition-colors"
@@ -81,8 +84,10 @@ export default function BugReportSection() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs uppercase tracking-widest font-bold text-white/40 ml-1">Opis problemu</label>
+                                <label htmlFor="bug-description" className="text-xs uppercase tracking-widest font-bold text-white/40 ml-1">Opis problemu</label>
                                 <textarea 
+                                    id="bug-description"
+                                    name="description"
                                     required
                                     rows="4"
                                     placeholder="Opisz co się stało..."

@@ -1,5 +1,6 @@
 import React from 'react';
 import { FiBookOpen } from "react-icons/fi";
+import SomniumSelect from "components/ui/SomniumSelect";
 
 export const ContactAndAddress = ({ 
     register, errors, user, savedAddresses, selectedAddressId, handleAddressSelect, 
@@ -19,19 +20,19 @@ export const ContactAndAddress = ({
           <div className="mb-6 p-4 bg-white/5 border border-white/10 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <FiBookOpen className="text-(--medium-shade) text-2xl hidden sm:block" />
               <div className="w-full">
-                  <label className="text-xs uppercase tracking-widest opacity-70 mb-2 block font-bold text-(--medium-shade)">Książka Adresowa</label>
-                  <select 
-                      value={selectedAddressId} 
-                      onChange={handleAddressSelect}
-                      className="w-full bg-black/30 border border-white/10 p-3 rounded-xl focus:outline-none focus:border-(--medium-shade) transition-colors cursor-pointer"
-                  >
-                      <option value="">-- Wpisz nowy adres ręcznie poniżej --</option>
-                      {savedAddresses.map(addr => (
-                          <option key={addr.id} value={addr.id}>
-                              {addr.label} ({addr.street}, {addr.city})
-                          </option>
-                      ))}
-                  </select>
+                  <SomniumSelect 
+                      label="Książka Adresowa"
+                      placeholder="-- Wpisz nowy adres ręcznie poniżej --"
+                      options={[
+                          { label: "-- Wpisz nowy adres ręcznie poniżej --", value: "" },
+                          ...savedAddresses.map(addr => ({
+                              label: `${addr.label} (${addr.street}, ${addr.city})`,
+                              value: String(addr.id)
+                          }))
+                      ]}
+                      value={String(selectedAddressId || "")} 
+                      onChange={(val) => handleAddressSelect({ target: { value: val } })}
+                  />
               </div>
           </div>
       )}

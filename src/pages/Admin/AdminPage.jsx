@@ -15,8 +15,8 @@ export default function AdminLayout() {
   ].filter(Boolean);
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-(--80-shade) text-[#F2EAE1]">
-      <aside className="hidden lg:flex w-72 flex-col fixed h-full border-r border-[#5C4A3D] bg-(--medium-shade)/20 z-20 pt-25 shadow-xl">
+    <div className="lg:grid lg:grid-cols-[288px_1fr] min-h-screen bg-(--80-shade) text-[#F2EAE1] relative">
+      <aside className="hidden lg:flex flex-col sticky top-0 h-screen border-r border-[#5C4A3D] bg-(--medium-shade)/20 z-20 pt-25 shadow-xl">
         <div className="p-8 text-center border-b border-[#5C4A3D]">
           <h1 className="font-serif font-bold tracking-widest text-xl text-(--medium-shade)">SOMNIUM</h1>
           <span className="text-xs uppercase tracking-[0.3em] text-[#F2EAE1]/70 font-bold">Admin</span>
@@ -32,7 +32,7 @@ export default function AdminLayout() {
                 flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 font-bold
                 ${isActive 
                   ? 'bg-(--medium-shade) text-[#24201d] shadow-[0_4px_15px_rgba(143,120,93,0.4)]' 
-                  : 'hover:bg-[#5C4A3D] text-[#F2EAE1]/70 hover:text-[#F2EAE1]'
+                  : 'hover:bg-[#5C4A3D]/50 text-[#F2EAE1]/70 hover:text-[#F2EAE1] hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(143,120,93,0.1)]'
                 }
               `}
             >
@@ -51,35 +51,30 @@ export default function AdminLayout() {
         </div>
       </aside>
 
-      <div className="lg:hidden fixed top-3 w-full z-30 bg-[#46382E] border-b border-[#5C4A3D] p-4 flex justify-between items-center mt-20 shadow-md">
-         <div>
-            <span className="font-serif font-bold tracking-widest text-lg text-(--medium-shade)">SOMNIUM</span>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-[#F2EAE1]/70 ml-2 font-bold">Admin</span>
-         </div>
-         <button onClick={() => { logout(); navigate("/"); }} className="p-2 text-[#F2EAE1]/70 hover:text-red-400">
-            <FiLogOut size={20} />
-         </button>
-      </div>
-
-      <main className="flex-1 lg:ml-72 p-4 pb-24 lg:p-10 mt-20 lg:pt-10 overflow-x-hidden">
+      <main className="p-4 pb-28 lg:p-10 lg:mt-0 lg:pt-25 overflow-x-hidden">
         <Outlet />
       </main>
 
-      <nav className="lg:hidden fixed bottom-0 w-full bg-[#46382E] border-t border-[#5C4A3D] z-30 flex justify-around p-2 pb-safe-area shadow-[0_-4px_24px_rgba(0,0,0,0.2)]">
-        {navItems.map((item) => (
-            <NavLink 
-              key={item.path}
-              to={item.path} 
-              end={item.end}
-              className={({isActive}) => `
-                flex flex-col items-center gap-1 p-3 rounded-xl transition-all w-full
-                ${isActive ? 'text-(--medium-shade)' : 'text-[#F2EAE1]/50'}
-              `}
-            >
-              {item.icon}
-              <span className="text-[10px] uppercase tracking-wider font-bold">{item.label}</span>
-            </NavLink>
-        ))}
+      {/* Mobile Bottom Nav - Reduced z-index to stay below main sidebar */}
+      <nav className="lg:hidden fixed bottom-0 w-full bg-[#4a3f35]/98 backdrop-blur-2xl border-t border-white/10 z-30 flex overflow-x-auto custom-scrollbar-hide justify-start p-2 px-4 pb-safe-area shadow-[0_-10px_40px_rgba(0,0,0,0.4)]">
+        <div className="flex items-center gap-2 min-w-max mx-auto">
+            {navItems.map((item) => (
+                <NavLink 
+                  key={item.path}
+                  to={item.path} 
+                  end={item.end}
+                  className={({isActive}) => `
+                    flex flex-col items-center gap-1.5 p-3 rounded-2xl transition-all min-w-[85px] shrink-0
+                    ${isActive 
+                        ? 'bg-(--medium-shade) text-[#24201d] shadow-[0_4px_15px_rgba(217,182,140,0.4)]' 
+                        : 'text-white/40 hover:bg-white/5 hover:text-white/60'}
+                  `}
+                >
+                  <span className="text-xl">{item.icon}</span>
+                  <span className="text-[10px] uppercase tracking-wider font-bold whitespace-nowrap">{item.label}</span>
+                </NavLink>
+            ))}
+        </div>
       </nav>
     </div>
   );

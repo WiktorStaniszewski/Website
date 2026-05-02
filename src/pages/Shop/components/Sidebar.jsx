@@ -5,7 +5,7 @@ import { FiX, FiFilter } from 'react-icons/fi';
 import ReactSlider from 'react-slider';
 import { useViewport } from 'hooks/useViewport';
 
-const RadioOption = ({ label, name, value, checkedValue, onChange }) => {
+const RadioOption = React.memo(({ label, name, value, checkedValue, onChange }) => {
   const isChecked = checkedValue === value;
   
   return (
@@ -26,9 +26,9 @@ const RadioOption = ({ label, name, value, checkedValue, onChange }) => {
       </span>
     </label>
   );
-};
+});
 
-const SidebarContent = ({ filters }) => {
+const SidebarContent = React.memo(({ filters }) => {
   const currentCategory = filters.category || "";
 
   return (
@@ -102,9 +102,9 @@ const SidebarContent = ({ filters }) => {
         </fieldset>
     </div>
   );
-};
+});
 
-export default function Sidebar({ filters, isFilterMenuOpen, toggleFilterMenu }) {
+function Sidebar({ filters, isFilterMenuOpen, toggleFilterMenu }) {
   const { isMobile } = useViewport();
 
   useEffect(() => {
@@ -135,3 +135,5 @@ export default function Sidebar({ filters, isFilterMenuOpen, toggleFilterMenu })
 
   return null;
 }
+
+export default React.memo(Sidebar);

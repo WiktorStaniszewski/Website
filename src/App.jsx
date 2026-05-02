@@ -34,7 +34,7 @@ const OrderPendingPayment = lazy(() => import('pages/Checkout/OrderPendingPaymen
 const AccountManager = lazy(() => import('src/pages/Account/AccountManager'));
 const UserOrderDetails = lazy(() => import('./pages/Account/UserOrderDetails'));
 
-const AdminLayout = lazy(() => import("src/pages/Admin/AdminLayout"));
+const AdminLayout = lazy(() => import("src/pages/Admin/AdminPage"));
 const Dashboard = lazy(() => import("src/pages/Admin/Components/Dashboard"));
 const Products = lazy(() => import("src/pages/Admin/Components/Inventory"));
 const AdminOrders = lazy(() => import('./pages/Admin/Components/Orders'));
@@ -80,6 +80,21 @@ const SuperAdminRoute = ({ children }) => {
 
 export default function App() {
   const location = useLocation();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (window.easyPack) {
+        window.easyPack.init({
+          defaultLocale: 'pl',
+          mapType: 'osm',
+          searchType: 'osm',
+          points: { types: ['pop', 'parcel_locker'] },
+          map: { initialTypes: ['pop', 'parcel_locker'] }
+        });
+      }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (location.pathname !== '/checkout' && location.pathname !== '/order-success' && location.pathname !== '/order-pending') {

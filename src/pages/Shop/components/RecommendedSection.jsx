@@ -1,7 +1,7 @@
 import React from 'react';
 import 'styles/Shop.css';
 
-export default function Recommended({ filters }) {
+function Recommended({ filters }) {
     const categories = [
         { label: "Wszystko", value: "" },
         { label: "Kawa Ziarnista", value: "Ziarna" },
@@ -29,3 +29,5 @@ export default function Recommended({ filters }) {
         </div>
     );
 }
+
+export default React.memo(Recommended);

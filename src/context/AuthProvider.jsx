@@ -8,7 +8,6 @@ export const AuthContext = createContext();
 function SessionManager({ logout, setToken }) {
     const [showPrompt, setShowPrompt] = useState(false);
     const [timeLeft, setTimeLeft] = useState(300);
-    const lastActivityRef = useRef(Date.now());
     const killTimerRef = useRef(null);
     const checkIntervalRef = useRef(null);
 
@@ -17,37 +16,27 @@ function SessionManager({ logout, setToken }) {
     const INACTIVITY_LIMIT = TOTAL_SESSION_TIME - (5 * 60 * 1000); 
     const KILL_AFTER_PROMPT = 300;
 
-    const handleForcedLogout = useCallback(async (reason) => {
-        try {
-            await api.post('auth/logout', {}).catch(() => {});
-        } catch (_) {}
-        localStorage.removeItem("somnium_user");
-        localStorage.removeItem("somnium_token");
-        localStorage.removeItem("somnium_cart");
-        localStorage.removeItem("session_start");
-        localStorage.removeItem("somnium_session_id");
-        localStorage.removeItem("somnium_checkout_expires");
-        
-        const baseUrl = window.location.origin + window.location.pathname;
-        window.location.href = `${baseUrl}#/login?reason=${reason}`;
-        window.location.reload(); 
-    }, []);
-
-    useEffect(() => {
-
-        return () => {};
-    }, []);
-
     useEffect(() => {
         const pingInterval = setInterval(() => {
             api.post('auth/ping').catch((err) => {
                 if (err.response && err.response.status === 401) {
-                    handleForcedLogout('session_expired');
+                    logout('session_expired');
                 }
             });
         }, 5 * 60 * 1000);
 
+        const checkIntegrity = () => {
+            const token = localStorage.getItem("somnium_token");
+            const userData = localStorage.getItem("somnium_user");
+                
+            if (!token || !userData) {
+                logout('session_invalidated');
+            }
+        };
+
         checkIntervalRef.current = setInterval(() => {
+            checkIntegrity();
+
             const sessionStart = parseInt(localStorage.getItem("session_start") || Date.now());
             const elapsed = Date.now() - sessionStart;
 
@@ -55,13 +44,29 @@ function SessionManager({ logout, setToken }) {
                 setShowPrompt(true);
                 setTimeLeft(KILL_AFTER_PROMPT);
             }
-        }, 10 * 1000); 
+        }, 5000);
+
+        // Catch storage changes from other tabs
+        const handleStorageChange = (e) => {
+            if (e.key === "somnium_token" || e.key === "somnium_user") {
+                if (!e.newValue) {
+                    logout('session_invalidated');
+                }
+            }
+        };
+        window.addEventListener('storage', handleStorageChange);
+
+        // Check on window focus
+        const handleFocus = () => checkIntegrity();
+        window.addEventListener('focus', handleFocus);
 
         return () => {
             clearInterval(pingInterval);
-            clearInterval(checkIntervalRef.current);
+            if (checkIntervalRef.current) clearInterval(checkIntervalRef.current);
+            window.removeEventListener('storage', handleStorageChange);
+            window.removeEventListener('focus', handleFocus);
         };
-    }, [handleForcedLogout, showPrompt, INACTIVITY_LIMIT]);
+    }, [logout, showPrompt, INACTIVITY_LIMIT]);
 
     useEffect(() => {
         if (!showPrompt) {
@@ -77,7 +82,7 @@ function SessionManager({ logout, setToken }) {
                 if (prev <= 1) {
                     clearInterval(killTimerRef.current);
                     killTimerRef.current = null;
-                    handleForcedLogout('timeout');
+                    logout('timeout');
                     return 0;
                 }
                 return prev - 1;
@@ -90,7 +95,7 @@ function SessionManager({ logout, setToken }) {
                 killTimerRef.current = null;
             }
         };
-    }, [showPrompt, handleForcedLogout]);
+    }, [showPrompt, logout]);
 
     const extendSession = async () => {
         try {
@@ -105,7 +110,7 @@ function SessionManager({ logout, setToken }) {
                 killTimerRef.current = null;
             }
         } catch (err) {
-            handleForcedLogout('extend_failed');
+            logout('extend_failed');
         }
     };
 
@@ -119,13 +124,13 @@ function SessionManager({ logout, setToken }) {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Twoja sesja wygasa</h3>
                 <p className="text-white/60 mb-2 leading-relaxed text-sm">
-                    Nie wykryliśmy aktywności przez dłuższy czas. Zostaniesz automatycznie wylogowany za:
+                    Ze względów bezpieczeństwa zostaniesz automatycznie wylogowany za:
                 </p>
                 <p className="text-3xl font-mono font-bold text-(--medium-shade) mb-6">
                     {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
                 </p>
                 <div className="flex gap-3 w-full">
-                    <button onClick={() => handleForcedLogout('user_closed')} className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold transition-colors cursor-pointer">
+                    <button onClick={() => logout('user_closed')} className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold transition-colors cursor-pointer">
                         Wyloguj mnie
                     </button>
                     <button onClick={extendSession} className="flex-1 py-3 font-bold rounded-xl transition-all cursor-pointer shadow-lg bg-(--medium-shade) hover:brightness-110 text-[#24201d]">
@@ -181,24 +186,24 @@ export function AuthProvider({ children }) {
         localStorage.setItem("session_start", Date.now().toString());
     }, []);
 
-    const logout = useCallback(async () => {
+    const logout = useCallback(async (reason = null) => {
         try {
-            await api.post('auth/logout', {}).catch(e => console.warn("Backend logout failed or session already gone"));
-        } catch (e) {
-            console.error("Błąd podczas wylogowywania (API):", e);
-        }
+            await api.post('auth/logout', {}).catch(() => {});
+        } catch (_) {}
+        
         localStorage.removeItem("somnium_user");
         localStorage.removeItem("somnium_token");
         localStorage.removeItem("somnium_cart");
         localStorage.removeItem("session_start");
-        localStorage.removeItem("somnium_remember_me");
         localStorage.removeItem("somnium_session_id");
         localStorage.removeItem("somnium_checkout_expires");
         
         setUser(null);
         
         const baseUrl = window.location.origin + window.location.pathname;
-        window.location.href = baseUrl + "#/login";
+        const targetUrl = reason ? `${baseUrl}#/login?reason=${reason}` : `${baseUrl}#/login`;
+        
+        window.location.href = targetUrl;
         window.location.reload();
     }, []);
 

@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+  import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "services/api"; 
 import { FiArrowLeft, FiUser, FiMail, FiMapPin, FiBox, FiCalendar } from "react-icons/fi";
+import AdminPageLayout from "./AdminPageLayout";
 
 export default function UserDetails() {
   const { id } = useParams();
@@ -30,27 +31,25 @@ export default function UserDetails() {
   const totalSpent = orders.reduce((acc, o) => acc + (o.status !== 'cancelled' ? Number(o.total) : 0), 0);
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 py-20">
-      
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <button 
-          onClick={() => navigate('/admin/users')}
-          className="p-3 bg-[#46382E] border border-[#5C4A3D] hover:bg-[#5C4A3D] text-[#F2EAE1] rounded-xl transition-colors cursor-pointer"
-        >
-          <FiArrowLeft size={20} />
-        </button>
-        <div>
-          <h1 className="text-3xl font-serif font-bold text-[#F2EAE1]">{user.username}</h1>
-          <p className="text-sm text-[#F2EAE1]/60 mt-1">Karta klienta #{user.id}</p>
-        </div>
-        <span className={`ml-auto px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider border ${
-            user.role === 'admin' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-[#46382E] text-(--medium-shade) border-[#5C4A3D]'
-        }`}>
-          {user.role}
-        </span>
-      </div>
-
+    <AdminPageLayout
+        title={user.username}
+        subtitle={`Karta klienta #${user.id}`}
+        actions={
+            <div className="flex items-center gap-4 w-full md:w-auto">
+                <button 
+                    onClick={() => navigate('/admin/users')}
+                    className="p-3 bg-[#46382E] border border-[#5C4A3D] hover:bg-[#5C4A3D] text-[#F2EAE1] rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-2 font-bold"
+                >
+                    <FiArrowLeft size={20} /> <span className="md:hidden">Wróć</span>
+                </button>
+                <span className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border ml-auto md:ml-0 ${
+                    user.role === 'admin' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-[#46382E] text-(--medium-shade) border-[#5C4A3D]'
+                }`}>
+                    {user.role}
+                </span>
+            </div>
+        }
+    >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         <div className="space-y-6 lg:col-span-1">
@@ -122,6 +121,6 @@ export default function UserDetails() {
         </div>
 
       </div>
-    </div>
+    </AdminPageLayout>
   );
 }

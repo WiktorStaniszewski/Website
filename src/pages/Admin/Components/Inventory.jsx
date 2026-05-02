@@ -3,6 +3,8 @@ import { createPortal } from "react-dom";
 import api from "services/api"; 
 import { FiBox, FiMapPin, FiTruck, FiArrowLeft, FiAlertTriangle, FiPlus, FiX } from "react-icons/fi";
 import DeliveryModal from './DeliveryModal';
+import SomniumSelect from "components/ui/SomniumSelect";
+import AdminPageLayout, { SkeletonGrid, SkeletonRow } from './AdminPageLayout';
 
 export default function Inventory() {
   const [locations, setLocations] = useState([]);
@@ -12,7 +14,6 @@ export default function Inventory() {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isDeliveryModalOpen, setIsDeliveryModalOpen] = useState(false);
 
-  // Stany dla dodawania nowej lokacji
   const [isAddLocationModalOpen, setIsAddLocationModalOpen] = useState(false);
   const [newLocation, setNewLocation] = useState({ name: "", type: "cafe" });
   const [isSubmittingLocation, setIsSubmittingLocation] = useState(false);
@@ -42,7 +43,7 @@ export default function Inventory() {
           await api.post("locations", newLocation);
           setIsAddLocationModalOpen(false);
           setNewLocation({ name: "", type: "cafe" });
-          fetchData(); // Odświeża listę, nowa lokacja pojawi się od razu
+          fetchData();
       } catch (err) {
           console.error(err);
           alert("Wystąpił błąd podczas dodawania nowej placówki.");
@@ -51,9 +52,6 @@ export default function Inventory() {
       }
   };
 
-  if (loading) return <div className="text-(--medium-shade) font-bold text-center mt-20">Ładowanie magazynów...</div>;
-
-  // Widok Szczegółowy Konkretnego Magazynu
   if (selectedLocation) {
       const localStock = globalProducts.map(gp => {
           const invRecord = selectedLocation.Inventories?.find(i => i.productId === gp.id);
@@ -61,58 +59,66 @@ export default function Inventory() {
       });
 
       return (
-          <div className="space-y-6 animate-in slide-in-from-right-8 duration-500 not-lg:pt-20">
-              <button 
-                  onClick={() => setSelectedLocation(null)}
-                  className="flex items-center gap-2 text-[#F2EAE1]/60 hover:text-(--medium-shade) transition-colors font-bold cursor-pointer w-max"
-              >
-                  <FiArrowLeft /> Wróć do przeglądu lokacji
-              </button>
-
-              <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-4">
-                  <div>
-                      <h1 className="text-3xl font-serif font-bold text-[#F2EAE1] flex items-center gap-3">
-                          <FiMapPin className="text-(--medium-shade)" /> {selectedLocation.name}
-                      </h1>
-                      <p className="text-[#F2EAE1]/60 mt-1">Podgląd lokalnego stanu zasobów</p>
+          <AdminPageLayout
+              title={selectedLocation.name}
+              subtitle="Podgląd lokalnego stanu zasobów"
+              actions={
+                  <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+                      <button 
+                          onClick={() => setSelectedLocation(null)}
+                          className="flex items-center justify-center gap-2 px-5 py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl transition-all cursor-pointer font-bold"
+                      >
+                          <FiArrowLeft /> Powrót
+                      </button>
+                      <button
+                          onClick={() => setIsDeliveryModalOpen(true)}
+                          className="bg-(--medium-shade) hover:brightness-110 text-[#24201d] px-5 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
+                      >
+                          <FiTruck size={20} /> Zarejestruj dostawę
+                      </button>
                   </div>
-                  <button
-                      onClick={() => setIsDeliveryModalOpen(true)}
-                      className="bg-(--medium-shade) hover:brightness-110 text-[#24201d] px-5 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
-                  >
-                      <FiTruck size={20} /> Zarejestruj dostawę
-                  </button>
-              </div>
-
-              <div className="bg-[#46382E] border border-[#5C4A3D] rounded-3xl shadow-xl overflow-x-auto">
-                <table className="w-full text-left text-sm text-[#F2EAE1] min-w-[600px]">
-                  <thead className="bg-[#352A21] text-(--medium-shade) uppercase text-xs tracking-wider border-b border-[#5C4A3D]">
-                    <tr>
-                      <th className="p-6 font-bold">NAZWA PRODUKTU</th>
-                      <th className="p-6 font-bold">KATEGORIA</th>
-                      <th className="p-6 font-bold">STAN NA LOKACJI</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#846f60]">
-                    {localStock.map((item) => (
-                      <tr key={item.id} className="hover:bg-[#5C4A3D]/50 transition-colors group">
-                        <td className="p-6 font-bold text-base">{item.name}</td>
-                        <td className="p-6 opacity-60">{item.category}</td>
-                        <td className="p-6 font-bold text-lg">
-                            {item.currentStock > 5 ? (
-                                <span className="text-green-400">{item.currentStock} szt.</span>
-                            ) : item.currentStock > 0 ? (
-                                <span className="text-yellow-400 flex items-center gap-2">
-                                    <FiAlertTriangle /> {item.currentStock} szt.
-                                </span>
-                            ) : (
-                                <span className="text-red-400 opacity-80">Brak na stanie</span>
-                            )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              }
+          >
+              <div className="rounded-[2.5rem] border border-white/5 overflow-hidden bg-[#24201d]/60 backdrop-blur-xl shadow-xl p-2 sm:p-8 min-h-[400px]">
+                {loading ? (
+                    <SkeletonRow count={5} />
+                ) : (
+                    <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm text-[#F2EAE1] min-w-[600px]">
+                        <thead className="text-(--medium-shade) uppercase text-xs tracking-[0.2em] font-black border-b border-white/5">
+                        <tr>
+                            <th className="p-6">Produkt</th>
+                            <th className="p-6 text-center">Kategoria</th>
+                            <th className="p-6 text-right">Stan na lokacji</th>
+                        </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/5">
+                        {localStock.map((item) => (
+                            <tr key={item.id} className="hover:bg-white/5 transition-all duration-300 group">
+                            <td className="p-6">
+                                <span className="font-bold text-lg block">{item.name}</span>
+                                <span className="text-[10px] uppercase tracking-widest text-white/30">ID: {item.id}</span>
+                            </td>
+                            <td className="p-6 text-center">
+                                <span className="px-3 py-1 bg-white/5 rounded-full text-xs text-white/60">{item.category}</span>
+                            </td>
+                            <td className="p-6 text-right font-bold text-lg">
+                                {item.currentStock > 5 ? (
+                                    <span className="text-green-400/80">{item.currentStock} szt.</span>
+                                ) : item.currentStock > 0 ? (
+                                    <span className="text-yellow-400/80 inline-flex items-center gap-2">
+                                        <FiAlertTriangle className="animate-pulse" /> {item.currentStock} szt.
+                                    </span>
+                                ) : (
+                                    <span className="text-red-400/60 font-black uppercase text-xs tracking-widest">Brak na stanie</span>
+                                )}
+                            </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                    </div>
+                )}
               </div>
 
               <DeliveryModal 
@@ -120,68 +126,71 @@ export default function Inventory() {
                   onClose={() => setIsDeliveryModalOpen(false)} 
                   onSuccess={() => { fetchData(); setSelectedLocation(null); }} 
               />
-          </div>
+          </AdminPageLayout>
       );
   }
 
-  // Widok Główny: Kafelki Lokacji
   return (
-    <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500 not-lg:pt-20">
-      <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
-        <div>
-            <h1 className="text-3xl font-serif font-bold text-[#F2EAE1]">Zasoby i Magazyny</h1>
-            <p className="text-[#F2EAE1]/60 font-medium text-sm mt-1">Wybierz placówkę lub dodaj nową, aby zarządzać asortymentem</p>
-        </div>
-        <button
-            onClick={() => setIsAddLocationModalOpen(true)}
-            className="bg-(--medium-shade) hover:brightness-110 text-[#24201d] px-5 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
-        >
-            <FiPlus size={20} /> Dodaj Placówkę
-        </button>
-      </div>
+    <AdminPageLayout
+        title="Zasoby i Magazyny"
+        subtitle="Wybierz placówkę lub dodaj nową, aby zarządzać asortymentem"
+        actions={
+            <button
+                onClick={() => setIsAddLocationModalOpen(true)}
+                className="bg-(--medium-shade) hover:brightness-110 text-[#24201d] px-5 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md w-full md:w-auto"
+            >
+                <FiPlus size={20} /> Dodaj Placówkę
+            </button>
+        }
+    >
+      <div className="min-h-[400px]">
+        {loading ? (
+            <SkeletonGrid count={4} />
+        ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                {locations.map(loc => {
+                    const totalItems = loc.Inventories?.reduce((sum, inv) => sum + inv.stockQuantity, 0) || 0;
+                    const lowStockCount = loc.Inventories?.filter(inv => inv.stockQuantity > 0 && inv.stockQuantity <= 5).length || 0;
+                    const outOfStockCount = globalProducts.length - (loc.Inventories?.filter(inv => inv.stockQuantity > 0).length || 0);
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {locations.map(loc => {
-              const totalItems = loc.Inventories?.reduce((sum, inv) => sum + inv.stockQuantity, 0) || 0;
-              const lowStockCount = loc.Inventories?.filter(inv => inv.stockQuantity > 0 && inv.stockQuantity <= 5).length || 0;
-              const outOfStockCount = globalProducts.length - (loc.Inventories?.filter(inv => inv.stockQuantity > 0).length || 0);
+                    return (
+                        <div 
+                            key={loc.id}
+                            onClick={() => setSelectedLocation(loc)}
+                            className="bg-[#46382E] border border-[#5C4A3D] rounded-3xl p-6 hover:bg-[#5C4A3D] cursor-pointer transition-all shadow-lg group relative overflow-hidden flex flex-col min-h-[220px]"
+                        >
+                            <div className="absolute -top-6 -right-6 opacity-5 group-hover:scale-110 transition-transform text-(--medium-shade)">
+                                {loc.type === 'warehouse' ? <FiBox size={120} /> : <FiMapPin size={120} />}
+                            </div>
+                            
+                            <div className="flex items-center gap-3 mb-6 relative z-10">
+                                <div className={`p-3 rounded-xl text-white ${loc.type === 'warehouse' ? 'bg-(--medium-shade)/80' : 'bg-white/10'}`}>
+                                    {loc.type === 'warehouse' ? <FiBox size={24} /> : <FiMapPin size={24} />}
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-lg text-white leading-tight">{loc.name}</h3>
+                                    <span className="text-xs uppercase tracking-wider text-(--medium-shade) font-bold">{loc.type === 'warehouse' ? 'Magazyn Główny' : 'Kawiarnia'}</span>
+                                </div>
+                            </div>
 
-              return (
-                  <div 
-                      key={loc.id}
-                      onClick={() => setSelectedLocation(loc)}
-                      className="bg-[#46382E] border border-[#5C4A3D] rounded-3xl p-6 hover:bg-[#5C4A3D] cursor-pointer transition-all shadow-lg group relative overflow-hidden flex flex-col"
-                  >
-                      <div className="absolute -top-6 -right-6 opacity-5 group-hover:scale-110 transition-transform text-(--medium-shade)">
-                          {loc.type === 'warehouse' ? <FiBox size={120} /> : <FiMapPin size={120} />}
-                      </div>
-                      
-                      <div className="flex items-center gap-3 mb-6 relative z-10">
-                          <div className={`p-3 rounded-xl text-white ${loc.type === 'warehouse' ? 'bg-(--medium-shade)/80' : 'bg-white/10'}`}>
-                              {loc.type === 'warehouse' ? <FiBox size={24} /> : <FiMapPin size={24} />}
-                          </div>
-                          <div>
-                              <h3 className="font-bold text-lg text-white leading-tight">{loc.name}</h3>
-                              <span className="text-xs uppercase tracking-wider text-(--medium-shade) font-bold">{loc.type === 'warehouse' ? 'Magazyn Główny' : 'Kawiarnia'}</span>
-                          </div>
-                      </div>
-
-                      <div className="mt-auto space-y-2 relative z-10 bg-black/20 p-4 rounded-2xl border border-white/5">
-                          <p className="text-sm flex justify-between text-white/70">
-                              Wszystkich sztuk: <strong className="text-white">{totalItems}</strong>
-                          </p>
-                          <p className="text-sm flex justify-between text-white/70">
-                              Brakujących prod.: <strong className="text-red-400">{outOfStockCount}</strong>
-                          </p>
-                          {lowStockCount > 0 && (
-                              <p className="text-xs text-yellow-400 font-bold mt-2 pt-2 border-t border-white/10 flex items-center gap-1">
-                                  <FiAlertTriangle /> {lowStockCount} na wyczerpaniu!
-                              </p>
-                          )}
-                      </div>
-                  </div>
-              );
-          })}
+                            <div className="mt-auto space-y-2 relative z-10 bg-black/20 p-4 rounded-2xl border border-white/5">
+                                <p className="text-sm flex justify-between text-white/70">
+                                    Wszystkich sztuk: <strong className="text-white">{totalItems}</strong>
+                                </p>
+                                <p className="text-sm flex justify-between text-white/70">
+                                    Brakujących prod.: <strong className="text-red-400">{outOfStockCount}</strong>
+                                </p>
+                                {lowStockCount > 0 && (
+                                    <p className="text-xs text-yellow-400 font-bold mt-2 pt-2 border-t border-white/10 flex items-center gap-1">
+                                        <FiAlertTriangle /> {lowStockCount} na wyczerpaniu!
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        )}
       </div>
 
       {/* Modal dodawania nowej lokacji */}
@@ -205,16 +214,17 @@ export default function Inventory() {
                               className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) transition-colors" 
                           />
                       </div>
-                      <div>
-                          <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Typ placówki</label>
-                          <select 
-                              value={newLocation.type} onChange={(e) => setNewLocation({...newLocation, type: e.target.value})} 
-                              className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) cursor-pointer"
-                          >
-                              <option value="cafe">Kawiarnia (Sprzedaż / Odbiór)</option>
-                              <option value="warehouse">Magazyn (Wysyłki internetowe)</option>
-                          </select>
-                      </div>
+                        <div>
+                            <SomniumSelect 
+                                label="Typ placówki"
+                                options={[
+                                    { label: "Kawiarnia (Sprzedaż / Odbiór)", value: "cafe" },
+                                    { label: "Magazyn (Wysyłki internetowe)", value: "warehouse" }
+                                ]}
+                                value={newLocation.type}
+                                onChange={(val) => setNewLocation({...newLocation, type: val})}
+                            />
+                        </div>
 
                       <div className="flex gap-3 mt-4">
                           <button type="button" onClick={() => setIsAddLocationModalOpen(false)} className="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-xl font-bold cursor-pointer transition-colors">Anuluj</button>
@@ -227,7 +237,6 @@ export default function Inventory() {
           </div>,
           document.body
       )}
-
-    </div>
+    </AdminPageLayout>
   );
 }

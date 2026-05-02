@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { FiX, FiUploadCloud, FiBox } from "react-icons/fi";
 import api from "services/api";
+import SomniumSelect from "components/ui/SomniumSelect";
 
 export default function ProductModal({ isOpen, onClose, onSuccess }) {
   const defaultState = {
@@ -46,7 +47,7 @@ export default function ProductModal({ isOpen, onClose, onSuccess }) {
       e.preventDefault();
       setIsSubmitting(true);
       try {
-          const cleanData = { ...formData, stockQuantity: 0 }; // Wymuszamy stan początkowy 0
+          const cleanData = { ...formData, stockQuantity: 0 };
           if (cleanData.category !== "Ziarna") {
               cleanData.flavours = ""; cleanData.processingMethod = ""; cleanData.variety = ""; cleanData.farm = ""; cleanData.roastDate = "";
           }
@@ -148,14 +149,18 @@ export default function ProductModal({ isOpen, onClose, onSuccess }) {
                     <input type="text" required name="name" value={formData.name} onChange={handleInputChange} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade)" />
                 </div>
                 <div>
-                    <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Kategoria</label>
-                    <select name="category" value={formData.category} onChange={handleInputChange} className="w-full bg-black/30 border border-white/10 rounded-xl p-3 mt-1 focus:outline-none focus:border-(--medium-shade) font-bold">
-                        <option value="Ziarna">Ziarna do kawy</option>
-                        <option value="Zaparzacze">Zaparzacze</option>
-                        <option value="Herbaty">Herbaty / Matcha</option>
-                        <option value="Filtry">Filtry</option>
-                        <option value="Kubki">Kubki i Szkło</option>
-                    </select>
+                    <SomniumSelect 
+                        label="Kategoria"
+                        options={[
+                            { label: "Ziarna do kawy", value: "Ziarna" },
+                            { label: "Zaparzacze", value: "Zaparzacze" },
+                            { label: "Herbaty / Matcha", value: "Herbaty" },
+                            { label: "Filtry", value: "Filtry" },
+                            { label: "Kubki i Szkło", value: "Kubki" }
+                        ]}
+                        value={formData.category}
+                        onChange={(val) => setFormData(prev => ({ ...prev, category: val }))}
+                    />
                 </div>
                 <div>
                     <label className="text-xs font-bold opacity-70 uppercase tracking-widest ml-1 text-(--medium-shade)">Cena (PLN)</label>

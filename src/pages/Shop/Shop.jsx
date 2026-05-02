@@ -1,17 +1,18 @@
 import 'styles/Shop.css'
+import React from 'react'
 
 import Products from 'src/pages/Shop/components/ProductList'
-import Navigation from 'pages/shop/components/ShopNavigation'
-import Recommended from 'pages/shop/components/RecommendedSection'
+import Navigation from 'src/pages/Shop/components/ShopNavigation'
+import Recommended from 'src/pages/Shop/components/RecommendedSection'
 import Sidebar from 'src/pages/Shop/components/Sidebar'
 import FilterBar from 'src/pages/Shop/components/FilterBar'
 
-import { useShopFilters } from 'pages/shop/hooks/useShopFilters'
+import { useShopFilters } from 'src/pages/Shop/hooks/useShopFilters'
 import { useToggle } from '@uidotdev/usehooks'
 
 import { useScrollVisibility } from 'src/hooks/useScrollVisibility';
 
-export default function Shop() {
+function Shop() {
     const filters = useShopFilters();
 
     const { visible } = useScrollVisibility();
@@ -37,7 +38,7 @@ export default function Shop() {
                     <FilterBar filters={filters} />
                 </div>
 
-                <div className='mb-6 mt-4'>
+                <div className='mt-4'>
                     <Recommended filters={filters} />
                 </div>
 
@@ -46,10 +47,10 @@ export default function Shop() {
                 </div>
                 
                 {/* Mobile Floating Action Button / Navigation */}
-                <div className={`lg:hidden fixed bottom-14 left-0 z-9999 px-4 transition-all duration-500 ease-in-out ${
-                    visible 
-                        ? 'w-[75%] translate-y-0 opacity-100' 
-                        : 'w-full translate-y-24 opacity-0 pointer-events-none'
+                <div className={`lg:hidden fixed bottom-25 left-0 z-30 px-4 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${
+                    (visible && !isFilterMenuOpen)
+                        ? 'w-[calc(100%-80px)] translate-y-0 opacity-100 scale-100' 
+                        : 'w-full translate-y-24 opacity-0 scale-95 pointer-events-none'
                 }`}>
                     <Navigation filters={filters} toggleFilterMenu={toggleFilterMenu} />
                 </div>
@@ -58,3 +59,5 @@ export default function Shop() {
         </main>
     )
 }
+
+export default React.memo(Shop);

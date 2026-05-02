@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from "context/AuthProvider";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import api from "services/api";
 
 import { FaUser, FaBox, FaLock, FaTruck, FaSignOutAlt, FaMapMarkerAlt } from "react-icons/fa";
@@ -16,6 +16,14 @@ export default function AccountManager() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const activeTab = searchParams.get("tab") || "profile";
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+  }, [activeTab]);
 
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
@@ -102,7 +110,7 @@ export default function AccountManager() {
                 style={{ background: 'radial-gradient(circle, var(--medium-shade) 0%, transparent 60%)', opacity: 0.05 }}
             ></div>
             
-            <div className="relative z-10">
+            <div className="relative z-10" id="account-tab-content">
                 {activeTab === "profile" && <ProfileTab user={user} />}
                 {activeTab === "address" && <AddressTab />}
                 {activeTab === "history" && <HistoryTab orders={orders} loading={loadingOrders} navigate={navigate} />}
