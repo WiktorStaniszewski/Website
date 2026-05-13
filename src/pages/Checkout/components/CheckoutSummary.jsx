@@ -4,7 +4,8 @@ import { FiArrowLeft, FiClock, FiAlertTriangle } from "react-icons/fi";
 
 export const CheckoutSummary = ({ 
     cartItems, cartTotal, currentShippingCost, finalTotal, shippingOptions, shippingMethod, 
-    timeRemaining, isTimeExpired, isTimeRunningOut, isSubmitting, handleFormSubmit, navigate 
+    timeRemaining, isTimeExpired, isTimeRunningOut, isSubmitting, handleFormSubmit, navigate,
+    discountAmount, discountPercent, activeDiscountType, promoCode
 }) => {
   
   return (
@@ -56,6 +57,15 @@ export const CheckoutSummary = ({
                 <span className="opacity-90 font-bold">Dostawa ({shippingOptions[shippingMethod].label})</span>
                 <span className="font-bold">{currentShippingCost === 0 ? 'Gratis' : `${currentShippingCost.toFixed(2)} zł`}</span>
             </div>
+            {discountAmount > 0 && (
+                <div className="flex justify-between text-green-400 animate-in fade-in">
+                    <span className="font-bold flex items-center gap-1">
+                        {activeDiscountType === 'promo' ? `Kod ${promoCode}` : 'Zniżka lojalnościowa'} 
+                        <span className="text-xs opacity-70">(-{discountPercent}%)</span>
+                    </span>
+                    <span className="font-bold">-{discountAmount.toFixed(2)} zł</span>
+                </div>
+            )}
         </div>
 
         <div className="border-t border-white/10 pt-4 mb-8">

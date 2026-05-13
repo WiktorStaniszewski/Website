@@ -9,7 +9,7 @@ import AdminPageLayout, { SkeletonRow } from './AdminPageLayout';
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isArchivedOpen, setIsArchivedOpen] = useState(false);
+  const [isArchivedOpen, setIsArchivedOpen] = useState(() => localStorage.getItem('admin_orders_archive_open') === 'true');
   
   const [searchQuery, setSearchQuery] = useState(() => localStorage.getItem('admin_order_search') || "");
   const [statusFilter, setStatusFilter] = useState(() => localStorage.getItem('admin_order_status_filter') || "all");
@@ -23,6 +23,10 @@ export default function AdminOrders() {
   useEffect(() => {
       localStorage.setItem('admin_order_status_filter', statusFilter);
   }, [statusFilter]);
+
+  useEffect(() => {
+      localStorage.setItem('admin_orders_archive_open', isArchivedOpen);
+  }, [isArchivedOpen]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -42,7 +46,6 @@ export default function AdminOrders() {
   const statusWeights = { 'new': 0, 'processing': 1, 'shipped': 2, 'pending_payment': 3, 'completed': 4, 'cancelled': 5 };
 
   const searchedOrders = orders.filter(o => {
-      // Filter by Status
       if (statusFilter !== "all" && o.status !== statusFilter) return false;
 
       if (!searchQuery) return true;
@@ -109,8 +112,8 @@ export default function AdminOrders() {
         <p className="text-xs text-(--medium-shade) mt-1">{o.date}</p>
       </div>
       <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-        <div className="text-right">
-          <p className="text-xl font-bold text-white">{o.total} PLN</p>
+        <div className="flex flex-col items-start sm:items-end text-left sm:text-right">
+          <p className="text-xl font-bold text-white mb-2">{o.total} PLN</p>
           <span className={`inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full border
               ${o.status === 'completed' ? 'border-green-500/30 text-green-300 bg-green-500/10' : 
                 o.status === 'cancelled' ? 'border-red-500/30 text-red-300 bg-red-500/10' :
@@ -118,16 +121,22 @@ export default function AdminOrders() {
                 'border-yellow-500/30 text-yellow-300 bg-yellow-500/10'}`}
           >
               {o.status === 'completed' && <FiCheck size={10} />}
-              {o.status === 'pending_payment' ? 'OCZEKUJE NA WPŁATĘ' : o.status.toUpperCase()}
+              {o.status === 'pending_payment' ? 'OCZEKUJE NA WPŁATĘ' : 
+               o.status === 'new' ? 'NOWE' :
+               o.status === 'processing' ? 'W TRAKCIE' :
+               o.status === 'shipped' ? 'WYSŁANE' :
+               o.status === 'completed' ? 'ZAKOŃCZONE' :
+               o.status === 'cancelled' ? 'ANULOWANE' :
+               o.status.toUpperCase()}
           </span>
           {o.feedback && (
-            <div className="mt-2 text-right">
+            <div className="mt-1">
               <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded border shadow-sm transition-colors
                 ${o.feedback.everythingOk 
                   ? 'bg-green-500/5 text-green-400/60 border-green-500/20' 
                   : 'bg-red-500/5 text-red-400/60 border-red-500/20'}`}
               >
-                Feedback {o.feedback.everythingOk ? 'received' : 'with issues'}
+                Opinia: {o.feedback.everythingOk ? 'Otrzymana' : 'Z uwagami'}
               </span>
             </div>
           )}
@@ -168,6 +177,11 @@ export default function AdminOrders() {
                           : 'bg-white/5 text-white/40 border-white/5 hover:bg-white/10 hover:text-white/60'}`}
               >
                   {status === 'all' ? 'Wszystkie' : 
+                   status === 'new' ? 'Nowe' :
+                   status === 'processing' ? 'W trakcie' :
+                   status === 'shipped' ? 'Wysłane' :
+                   status === 'completed' ? 'Zakończone' :
+                   status === 'cancelled' ? 'Anulowane' :
                    status === 'pending_payment' ? 'Oczekuje wpłaty' : status.toUpperCase()}
               </button>
           ))}

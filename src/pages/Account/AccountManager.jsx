@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from "context/AuthProvider";
-import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import api from "services/api";
 
-import { FaUser, FaBox, FaLock, FaTruck, FaSignOutAlt, FaMapMarkerAlt } from "react-icons/fa";
+import { FaUser, FaBox, FaLock, FaTruck, FaSignOutAlt, FaMapMarkerAlt, FaStar } from "react-icons/fa";
 
 import ProfileTab from './components/ProfileTab';
 import AddressTab from './components/AddressTab';
 import HistoryTab from './components/HistoryTab';
 import SecurityTab from './components/SecurityTab';
 import StatusTab from './components/StatusTab';
+import LoyaltyTab from './components/LoyaltyTab';
 
 export default function AccountManager() {
   const { user, logout } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const activeTab = searchParams.get("tab") || "profile";
-  const { pathname } = useLocation();
 
   useEffect(() => {
     window.scrollTo({
@@ -54,6 +54,7 @@ export default function AccountManager() {
     { id: "address", label: "Książka Adresowa", icon: <FaMapMarkerAlt /> },
     { id: "history", label: "Historia Zamówień", icon: <FaBox /> },
     { id: "status", label: "Śledzenie Paczki", icon: <FaTruck /> },
+    { id: "loyalty", label: "Program Lojalnościowy", icon: <FaStar /> },
     { id: "security", label: "Bezpieczeństwo", icon: <FaLock /> },
   ];
 
@@ -116,6 +117,7 @@ export default function AccountManager() {
                 {activeTab === "history" && <HistoryTab orders={orders} loading={loadingOrders} navigate={navigate} />}
                 {activeTab === "security" && <SecurityTab />}
                 {activeTab === "status" && <StatusTab />}
+                {activeTab === "loyalty" && <LoyaltyTab />}
             </div>
         </main>
       </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "services/api"; 
-import { FiArrowLeft, FiUser, FiTruck, FiBox, FiCheckCircle, FiLink, FiDownload } from "react-icons/fi";
+import { FiArrowLeft, FiUser, FiTruck, FiBox, FiCheckCircle, FiLink, FiDownload, FiMessageSquare, FiTag } from "react-icons/fi";
 import PasswordPromptModal from "src/components/PasswordPromptModal";
 import SomniumSelect from "components/ui/SomniumSelect";
 import AdminPageLayout from "./AdminPageLayout";
@@ -217,6 +217,49 @@ export default function OrderDetails() {
                         <div className={`p-4 bg-black/20 rounded-2xl border italic text-sm text-white/80 ${order.feedback.everythingOk ? 'border-white/5' : 'border-red-500/20 text-red-100/70'}`}>
                             "{order.feedback.comment}"
                         </div>
+                    )}
+                </div>
+            </div>
+        )}
+
+        {/* NOTATKA DLA BARISTY */}
+        {order.baristaNotes && (
+            <div className="lg:col-span-1 bg-[#46382E] border border-yellow-500/20 p-6 rounded-3xl shadow-lg animate-in fade-in">
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2 border-b border-[#5C4A3D] pb-3 text-[#F2EAE1]">
+                  <FiMessageSquare className="text-yellow-400" /> Notatka od klienta
+                </h2>
+                <div className="bg-yellow-500/5 border border-yellow-500/10 rounded-2xl p-4">
+                    <p className="text-sm text-[#F2EAE1]/80 italic leading-relaxed">
+                        "{order.baristaNotes}"
+                    </p>
+                </div>
+            </div>
+        )}
+
+        {/* ZASTOSOWANA ZNIŻKA */}
+        {order.discount && (
+            <div className="lg:col-span-1 bg-[#46382E] border border-green-500/20 p-6 rounded-3xl shadow-lg animate-in fade-in">
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2 border-b border-[#5C4A3D] pb-3 text-[#F2EAE1]">
+                  <FiTag className="text-green-400" /> Zastosowana zniżka
+                </h2>
+                <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                        <div className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-green-500/20 text-green-400">
+                            {order.discount.type === 'promo' ? `Kod: ${order.discount.code}` : 'Program lojalnościowy'}
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                        <div className="bg-[#352A21] p-3 rounded-xl border border-[#5C4A3D]">
+                            <p className="text-[10px] text-white/50 uppercase tracking-widest mb-1">Zniżka</p>
+                            <p className="font-bold text-green-400 text-lg">{order.discount.percent}%</p>
+                        </div>
+                        <div className="bg-[#352A21] p-3 rounded-xl border border-[#5C4A3D]">
+                            <p className="text-[10px] text-white/50 uppercase tracking-widest mb-1">Zaoszczędzono</p>
+                            <p className="font-bold text-green-400 text-lg">{order.discount.savedAmount?.toFixed(2)} PLN</p>
+                        </div>
+                    </div>
+                    {order.discount.pointsSpent && (
+                        <p className="text-xs text-white/40">Wydano {order.discount.pointsSpent} punktów lojalnościowych</p>
                     )}
                 </div>
             </div>

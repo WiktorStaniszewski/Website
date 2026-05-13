@@ -19,7 +19,7 @@ function Menu({ category, isActive, toggleMenu, index, isEditing, onCategoryChan
   };
 
   const isEven = index % 2 === 0;
-  const cardStyle = isEven ? "bg-white/10 border-white/10 hover:bg-white/15" : "bg-white/20 border-white/5 hover:bg-white/25";
+  const cardStyle = isEven ? "bg-black/25 border-white/5 hover:bg-black/30" : "bg-black/40 border-white/10 hover:bg-black/45";
 
   const lastClientYRef = useRef(0);
   const isDraggingRef = useRef(false);

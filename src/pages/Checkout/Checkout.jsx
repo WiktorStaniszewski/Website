@@ -9,6 +9,7 @@ import { DeliveryMethod } from './components/DeliveryMethod';
 import { ContactAndAddress } from './components/ContactAndAddress';
 import { PaymentMethod } from './components/PaymentMethod';
 import { CheckoutSummary } from './components/CheckoutSummary';
+import { DiscountSection } from './components/DiscountSection';
 import PaymentSimulationModal from 'src/components/PaymentSimulationModal';
 import ConfirmModal from 'src/components/ConfirmModal';
 
@@ -36,6 +37,12 @@ export default function Checkout() {
   
   const [validationModal, setValidationModal] = useState({ isOpen: false, message: '' });
 
+  // Stan zniżek i notatki
+  const [promoCode, setPromoCode] = useState('');
+  const [promoDiscount, setPromoDiscount] = useState(null);
+  const [loyaltyDiscount, setLoyaltyDiscount] = useState(null);
+  const [baristaNotes, setBaristaNotes] = useState('');
+
   const orderPlacedRef = useRef(false);
   const [timeLeft, setTimeLeft] = useState(600);
 
@@ -50,7 +57,12 @@ export default function Checkout() {
   };
 
   const currentShippingCost = shippingOptions[shippingMethod].price;
-  const finalTotal = cartTotal + currentShippingCost;
+  
+  // Obliczanie zniżki
+  const activeDiscount = promoDiscount || loyaltyDiscount;
+  const discountPercent = activeDiscount?.percent || 0;
+  const discountAmount = cartTotal * (discountPercent / 100);
+  const finalTotal = cartTotal - discountAmount + currentShippingCost;
   
   const formatTime = (seconds) => {
       const m = Math.floor(seconds / 60).toString().padStart(2, '0');
@@ -220,7 +232,10 @@ export default function Checkout() {
           details: shippingOptions[shippingMethod],
           pointId: shippingMethod === 'locker' ? selectedLocker?.name : null
       },
-      paymentMethod: paymentMethod
+      paymentMethod: paymentMethod,
+      baristaNotes: baristaNotes.trim() || null,
+      promoCode: promoCode || null,
+      loyaltyRedeem: loyaltyDiscount ? { threshold: loyaltyDiscount.threshold } : null
     };
 
     try {
@@ -335,17 +350,28 @@ export default function Checkout() {
               newAddressLabel={newAddressLabel} setNewAddressLabel={setNewAddressLabel} shippingMethod={shippingMethod} 
           />
           <PaymentMethod paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />
+          
+          <DiscountSection
+            user={user}
+            promoCode={promoCode} setPromoCode={setPromoCode}
+            promoDiscount={promoDiscount} setPromoDiscount={setPromoDiscount}
+            loyaltyDiscount={loyaltyDiscount} setLoyaltyDiscount={setLoyaltyDiscount}
+            baristaNotes={baristaNotes} setBaristaNotes={setBaristaNotes}
+          />
         </form>
 
         <div className="flex flex-col gap-6">
            <CheckoutSummary 
-               cartItems={cartItems} cartTotal={cartTotal} currentShippingCost={currentShippingCost} finalTotal={finalTotal} 
-               shippingOptions={shippingOptions} shippingMethod={shippingMethod} 
-               timeRemaining={formattedTime}
-               isTimeExpired={isTimeExpired} 
-               isTimeRunningOut={isTimeRunningOut} 
-               isSubmitting={isSubmitting} 
-               handleFormSubmit={handleSubmit(onSubmit)} navigate={navigate} 
+                cartItems={cartItems} cartTotal={cartTotal} currentShippingCost={currentShippingCost} finalTotal={finalTotal} 
+                shippingOptions={shippingOptions} shippingMethod={shippingMethod} 
+                timeRemaining={formattedTime}
+                isTimeExpired={isTimeExpired} 
+                isTimeRunningOut={isTimeRunningOut} 
+                isSubmitting={isSubmitting} 
+                handleFormSubmit={handleSubmit(onSubmit)} navigate={navigate}
+                discountAmount={discountAmount} discountPercent={discountPercent}
+                activeDiscountType={promoDiscount ? 'promo' : loyaltyDiscount ? 'loyalty' : null}
+                promoCode={promoCode}
            />
         </div>
       </div>

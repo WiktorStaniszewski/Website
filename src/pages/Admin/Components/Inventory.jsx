@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useSearchParams } from "react-router-dom";
 import api from "services/api"; 
-import { FiBox, FiMapPin, FiTruck, FiArrowLeft, FiAlertTriangle, FiPlus, FiX } from "react-icons/fi";
+import { FiBox, FiMapPin, FiTruck, FiArrowLeft, FiAlertTriangle, FiPlus, FiX, FiSearch, FiPackage, FiEdit2, FiImage } from "react-icons/fi";
 import DeliveryModal from './DeliveryModal';
-import SomniumSelect from "components/ui/SomniumSelect";
+import ProductEditModal from './ProductEditModal';
 import AdminPageLayout, { SkeletonGrid, SkeletonRow } from './AdminPageLayout';
 
 export default function Inventory() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [locations, setLocations] = useState([]);
   const [globalProducts, setGlobalProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,6 +20,17 @@ export default function Inventory() {
   const [newLocation, setNewLocation] = useState({ name: "", type: "cafe" });
   const [isSubmittingLocation, setIsSubmittingLocation] = useState(false);
 
+  const [productSearch, setProductSearch] = useState("");
+  const [viewMode, setViewMode] = useState(searchParams.get('view') || 'locations');
+  
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [productToEdit, setProductToEdit] = useState(null);
+
+  const openEditModal = (product) => {
+      setProductToEdit(product);
+      setIsEditModalOpen(true);
+  };
+
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -27,6 +40,20 @@ export default function Inventory() {
         ]);
         setLocations(locs);
         setGlobalProducts(prods);
+        
+        const locParam = searchParams.get('location');
+        if (locParam) {
+           const loc = locs.find(l => String(l.id) === locParam);
+           if (loc) setSelectedLocation(loc);
+        }
+
+        if (searchParams.get('action') === 'add') {
+            openEditModal(null);
+            setSearchParams(prev => {
+                prev.delete('action');
+                return prev;
+            }, { replace: true });
+        }
     } catch(e) {
         console.error(e);
     } finally {
@@ -35,6 +62,13 @@ export default function Inventory() {
   };
 
   useEffect(() => { fetchData(); },[]);
+
+  const handleBack = () => {
+      setSelectedLocation(null);
+      if (searchParams.has('location')) {
+          setSearchParams({});
+      }
+  };
 
   const handleAddLocation = async (e) => {
       e.preventDefault();
@@ -65,7 +99,7 @@ export default function Inventory() {
               actions={
                   <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
                       <button 
-                          onClick={() => setSelectedLocation(null)}
+                          onClick={handleBack}
                           className="flex items-center justify-center gap-2 px-5 py-3 bg-white/5 hover:bg-white/10 text-white/70 rounded-xl transition-all cursor-pointer font-bold"
                       >
                           <FiArrowLeft /> Powrót
@@ -143,10 +177,96 @@ export default function Inventory() {
             </button>
         }
     >
+      <div className="mb-6 flex gap-4 border-b border-white/5 pb-4">
+        <button 
+          onClick={() => setViewMode('locations')}
+          className={`px-6 py-2 rounded-xl font-bold transition-all ${viewMode === 'locations' ? 'bg-(--medium-shade) text-[#24201d]' : 'text-white/40 hover:bg-white/5 hover:text-white/80'}`}
+        >
+          Magazyny i Placówki
+        </button>
+        <button 
+          onClick={() => setViewMode('products')}
+          className={`px-6 py-2 rounded-xl font-bold transition-all ${viewMode === 'products' ? 'bg-(--medium-shade) text-[#24201d]' : 'text-white/40 hover:bg-white/5 hover:text-white/80'}`}
+        >
+          Wszystkie Produkty
+        </button>
+      </div>
+
+      {viewMode === 'locations' && (
+          <div className="mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+              <div className="relative w-full md:w-96">
+                  <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 text-lg" />
+                  <input 
+                      type="text" 
+                      placeholder="Szukaj produktu na stanach..." 
+                      value={productSearch}
+                      onChange={(e) => setProductSearch(e.target.value)}
+                      className="w-full bg-[#2D231C] border border-[#5C4A3D] rounded-xl py-3 pl-11 pr-4 text-white focus:outline-none focus:border-(--medium-shade) transition-colors placeholder-white/30"
+                  />
+              </div>
+          </div>
+      )}
+
+      {viewMode === 'locations' && productSearch.trim().length > 0 && !loading && (() => {
+          const q = productSearch.toLowerCase();
+          const matchingProducts = globalProducts.filter(p => p.name.toLowerCase().includes(q));
+          
+          if (matchingProducts.length === 0) {
+              return (
+                  <div className="rounded-2xl border border-white/5 bg-[#24201d]/60 p-8 text-center text-white/40 italic mb-6">
+                      Nie znaleziono produktów pasujących do "{productSearch}".
+                  </div>
+              );
+          }
+
+          return (
+              <div className="rounded-2xl border border-white/5 bg-[#24201d]/60 backdrop-blur-xl shadow-xl p-4 sm:p-6 mb-6 space-y-4 animate-in fade-in duration-300">
+                  <h3 className="text-sm uppercase tracking-widest text-(--medium-shade) font-bold">Wyniki wyszukiwania ({matchingProducts.length})</h3>
+                  {matchingProducts.slice(0, 10).map(product => {
+                      const stockByLocation = locations.map(loc => {
+                          const inv = loc.Inventories?.find(i => i.productId === product.id);
+                          return { locationName: loc.name, locationType: loc.type, stock: inv ? inv.stockQuantity : 0 };
+                      });
+                      const totalStock = stockByLocation.reduce((sum, s) => sum + s.stock, 0);
+
+                      return (
+                          <div key={product.id} className="bg-white/5 border border-white/5 rounded-2xl p-4">
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                                  <div>
+                                      <h4 className="font-bold text-white text-lg">{product.name}</h4>
+                                      <span className="text-xs text-white/40">{product.category} · {product.price} PLN</span>
+                                  </div>
+                                  <span className={`text-sm font-bold px-3 py-1 rounded-full border ${totalStock > 5 ? 'border-green-500/30 text-green-400 bg-green-500/10' : totalStock > 0 ? 'border-yellow-500/30 text-yellow-400 bg-yellow-500/10' : 'border-red-500/30 text-red-400 bg-red-500/10'}`}>
+                                      Łącznie: {totalStock} szt.
+                                  </span>
+                              </div>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                                  {stockByLocation.map((s, idx) => (
+                                      <div key={idx} className="flex items-center justify-between bg-black/20 rounded-xl px-3 py-2 border border-white/5">
+                                          <span className="flex items-center gap-2 text-sm text-white/70">
+                                              {s.locationType === 'warehouse' ? <FiBox size={14} className="text-(--medium-shade)" /> : <FiMapPin size={14} className="text-(--medium-shade)" />}
+                                              {s.locationName}
+                                          </span>
+                                          <span className={`font-bold text-sm ${s.stock > 5 ? 'text-green-400' : s.stock > 0 ? 'text-yellow-400' : 'text-red-400/60'}`}>
+                                              {s.stock} szt.
+                                          </span>
+                                      </div>
+                                  ))}
+                              </div>
+                          </div>
+                      );
+                  })}
+                  {matchingProducts.length > 10 && (
+                      <p className="text-xs text-white/40 text-center italic">...i {matchingProducts.length - 10} więcej wyników. Doprecyzuj wyszukiwanie.</p>
+                  )}
+              </div>
+          );
+      })()}
+
       <div className="min-h-[400px]">
         {loading ? (
             <SkeletonGrid count={4} />
-        ) : (
+        ) : viewMode === 'locations' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                 {locations.map(loc => {
                     const totalItems = loc.Inventories?.reduce((sum, inv) => sum + inv.stockQuantity, 0) || 0;
@@ -189,6 +309,68 @@ export default function Inventory() {
                         </div>
                     );
                 })}
+            </div>
+        ) : (
+            <div className="rounded-[2.5rem] border border-white/5 overflow-hidden bg-[#24201d]/60 backdrop-blur-xl shadow-xl p-2 sm:p-8">
+                <div className="flex justify-between items-center mb-6 px-4 md:px-0 border-b border-white/5 pb-4">
+                    <h2 className="text-xl font-bold text-(--medium-shade) flex items-center gap-2">
+                        <FiPackage className="text-(--medium-shade)" /> Lista wszystkich produktów ({globalProducts.length})
+                    </h2>
+                    <button 
+                        onClick={() => openEditModal(null)}
+                        className="bg-(--medium-shade) hover:brightness-110 text-[#24201d] px-4 py-2 rounded-xl font-bold text-sm shadow-md transition-all cursor-pointer flex items-center gap-2"
+                    >
+                        <FiPlus /> Dodaj produkt
+                    </button>
+                </div>
+                
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm text-[#F2EAE1] min-w-[800px]">
+                        <thead className="text-(--medium-shade) uppercase text-[10px] tracking-widest font-black border-b border-white/5">
+                            <tr>
+                                <th className="p-4">Zdjęcie</th>
+                                <th className="p-4">Nazwa / Kategoria</th>
+                                <th className="p-4 text-center">Cena</th>
+                                <th className="p-4 text-center">Ogólny Stan Magazynowy</th>
+                                <th className="p-4 text-right">Akcje</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/5">
+                            {globalProducts.map(product => (
+                                <tr key={product.id} className="hover:bg-white/5 transition-colors group">
+                                    <td className="p-4 w-16">
+                                        <div className="w-12 h-12 rounded-xl border border-white/10 overflow-hidden bg-[#2D231C]">
+                                            {product.image ? (
+                                                <img src={`http://localhost:5000/images/products/${product.image}`} alt={product.name} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-white/20"><FiImage /></div>
+                                            )}
+                                        </div>
+                                    </td>
+                                    <td className="p-4">
+                                        <p className="font-bold text-lg">{product.name}</p>
+                                        <p className="text-xs text-white/40">{product.category} {product.size ? `· ${product.size}` : ''}</p>
+                                    </td>
+                                    <td className="p-4 text-center font-bold">{product.price} PLN</td>
+                                    <td className="p-4 text-center">
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${product.stockQuantity > 5 ? 'bg-green-500/10 text-green-400' : product.stockQuantity > 0 ? 'bg-yellow-500/10 text-yellow-400' : 'bg-red-500/10 text-red-400'}`}>
+                                            {product.stockQuantity} szt.
+                                        </span>
+                                    </td>
+                                    <td className="p-4 text-right">
+                                        <button 
+                                            onClick={() => openEditModal(product)}
+                                            className="p-2 bg-white/5 hover:bg-(--medium-shade) hover:text-[#24201d] text-white/50 rounded-xl transition-colors cursor-pointer"
+                                            title="Edytuj produkt"
+                                        >
+                                            <FiEdit2 size={16} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         )}
       </div>
@@ -237,6 +419,17 @@ export default function Inventory() {
           </div>,
           document.body
       )}
+
+      {/* Modal edycji/dodawania produktu */}
+      <ProductEditModal 
+          isOpen={isEditModalOpen} 
+          onClose={() => {
+              setIsEditModalOpen(false);
+              setProductToEdit(null);
+          }} 
+          product={productToEdit}
+          onSuccess={fetchData} 
+      />
     </AdminPageLayout>
   );
 }

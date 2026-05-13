@@ -49,7 +49,7 @@ function Shop() {
                 {/* Mobile Floating Action Button / Navigation */}
                 <div className={`lg:hidden fixed bottom-25 left-0 z-30 px-4 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${
                     (visible && !isFilterMenuOpen)
-                        ? 'w-[calc(100%-80px)] translate-y-0 opacity-100 scale-100' 
+                        ? 'w-[calc(100%-100px)] translate-y-0 opacity-100 scale-100' 
                         : 'w-full translate-y-24 opacity-0 scale-95 pointer-events-none'
                 }`}>
                     <Navigation filters={filters} toggleFilterMenu={toggleFilterMenu} />

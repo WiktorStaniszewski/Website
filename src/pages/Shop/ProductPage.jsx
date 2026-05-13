@@ -79,7 +79,7 @@ export default function ProductPage() {
     };
 
     return (
-        <div className="min-h-screen bg-(--80-shade) pt-32 pb-40 lg:pb-12">
+        <div className="min-h-screen bg-(--80-shade) pt-32 pb-20">
             
             <div className="max-w-6xl mx-auto px-4 lg:px-12 mb-8 flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
                 <button 
@@ -156,10 +156,10 @@ export default function ProductPage() {
                         </div>
                     )}
 
-                    <div className="hidden lg:block mt-auto border-t border-white/10 pt-8">
+                    <div className="mt-8 lg:mt-auto border-t border-white/10 pt-8">
                         <div className="flex justify-between items-end mb-6">
                             <span className="text-sm uppercase text-(--font-color)/50 tracking-widest font-bold">Cena</span>
-                            <div className="text-5xl font-bold text-(--medium-shade) drop-shadow-sm">
+                            <div className="text-4xl md:text-5xl font-bold text-(--medium-shade) drop-shadow-sm">
                                 {product.price} <span className="text-xl text-(--font-color)">PLN</span>
                             </div>
                         </div>
@@ -169,23 +169,6 @@ export default function ProductPage() {
                         }
                     </div>
                 </div>
-            </div>
-
-            {/* Sticky Bar dla Mobile */}
-            <div className="lg:hidden fixed bottom-0 left-0 w-full bg-(--80-shade)/95 backdrop-blur-xl border-t border-white/10 p-4 z-40 pb-safe shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
-                {isSoldOut ? (
-                     <WaitlistForm email={email} setEmail={setEmail} status={waitlistStatus} onSubmit={handleWaitlist} isMobile />
-                ) : (
-                    <div className="flex items-center justify-between gap-4">
-                        <div className="flex flex-col">
-                            <span className="text-[10px] uppercase text-(--font-color)/60 font-bold">Do zapłaty</span>
-                            <span className="text-2xl font-bold text-(--medium-shade)">{product.price} <span className="text-sm text-(--font-color)">PLN</span></span>
-                        </div>
-                        <div className="flex-1 max-w-[200px]">
-                            <AddToCartButton product={product} className="w-full py-3.5 shadow-lg" />
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     );

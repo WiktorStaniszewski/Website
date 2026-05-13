@@ -42,6 +42,8 @@ const OrderDetails = lazy(() => import('./pages/Admin/Components/OrderDetails'))
 const Users = lazy(() => import('./pages/Admin/Components/Users'));
 const UserDetails = lazy(() => import('./pages/Admin/Components/UserDetails'));
 const AdminDeliveries = lazy(() => import('./pages/Admin/Components/AdminDeliveries'));
+const PromoCodes = lazy(() => import('./pages/Admin/Components/PromoCodes'));
+const SalesReport = lazy(() => import('./pages/Admin/Components/SalesReport'));
 
 function PageLoader() {
   return (
@@ -163,6 +165,8 @@ export default function App() {
               <Route path="deliveries" element={<SuperAdminRoute><Suspense fallback={<PageLoader />}><PageWrapper><AdminDeliveries /></PageWrapper></Suspense></SuperAdminRoute>} />
               <Route path="users" element={<SuperAdminRoute><Suspense fallback={<PageLoader />}><PageWrapper><Users /></PageWrapper></Suspense></SuperAdminRoute>} />
               <Route path="users/:id" element={<SuperAdminRoute><Suspense fallback={<PageLoader />}><PageWrapper animation="slideRight"><UserDetails /></PageWrapper></Suspense></SuperAdminRoute>} />
+              <Route path="promo-codes" element={<SuperAdminRoute><Suspense fallback={<PageLoader />}><PageWrapper><PromoCodes /></PageWrapper></Suspense></SuperAdminRoute>} />
+              <Route path="reports" element={<SuperAdminRoute><Suspense fallback={<PageLoader />}><PageWrapper><SalesReport /></PageWrapper></Suspense></SuperAdminRoute>} />
             </Route>
             
             <Route path="account" element={

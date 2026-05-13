@@ -27,6 +27,7 @@ export default function DeliveryModal({ isOpen, onClose, onSuccess }) {
   
   const [formData, setFormData] = useState(defaultProductState);
   const [selectedProductId, setSelectedProductId] = useState("");
+  const [productQuery, setProductQuery] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const fileInputRef = useRef(null);
@@ -59,6 +60,7 @@ export default function DeliveryModal({ isOpen, onClose, onSuccess }) {
       setActiveForm(null);
       setFormData(defaultProductState);
       setSelectedProductId("");
+      setProductQuery("");
       setSelectedFile(null);
       setPreviewUrl(null);
   };
@@ -314,11 +316,12 @@ export default function DeliveryModal({ isOpen, onClose, onSuccess }) {
                         </div>
 
                         {activeForm === 'ADD_STOCK' && (
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <SomniumSelect 
                                         label="Wybierz produkt"
                                         placeholder="Z listy..."
+                                        searchable
                                         options={products.map(p => ({ label: p.name, value: String(p.id) }))}
                                         value={String(selectedProductId)}
                                         onChange={(val) => setSelectedProductId(val)}

@@ -68,7 +68,7 @@ function Menus() {
     };
 
     const handlePasswordSubmit = async (password) => {
-        await api.post('auth/verify-password', { password }); // rzuca wyjątek
+        await api.post('auth/verify-password', { password }); 
         setPasswordModalOpen(false);
 
         try {
@@ -160,7 +160,7 @@ function Menus() {
                      {isSuperAdmin && (
                          <div className="w-full flex flex-col sm:flex-row justify-center md:absolute md:right-0 md:top-0 gap-3 md:w-auto mb-6 md:mb-0">
                              {!isEditing ? (
-                                 <button onClick={enableEditMode} className="w-full sm:w-auto bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3 md:px-4 md:py-2 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-colors shadow-lg cursor-pointer">
+                                 <button onClick={enableEditMode} className="w-full sm:w-auto bg-black/20 hover:bg-black/30 border border-white/10 text-white px-6 py-3 md:px-4 md:py-2 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-colors shadow-lg cursor-pointer">
                                      <FiEdit3 /> Edytuj Menu
                                  </button>
                              ) : (

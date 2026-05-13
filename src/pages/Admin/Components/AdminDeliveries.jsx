@@ -214,7 +214,7 @@ export default function AdminDeliveries() {
                                             ) : "—"}
                                         </td>
                                         <td className="p-6">
-                                            <span className="px-3 py-1 bg-(--medium-shade)/10 text-(--medium-shade) rounded-full text-[10px] font-black uppercase tracking-widest">
+                                            <span className="px-3 py-1 bg-(--medium-shade)/10 text-(--medium-shade) rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap inline-block">
                                                 {delivery.DeliveryActions?.length || 0} operacji
                                             </span>
                                         </td>

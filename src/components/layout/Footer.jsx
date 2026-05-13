@@ -1,10 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FiFacebook, FiInstagram, FiMapPin, FiPhone, FiMail, FiArrowRight } from "react-icons/fi";
 import { FaTiktok } from "react-icons/fa";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const location = useLocation();
+
+  if (location.pathname.toLowerCase().includes('/admin')) {
+    return null;
+  }
 
   return (
     <footer className="w-full mt-auto relative z-10 text-(--font-color)">
@@ -12,15 +17,15 @@ export default function Footer() {
 
       <div className="w-full bg-(--header-footer-bg)/90 backdrop-blur-xl pt-16 pb-8 px-6 lg:px-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
-          
+
           <div className="flex flex-col gap-6">
             <Link to="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-full bg-white/10 overflow-hidden border border-white/5 group-hover:border-(--80-shade) transition-colors">
-                 <img src="images/Somnium/SomniumLogo.jpg" alt="Somnium" className="w-full h-full object-cover" />
+                <img src="images/Somnium/SomniumLogo.jpg" alt="Somnium" className="w-full h-full object-cover" />
               </div>
               <span className="text-2xl font-bold tracking-tighter">Somnium</span>
             </Link>
-            
+
             <p className="text-sm opacity-60 leading-relaxed max-w-xs">
               Kawa to nie tylko napój, to doświadczenie. Dołącz do nas i odkryj świat specialty coffee w sercu Krakowa.
             </p>
@@ -29,11 +34,11 @@ export default function Footer() {
             <div className="flex flex-col gap-2 mt-2">
               <label htmlFor="newsletter-email" className="text-xs font-bold uppercase tracking-wider opacity-50">Newsletter</label>
               <form className="flex gap-2">
-                <input 
+                <input
                   id="newsletter-email"
                   name="email"
-                  type="email" 
-                  placeholder="Twój email..." 
+                  type="email"
+                  placeholder="Twój email..."
                   className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm w-full focus:outline-none focus:border-(--80-shade) transition-all placeholder:opacity-30"
                 />
                 <button type="submit" aria-label="Zapisz się" className="bg-(--80-shade) hover:bg-(--button-hover-bg) text-white p-2 rounded-lg transition-colors cursor-pointer">

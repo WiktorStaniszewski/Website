@@ -21,8 +21,8 @@ function Card({ product }) {
             onClick={handleCardClick}
             className={`
                 group relative h-[420px] max-w-60 w-full flex flex-col cursor-pointer overflow-hidden
-                bg-white/10 backdrop-blur-md border border-white/10 rounded-4xl 
-                transition-all duration-500 shadow-lg hover:shadow-[0_10px_40px_rgba(143,120,93,0.25)] hover:-translate-y-2 hover:border-(--medium-shade)
+                bg-white/5 backdrop-blur-sm border border-white/5 rounded-4xl 
+                transition-all duration-500 shadow-xl hover:shadow-[0_15px_45px_rgba(0,0,0,0.5)] hover:-translate-y-2 hover:border-(--medium-shade)/50
                 ${isSoldOut ? 'opacity-80 grayscale-40' : ''}
             `}
         >
@@ -41,7 +41,7 @@ function Card({ product }) {
             </div>
 
             {/* Kontener zdjęcia */}
-            <div className="relative w-full h-[55%] overflow-hidden bg-white/45 p-6 flex items-center justify-center">
+            <div className="relative w-full h-[55%] overflow-hidden bg-white/5 p-6 flex items-center justify-center">
                 <img 
                     src={getImageUrl(product.image || product.img)} 
                     alt={product.name} 

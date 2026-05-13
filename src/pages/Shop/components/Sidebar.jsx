@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import 'styles/Shop.css';
 import { FiX, FiFilter } from 'react-icons/fi';
-import ReactSlider from 'react-slider';
 import { useViewport } from 'hooks/useViewport';
 
 const RadioOption = React.memo(({ label, name, value, checkedValue, onChange }) => {
@@ -77,27 +76,49 @@ const SidebarContent = React.memo(({ filters }) => {
         <div className="h-px bg-white/5 w-full mt-8"></div>
 
         <fieldset className="mt-8 mb-8">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-4">
                 <h3 className="text-sm uppercase tracking-widest text-white/50 font-bold">Cena</h3>
-                <span className="text-xs font-bold text-(--medium-shade) bg-(--medium-shade)/10 px-2 py-1 rounded-md">
-                    {filters.priceRange[0]} zł - {filters.priceRange[1]} zł
-                </span>
             </div>
             
-            <div className="px-2" style={{ touchAction: 'none' }}>
-                <ReactSlider
-                    className="w-full h-1 bg-white/10 rounded-full flex items-center"
-                    thumbClassName="w-5 h-5 bg-(--medium-shade) rounded-full shadow-[0_0_10px_rgba(143,120,93,0.8)] cursor-grab outline-none flex items-center justify-center hover:scale-110 transition-transform"
-                    trackClassName="bg-(--medium-shade) h-1 rounded-full"
-                    min={0} max={500} step={10} value={filters.priceRange}
-                    onChange={(newRange) => { if(filters.handlePriceRangeChange) filters.handlePriceRangeChange(newRange); }}
-                    renderThumb={({ key, ...restProps }) => (
-                        <div key={key} {...restProps}><div className="w-2 h-2 bg-[#24201d] rounded-full"></div></div>
-                    )}
-                />
+            <div className="flex flex-wrap gap-2 mb-6">
+                <button 
+                  onClick={() => filters.handlePriceRangeChange([0, 50])}
+                  className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors cursor-pointer ${filters.priceRange[0] === 0 && filters.priceRange[1] === 50 ? 'bg-(--medium-shade) text-[#24201d] border-(--medium-shade)' : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white'}`}
+                >Do 50 zł</button>
+                <button 
+                  onClick={() => filters.handlePriceRangeChange([0, 75])}
+                  className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors cursor-pointer ${filters.priceRange[0] === 0 && filters.priceRange[1] === 75 ? 'bg-(--medium-shade) text-[#24201d] border-(--medium-shade)' : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white'}`}
+                >Do 75 zł</button>
+                <button 
+                  onClick={() => filters.handlePriceRangeChange([0, 100])}
+                  className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors cursor-pointer ${filters.priceRange[0] === 0 && filters.priceRange[1] === 100 ? 'bg-(--medium-shade) text-[#24201d] border-(--medium-shade)' : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white'}`}
+                >Do 100 zł</button>
             </div>
-            <div className="flex justify-between text-[10px] text-white/40 mt-3 px-1 font-mono">
-                <span>0 zł</span><span>500+ zł</span>
+
+            <div className="flex items-center gap-3">
+                <div className="relative flex-1">
+                    <input 
+                        type="number" 
+                        min="0"
+                        value={filters.priceRange[0] === 0 && filters.priceRange[1] === 500 && filters.priceRange[0] === 0 ? '' : filters.priceRange[0]} 
+                        onChange={(e) => filters.handlePriceRangeChange([e.target.value === '' ? '' : Number(e.target.value), filters.priceRange[1]])}
+                        className="w-full bg-black/20 border border-white/10 rounded-xl py-2 px-3 text-sm text-white focus:border-(--medium-shade) outline-none transition-colors"
+                        placeholder="Od"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/40 font-bold">zł</span>
+                </div>
+                <span className="text-white/30 font-bold">-</span>
+                <div className="relative flex-1">
+                    <input 
+                        type="number" 
+                        min="0"
+                        value={filters.priceRange[1] === 500 && filters.priceRange[0] === 0 ? '' : filters.priceRange[1]} 
+                        onChange={(e) => filters.handlePriceRangeChange([filters.priceRange[0], e.target.value === '' ? '' : Number(e.target.value)])}
+                        className="w-full bg-black/20 border border-white/10 rounded-xl py-2 px-3 text-sm text-white focus:border-(--medium-shade) outline-none transition-colors"
+                        placeholder="Do"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/40 font-bold">zł</span>
+                </div>
             </div>
         </fieldset>
     </div>
@@ -125,7 +146,7 @@ function Sidebar({ filters, isFilterMenuOpen, toggleFilterMenu }) {
             <button onClick={toggleFilterMenu} className="p-2.5 bg-white/5 rounded-xl hover:bg-white/10 transition-colors text-white cursor-pointer"><FiX size={20} /></button>
         </div>
         <SidebarContent filters={filters} />
-        <div className="absolute bottom-0 w-full p-6 border-t border-white/10 bg-[#24201d]/90 backdrop-blur-md shrink-0 pb-safe-area">
+        <div className="absolute bottom-0 w-full p-6 pb-12 border-t border-white/10 bg-[#24201d]/90 backdrop-blur-md shrink-0">
               <button onClick={toggleFilterMenu} className="w-full py-4 bg-(--medium-shade) hover:brightness-110 text-[#24201d] font-bold text-lg rounded-2xl shadow-[0_0_20px_rgba(143,120,93,0.3)] active:scale-95 transition-all cursor-pointer">Pokaż Wyniki</button>
         </div>
       </aside>,
