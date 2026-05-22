@@ -9,6 +9,7 @@ function Card({ product }) {
     const available = product.availableStock !== undefined ? product.availableStock : (product.stockQuantity || 0);
     const isSoldOut = available <= 0;
     const isLowStock = available > 0 && available <= 5;
+    const is1kg = product.size && product.size.toLowerCase().includes('1kg');
     
     const handleCardClick = () => {
         navigate(`/shop/${product.id || product.slug}`);
@@ -19,6 +20,15 @@ function Card({ product }) {
     return (
         <section 
             onClick={handleCardClick}
+            aria-label={`Produkt ${product.name}`}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleCardClick();
+                }
+            }}
             className={`
                 group relative h-[420px] max-w-60 w-full flex flex-col cursor-pointer overflow-hidden
                 bg-white/5 backdrop-blur-sm border border-white/5 rounded-4xl 
@@ -28,6 +38,11 @@ function Card({ product }) {
         >
             {/* Tagi statusu */}
             <div className="absolute top-4 left-4 z-20 flex flex-col gap-2 pointer-events-none">
+                {is1kg && (
+                    <span className="bg-black/50 backdrop-blur-sm text-[#24201d] text-[10px] uppercase font-bold tracking-wider px-3 py-1.5 rounded-xl shadow-md border border-white/50">
+                        Wersja 1kg
+                    </span>
+                )}
                 {isSoldOut && (
                     <span className="bg-red-500/90 backdrop-blur-sm text-white text-[10px] uppercase font-bold tracking-wider px-3 py-1.5 rounded-xl border border-red-400/50 shadow-md">
                         Wyprzedane

@@ -1,6 +1,13 @@
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "src/context/AuthProvider";
-import { FiGrid, FiBox, FiUsers, FiShoppingCart, FiLogOut, FiTruck, FiTag, FiBarChart2 } from "react-icons/fi";
+import { FiGrid } from "react-icons/fi";
+import { FiBox } from "react-icons/fi";
+import { FiUsers } from "react-icons/fi";
+import { FiShoppingCart } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
+import { FiTruck } from "react-icons/fi";
+import { FiTag } from "react-icons/fi";
+import { FiBarChart2 } from "react-icons/fi";
 
 export default function AdminLayout() {
   const { logout, isSuperAdmin } = useAuth();
@@ -18,7 +25,7 @@ export default function AdminLayout() {
 
   return (
     <div className="lg:grid lg:grid-cols-[288px_1fr] min-h-screen bg-(--80-shade) text-[#F2EAE1] relative">
-      <aside className="hidden lg:flex flex-col sticky top-0 h-screen border-r border-[#5C4A3D] bg-(--medium-shade)/20 z-20 shadow-xl">
+      <aside className="hidden lg:flex flex-col sticky top-0 h-screen border-r border-[#5C4A3D] bg-(--medium-shade)/20 z-20 shadow-xl overflow-hidden">
         <div className="pt-[104px] pb-8 px-8 text-center border-b border-[#5C4A3D] flex flex-col justify-start">
           <h1 className="font-serif font-bold tracking-widest text-[28px] leading-none text-(--medium-shade)">SOMNIUM</h1>
           <span className="text-xs uppercase tracking-[0.3em] text-[#F2EAE1]/70 font-bold mt-1">Admin</span>

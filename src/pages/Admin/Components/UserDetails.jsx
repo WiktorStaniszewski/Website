@@ -1,7 +1,11 @@
   import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "services/api"; 
-import { FiArrowLeft, FiUser, FiMail, FiMapPin, FiBox, FiCalendar } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
+import { FiMail } from "react-icons/fi";
+import { FiMapPin } from "react-icons/fi";
+import { FiBox } from "react-icons/fi";
+import { FiCalendar } from "react-icons/fi";
 import AdminPageLayout from "./AdminPageLayout";
 
 export default function UserDetails() {

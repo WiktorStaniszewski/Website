@@ -1,6 +1,9 @@
 import React from 'react'
 import Form from 'components/ui/Form';
-import { FaCoffee, FaStar, FaUserFriends, FaRegCheckCircle } from 'react-icons/fa';
+import { FaCoffee } from 'react-icons/fa';
+import { FaStar } from 'react-icons/fa';
+import { FaUserFriends } from 'react-icons/fa';
+import { FaRegCheckCircle } from 'react-icons/fa';
 
 export default function Recruitment() {
   return (

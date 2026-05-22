@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { RiArrowDropDownLine, RiDraggable } from "react-icons/ri";
-import { FiTrash2, FiPlus } from "react-icons/fi";
+import { RiArrowDropDownLine } from "react-icons/ri";
+import { RiDraggable } from "react-icons/ri";
+import { FiTrash2 } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
 
 function Menu({ category, isActive, toggleMenu, index, isEditing, onCategoryChange, onItemChange, onAddItem, onRemoveItem, onRemoveCategory, onReorderItem }) {
   const [insertAtSlot, setInsertAtSlot] = useState(null);

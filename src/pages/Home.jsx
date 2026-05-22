@@ -1,17 +1,27 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaPlus, FaMinus, FaCoffee, FaStar, FaLeaf } from "react-icons/fa";
-import { FiCoffee, FiZap, FiSettings, FiPackage, FiArrowRight } from "react-icons/fi";
+import { FaPlus } from "react-icons/fa";
+import { FaMinus } from "react-icons/fa";
+import { FaCoffee } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
+import { FaLeaf } from "react-icons/fa";
+import { FiCoffee } from "react-icons/fi";
+import { FiZap } from "react-icons/fi";
+import { FiSettings } from "react-icons/fi";
+import { FiPackage } from "react-icons/fi";
+import { FiArrowRight } from "react-icons/fi";
 import BugReportSection from './BugReportSection';
 
 const HeroSection = () => (
     <div className='relative w-full h-screen overflow-hidden flex items-center justify-center'>
         <div className="absolute inset-0 z-0">
             <img
-                src="images/tlo1.jpg"
+                src={`${import.meta.env.BASE_URL}images/tlo1.webp`}
                 alt="Somnium Cafe Interior"
                 fetchPriority="high"
-                loading="eager"
+                decoding="sync"
+                width={1920}
+                height={1080}
                 className='w-full h-full object-cover object-center scale-105 animate-in fade-in duration-1000'
             />
             <div className="absolute inset-0 bg-linear-to-t from-(--darker-bg) via-(--darker-bg)/40 to-black/20" />
@@ -48,7 +58,7 @@ const HeroSection = () => (
                     to="/shop"
                     className="group relative px-8 py-4 bg-(--medium-shade) hover:bg-black/10 backdrop-blur-md border border-(--medium-shade) rounded-full transition-all duration-300 overflow-hidden shadow-lg hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] cursor-pointer"
                 >
-                    <span className="relative z-10 text-[#24201d] font-bold uppercase tracking-widest text-sm transition-colors group-hover:text-[#24201d]">
+                    <span className="relative z-10 text-black font-extrabold uppercase tracking-widest text-sm transition-colors group-hover:text-black drop-shadow-sm">
                         Sklep Online
                     </span>
                 </NavLink>
@@ -61,7 +71,7 @@ const HeroSection = () => (
 );
 
 const FeatureIcons = React.memo(() => (
-    <div className="w-full py-12 border-b border-white/10 relative z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.4)]">
+    <div className="w-full py-12 border-b border-white/10 relative z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.4)] bg-black/30 backdrop-blur-sm">
         <div className="flex flex-wrap justify-center gap-8 md:gap-24 text-(--font-color)">
             <div className="flex flex-col items-center gap-2 group cursor-default">
                 <div className="p-4 rounded-full bg-white/5 border border-white/5 group-hover:border-(--medium-shade)/30 transition-colors">

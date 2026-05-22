@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const getHeaders = (isFormData = false) => {
   const token = localStorage.getItem("somnium_token");
@@ -23,8 +23,13 @@ const api = {
       });
       
       if (!res.ok) {
+        if (res.status === 401 && cleanEndpoint === 'cart') {
+          return []; 
+        }
         const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.message || `API Error: ${res.status}`);
+        const err = new Error(errorData.message || `API Error: ${res.status}`);
+        err.status = res.status;
+        throw err;
       }
       
       return await res.json();

@@ -1,6 +1,12 @@
 import React from 'react';
-import { FaBox, FaChevronRight, FaCheck, FaSpinner, FaTimes, FaChevronLeft } from "react-icons/fa";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FaBox } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
+import { FaChevronLeft } from "react-icons/fa";
+import { FiChevronLeft } from "react-icons/fi";
+import { FiChevronRight } from "react-icons/fi";
 import usePagination from 'src/hooks/usePagination';
 
 export default function HistoryTab({ orders, loading, navigate }) {

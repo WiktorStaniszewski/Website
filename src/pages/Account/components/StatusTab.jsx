@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import api from "src/services/api";
-import { FaSpinner, FaSearch, FaBoxOpen, FaChevronDown } from "react-icons/fa";
-import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "src/context/AuthProvider";
+import { FaSpinner } from "react-icons/fa";
+import { FaBoxOpen } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 export default function StatusTab() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const location = useLocation();
     const urlTrackingNumber = searchParams.get("track") || "";
 
     const [searchId, setSearchId] = useState(urlTrackingNumber);
@@ -117,7 +117,7 @@ export default function StatusTab() {
     };
 
     const currentStepIndex = trackingResult ? stepsTemplate.findIndex(s => s.id === trackingResult.status) : -1;
-    const progressPercent = trackingResult ? (Math.max(0, currentStepIndex) / (stepsTemplate.length - 1)) * 100 : 0;
+    const progressPercent = trackingResult ? (Math.min(currentStepIndex + 0.7, stepsTemplate.length - 1) / (stepsTemplate.length - 1)) * 100 : 0;
 
     return (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -126,14 +126,16 @@ export default function StatusTab() {
                 <h2 className="text-4xl font-serif font-bold text-white mt-2">Śledzenie Zamówienia</h2>
             </div>
             
-            <div className="bg-[#1a1715]/60 p-6 sm:p-10 rounded-3xl border border-white/5 shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-(--medium-shade) rounded-full opacity-5 blur-3xl pointer-events-none"></div>
+            <div className="bg-[#1a1715]/60 p-6 sm:p-10 rounded-3xl border border-white/5 shadow-2xl relative">
+                <div className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-(--medium-shade) rounded-full opacity-5 blur-3xl"></div>
+                </div>
                 
                 <form onSubmit={handleSearch} className="relative z-20 mb-6">
                     <p className="text-xs uppercase tracking-widest text-white/40 font-bold mb-3 ml-2">Wybierz przesyłkę z listy</p>
                     
                     <div className="flex flex-col md:flex-row gap-4">
-                        <div className="relative flex-1">
+                        <div className="relative flex-1 z-50">
                             <button
                                 type="button"
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -151,7 +153,7 @@ export default function StatusTab() {
                             </button>
 
                             {isDropdownOpen && (
-                                <div className="absolute top-full left-0 w-full mt-2 bg-[#24201d] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200 max-h-[300px] overflow-y-auto custom-scrollbar">
+                                <div className="absolute top-full left-0 w-full mt-2 bg-[#24201d] border border-white/10 rounded-2xl shadow-2xl z-[999] animate-in fade-in slide-in-from-top-2 duration-200 max-h-[300px] overflow-y-auto overflow-x-hidden custom-scrollbar">
                                     {loadingOrders ? (
                                         <div className="p-8 text-center text-white/30">
                                             <FaSpinner className="animate-spin inline-block mr-2" /> Ładowanie listy...
@@ -235,10 +237,11 @@ export default function StatusTab() {
                         </div>
 
                         <div className="relative mt-12 mb-4 px-4 sm:px-12">
+                          <div className="relative">
                             {/* Ścieżka tła */}
-                            <div className="hidden sm:block absolute top-5 left-0 w-full h-1.5 bg-[#1a1715] -translate-y-1/2 rounded-full z-0 border border-white/5"></div>
+                            <div className="hidden sm:block absolute top-5 left-[12.5%] w-[75%] h-1.5 bg-[#1a1715] -translate-y-1/2 rounded-full z-0 border border-white/5"></div>
                             {/* Ścieżka wypełniona */}
-                            <div className="hidden sm:block absolute top-5 left-0 h-1.5 bg-linear-to-r from-(--medium-shade) to-[#d4a373] -translate-y-1/2 rounded-full transition-all duration-1000 z-0 shadow-[0_0_15px_rgba(143,120,93,0.5)]" style={{ width: `${progressPercent}%` }}></div>
+                            <div className="hidden sm:block absolute top-5 left-[12.5%] h-1.5 bg-linear-to-r from-(--medium-shade) to-[#d4a373] -translate-y-1/2 rounded-full transition-all duration-1000 z-0 shadow-[0_0_15px_rgba(143,120,93,0.5)]" style={{ width: `calc(75% * ${progressPercent / 100})` }}></div>
 
                             {/* Wersja mobilna ścieżki */}
                             <div className="sm:hidden absolute top-4 bottom-[30px] left-[23px] w-1.5 bg-[#1a1715] border border-white/5 rounded-full z-0"></div>
@@ -249,26 +252,28 @@ export default function StatusTab() {
                                     const timestamp = getTimestampForStep(step.id);
                                     const isReached = index <= currentStepIndex;
                                     const isCurrent = index === currentStepIndex;
-
+                                    const isNext = index === currentStepIndex + 1;
                                     return (
                                         <div key={index} className="flex flex-row sm:flex-col items-start sm:items-center gap-6 sm:gap-4 relative z-10 sm:-top-5 sm:w-1/4 group">
                                             {/* Kropki na osi czasu */}
                                             <div className={`w-8 h-8 rounded-full shrink-0 flex items-center justify-center transition-all duration-500 relative mt-1 sm:mt-0 
-                                                ${isCurrent ? "bg-[#1a1715] border-4 border-(--medium-shade) shadow-[0_0_20px_rgba(143,120,93,0.6)] scale-125" : 
-                                                isReached ? "bg-(--medium-shade) border-4 border-(--medium-shade)" : 
+                                                ${isReached ? "bg-(--medium-shade) border-4 border-(--medium-shade)" : 
+                                                isNext ? "bg-[#1a1715] border-4 border-(--medium-shade) shadow-[0_0_25px_rgba(143,120,93,0.7)] scale-125" :
                                                 "bg-[#1a1715] border-2 border-white/10"}`}>
-                                                {isCurrent && <div className="w-2 h-2 bg-(--medium-shade) rounded-full animate-pulse"></div>}
-                                                {isReached && !isCurrent && <FaBoxOpen className="text-[#1a1715] text-xs" />}
+                                                {isNext && <div className="absolute inset-[-6px] rounded-full border-2 border-(--medium-shade) opacity-60 animate-ping"></div>}
+                                                {isReached && <FaBoxOpen className="text-[#1a1715] text-xs" />}
+                                                {isNext && <div className="w-2 h-2 bg-(--medium-shade) rounded-full animate-pulse"></div>}
                                             </div>
                                             
-                                            <div className={`text-left sm:text-center transition-all duration-500 ${isReached ? "opacity-100" : "opacity-40"}`}>
-                                                <p className={`text-lg sm:text-base font-bold sm:whitespace-nowrap sm:pt-4 tracking-wide ${isCurrent ? 'text-(--medium-shade)' : 'text-white'}`}>{step.label}</p>
+                                            <div className={`text-left sm:text-center transition-all duration-500 ${isReached ? "opacity-100" : isNext ? "opacity-80" : "opacity-40"}`}>
+                                                <p className={`text-lg sm:text-base font-bold sm:whitespace-nowrap sm:pt-4 tracking-wide ${isNext ? 'text-(--medium-shade)' : isCurrent ? 'text-(--medium-shade)/80' : 'text-white'}`}>{step.label}</p>
                                                 <p className="text-sm sm:text-xs font-mono text-white/50 mt-1 bg-[#1a1715] sm:bg-transparent inline-block px-2 py-1 sm:p-0 rounded-md border sm:border-0 border-white/5">{timestamp || 'Oczekuje'}</p>
                                             </div>
                                         </div>
                                     );
                                 })}
                             </div>
+                          </div>
                         </div>
                     </div>
                 )}

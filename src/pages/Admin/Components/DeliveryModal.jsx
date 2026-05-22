@@ -1,6 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { FiX, FiPlus, FiBox, FiEdit2, FiUploadCloud, FiTrash2 } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
+import { FiBox } from "react-icons/fi";
+import { FiUploadCloud } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 import api from "services/api";
 import SomniumSelect from "components/ui/SomniumSelect";
 
@@ -85,7 +89,8 @@ export default function DeliveryModal({ isOpen, onClose, onSuccess }) {
 
       if (activeForm === 'ADD_STOCK') {
           const prod = products.find(p => String(p.id) === String(selectedProductId));
-          actionPayload = { ...actionPayload, productId: prod.id, productName: prod.name, quantity: parseInt(formData.stockQuantity) };
+          const prodNameWithSize = prod.size ? `${prod.name} - ${prod.size}` : prod.name;
+          actionPayload = { ...actionPayload, productId: prod.id, productName: prodNameWithSize, quantity: parseInt(formData.stockQuantity) };
       } 
       
       else if (activeForm === 'CREATE_PRODUCT' || activeForm === 'EDIT_PRODUCT') {
@@ -96,9 +101,12 @@ export default function DeliveryModal({ isOpen, onClose, onSuccess }) {
           if (cleanData.category !== "Herbaty") cleanData.teaType = "";
           if (cleanData.category === "Kubki") { cleanData.size = ""; cleanData.purpose = ""; }
 
+          const baseName = cleanData.name || "Nowy produkt";
+          const finalName = cleanData.size ? `${baseName} - ${cleanData.size}` : baseName;
+
           actionPayload = { 
               ...actionPayload, 
-              productName: cleanData.name || "Nowy produkt",
+              productName: finalName,
               productData: cleanData,
               file: selectedFile 
           };
@@ -322,7 +330,10 @@ export default function DeliveryModal({ isOpen, onClose, onSuccess }) {
                                         label="Wybierz produkt"
                                         placeholder="Z listy..."
                                         searchable
-                                        options={products.map(p => ({ label: p.name, value: String(p.id) }))}
+                                        options={products.map(p => ({ 
+                                            label: p.size ? `${p.name} - ${p.size}` : p.name, 
+                                            value: String(p.id) 
+                                        }))}
                                         value={String(selectedProductId)}
                                         onChange={(val) => setSelectedProductId(val)}
                                     />

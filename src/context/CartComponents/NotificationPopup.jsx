@@ -1,6 +1,6 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
-import { FiAlertTriangle } from "react-icons/fi"; 
+import { FiAlertTriangle } from "react-icons/fi";
 
 export const NotificationPopup = ({ popupMessage, setPopupMessage }) => {
     if (!popupMessage) return null;

@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import 'styles/Shop.css';
-import { FiX, FiFilter } from 'react-icons/fi';
+import { FiX } from 'react-icons/fi';
+import { FiFilter } from 'react-icons/fi';
 import { useViewport } from 'hooks/useViewport';
 
 const RadioOption = React.memo(({ label, name, value, checkedValue, onChange }) => {
@@ -12,6 +13,7 @@ const RadioOption = React.memo(({ label, name, value, checkedValue, onChange }) 
       <input
         type="radio" name={name} value={value} checked={isChecked} onChange={(e) => onChange(e.target.value)}
         className="sr-only peer"
+        aria-label={label}
       />
       <div className={`w-5 h-5 mr-3 rounded-full border flex items-center justify-center transition-all duration-300
         ${isChecked ? 'border-(--medium-shade) bg-(--medium-shade)/10' : 'border-white/20 bg-black/30 group-hover:border-white/40'}
@@ -104,6 +106,7 @@ const SidebarContent = React.memo(({ filters }) => {
                         onChange={(e) => filters.handlePriceRangeChange([e.target.value === '' ? '' : Number(e.target.value), filters.priceRange[1]])}
                         className="w-full bg-black/20 border border-white/10 rounded-xl py-2 px-3 text-sm text-white focus:border-(--medium-shade) outline-none transition-colors"
                         placeholder="Od"
+                        aria-label="Cena minimalna"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/40 font-bold">zł</span>
                 </div>
@@ -116,6 +119,7 @@ const SidebarContent = React.memo(({ filters }) => {
                         onChange={(e) => filters.handlePriceRangeChange([filters.priceRange[0], e.target.value === '' ? '' : Number(e.target.value)])}
                         className="w-full bg-black/20 border border-white/10 rounded-xl py-2 px-3 text-sm text-white focus:border-(--medium-shade) outline-none transition-colors"
                         placeholder="Do"
+                        aria-label="Cena maksymalna"
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-white/40 font-bold">zł</span>
                 </div>
@@ -143,11 +147,11 @@ function Sidebar({ filters, isFilterMenuOpen, toggleFilterMenu }) {
             <h2 className="text-2xl font-serif font-bold flex items-center gap-3 text-white">
                 <FiFilter className="text-(--medium-shade)" /> Filtry
             </h2>
-            <button onClick={toggleFilterMenu} className="p-2.5 bg-white/5 rounded-xl hover:bg-white/10 transition-colors text-white cursor-pointer"><FiX size={20} /></button>
+            <button onClick={toggleFilterMenu} className="p-2.5 bg-white/5 rounded-xl hover:bg-white/10 transition-colors text-white cursor-pointer" aria-label="Zamknij filtry"><FiX size={20} /></button>
         </div>
         <SidebarContent filters={filters} />
         <div className="absolute bottom-0 w-full p-6 pb-12 border-t border-white/10 bg-[#24201d]/90 backdrop-blur-md shrink-0">
-              <button onClick={toggleFilterMenu} className="w-full py-4 bg-(--medium-shade) hover:brightness-110 text-[#24201d] font-bold text-lg rounded-2xl shadow-[0_0_20px_rgba(143,120,93,0.3)] active:scale-95 transition-all cursor-pointer">Pokaż Wyniki</button>
+              <button onClick={toggleFilterMenu} aria-label="Pokaż wyniki filtrowania" className="w-full py-4 bg-(--medium-shade) hover:brightness-110 text-[#24201d] font-bold text-lg rounded-2xl shadow-[0_0_20px_rgba(143,120,93,0.3)] active:scale-95 transition-all cursor-pointer">Pokaż Wyniki</button>
         </div>
       </aside>,
       document.body

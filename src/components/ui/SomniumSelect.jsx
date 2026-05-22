@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FiChevronDown, FiSearch } from 'react-icons/fi';
+import { FiChevronDown } from 'react-icons/fi';
+import { FiSearch } from 'react-icons/fi';
 
 export default function SomniumSelect({ 
     options, 

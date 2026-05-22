@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { FiSend, FiAlertCircle, FiCheckCircle } from 'react-icons/fi';
+import { FiSend } from 'react-icons/fi';
+import { FiAlertCircle } from 'react-icons/fi';
+import { FiCheckCircle } from 'react-icons/fi';
 import SomniumSelect from 'src/components/ui/SomniumSelect';
 
 export default function BugReportSection() {

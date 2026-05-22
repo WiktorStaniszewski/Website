@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { FiX, FiUpload, FiSave, FiImage, FiPackage, FiCoffee, FiTag } from 'react-icons/fi';
+import { FiX } from 'react-icons/fi';
+import { FiUpload } from 'react-icons/fi';
+import { FiSave } from 'react-icons/fi';
+import { FiImage } from 'react-icons/fi';
+import { FiPackage } from 'react-icons/fi';
+import { FiCoffee } from 'react-icons/fi';
+import { FiTag } from 'react-icons/fi';
 import api from 'services/api';
 
 export default function ProductEditModal({ isOpen, onClose, product, onSuccess }) {
@@ -17,6 +23,7 @@ export default function ProductEditModal({ isOpen, onClose, product, onSuccess }
     farm: '',
     roastDate: '',
     teaType: '',
+    variantGroup: '',
     stockQuantity: ''
   });
   const [imageFile, setImageFile] = useState(null);
@@ -50,10 +57,11 @@ export default function ProductEditModal({ isOpen, onClose, product, onSuccess }
         farm: product.farm || '',
         roastDate: product.roastDate ? new Date(product.roastDate).toISOString().split('T')[0] : '',
         teaType: product.teaType || '',
+        variantGroup: product.variantGroup || '',
         stockQuantity: product.stockQuantity || ''
       });
       if (product.image) {
-        setImagePreview(`http://localhost:5000/images/products/${product.image}`);
+        setImagePreview(`${import.meta.env.VITE_BACKEND_URL}/images/products/${product.image}`);
       } else {
         setImagePreview(null);
       }
@@ -61,7 +69,7 @@ export default function ProductEditModal({ isOpen, onClose, product, onSuccess }
       setFormData({
         name: '', description: '', price: '', company: '', category: 'Kawa',
         flavours: '', size: '', purpose: '', processingMethod: '', variety: '',
-        farm: '', roastDate: '', teaType: '', stockQuantity: ''
+        farm: '', roastDate: '', teaType: '', variantGroup: '', stockQuantity: ''
       });
       setImagePreview(null);
     }
@@ -279,6 +287,15 @@ export default function ProductEditModal({ isOpen, onClose, product, onSuccess }
                       className="w-full bg-[#1a1614] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-(--medium-shade) outline-none"
                     />
                   </div>
+                </div>
+
+                <div className="mt-4 p-4 bg-[#2D231C]/30 rounded-xl border border-white/5">
+                  <label className="text-xs text-white/50 mb-1 block">Grupa wariantowa</label>
+                  <input 
+                    type="text" name="variantGroup" value={formData.variantGroup} onChange={handleChange} placeholder="np. gwatemala-meissa (puste = brak wariantów)"
+                    className="w-full bg-[#1a1614] border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-(--medium-shade) outline-none"
+                  />
+                  <p className="text-[10px] text-white/30 mt-1">Produkty z tą samą grupą wyświetlą się jako warianty rozmiarowe w sklepie.</p>
                 </div>
               </div>
 

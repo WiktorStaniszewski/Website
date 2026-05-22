@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import api from "src/services/api"; 
-import { FaUserShield, FaUser, FaSearch, FaBox, FaCrown } from "react-icons/fa";
-import { FiFilter, FiAlertTriangle, FiMapPin, FiEdit2, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FaUserShield } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
+import { FaBox } from "react-icons/fa";
+import { FaCrown } from "react-icons/fa";
+import { FiFilter } from "react-icons/fi";
+import { FiAlertTriangle } from "react-icons/fi";
+import { FiMapPin } from "react-icons/fi";
+import { FiEdit2 } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 import usePagination from "src/hooks/usePagination";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "src/context/AuthProvider";
@@ -125,8 +133,17 @@ export default function Users() {
                     placeholder="Szukaj (nazwa, email, placówka)..." 
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-[#46382E] border border-[#5C4A3D] rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-(--medium-shade) text-[#F2EAE1] placeholder-[#F2EAE1]/30 transition-colors"
+                    className="w-full bg-[#46382E] border border-[#5C4A3D] rounded-xl py-3 pl-11 pr-10 focus:outline-none focus:border-(--medium-shade) text-[#F2EAE1] placeholder-[#F2EAE1]/30 transition-colors"
                 />
+                {searchTerm && (
+                    <button
+                        onClick={() => setSearchTerm("")}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/80 transition-colors cursor-pointer flex items-center justify-center p-1"
+                        title="Wyczyść"
+                    >
+                        <FiX />
+                    </button>
+                )}
             </div>
         }
     >

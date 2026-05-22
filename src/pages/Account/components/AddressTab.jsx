@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import api from "services/api";
-import { FaMapMarkerAlt, FaSpinner, FaCity, FaPhoneAlt, FaBoxOpen } from "react-icons/fa";
-import { FiEdit2, FiTrash2, FiPlus } from "react-icons/fi";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
+import { FaCity } from "react-icons/fa";
+import { FaPhoneAlt } from "react-icons/fa";
+import { FaBoxOpen } from "react-icons/fa";
+import { FiEdit2 } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
 
 export default function AddressTab() {
     const[addresses, setAddresses] = useState([]);

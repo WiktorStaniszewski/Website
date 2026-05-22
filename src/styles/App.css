@@ -37,7 +37,7 @@ html, body {
     }
 }
 
-input {
+input:not([type="checkbox"]):not([type="radio"]) {
     padding: 0.75rem 1.25rem;
     border: none;
     color: var(--font-color);
@@ -48,6 +48,6 @@ input {
 
 @media(max-width:1024px){
   div #root {
-    min-height: 100vw;
+    min-height: 100vh;
   }
 }

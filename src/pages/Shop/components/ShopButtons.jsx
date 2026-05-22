@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { FaCartPlus, FaCheck, FaSpinner } from "react-icons/fa";
+import { FaCartPlus } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 import { FiXCircle } from "react-icons/fi";
 import { useCart } from 'context/CartProvider';
 
-export const AddToCartButton = ({ product, compact = false, className = '' }) => { 
+export const AddToCartButton = ({ product, compact = false, className = '', options = null }) => { 
     const { addToCart, cartItems } = useCart();
     const [isAdded, setIsAdded] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +30,7 @@ export const AddToCartButton = ({ product, compact = false, className = '' }) =>
             title: product.name,
             price: Number(product.price),
             img: product.image || product.img,
+            options,
             ...product
         };
 
@@ -62,6 +65,7 @@ export const AddToCartButton = ({ product, compact = false, className = '' }) =>
                     ${className}
                 `}
                 title={btnText}
+                aria-label={`Koszyk: ${btnText} - ${product.name}`}
             >
                 {isLoading ? <FaSpinner className="animate-spin" size={18} /> 
                  : (isSoldOut || isMaxReached) ? <FiXCircle size={18} /> 
@@ -85,6 +89,7 @@ export const AddToCartButton = ({ product, compact = false, className = '' }) =>
                         : 'bg-(--medium-shade) hover:bg-(--button-hover-bg) text-[#24201d] border-(--medium-shade) cursor-pointer'}
                 ${className}
             `}
+            aria-label={`Koszyk: ${btnText} - ${product.name}`}
         >
             <span className='select-none'>{btnText}</span>
             

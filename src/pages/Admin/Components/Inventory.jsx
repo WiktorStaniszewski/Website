@@ -2,7 +2,17 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useSearchParams } from "react-router-dom";
 import api from "services/api"; 
-import { FiBox, FiMapPin, FiTruck, FiArrowLeft, FiAlertTriangle, FiPlus, FiX, FiSearch, FiPackage, FiEdit2, FiImage } from "react-icons/fi";
+import { FiBox } from "react-icons/fi";
+import { FiMapPin } from "react-icons/fi";
+import { FiTruck } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
+import { FiAlertTriangle } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
+import { FiPackage } from "react-icons/fi";
+import { FiEdit2 } from "react-icons/fi";
+import { FiImage } from "react-icons/fi";
 import DeliveryModal from './DeliveryModal';
 import ProductEditModal from './ProductEditModal';
 import AdminPageLayout, { SkeletonGrid, SkeletonRow } from './AdminPageLayout';
@@ -192,20 +202,27 @@ export default function Inventory() {
         </button>
       </div>
 
-      {viewMode === 'locations' && (
-          <div className="mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-              <div className="relative w-full md:w-96">
-                  <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 text-lg" />
-                  <input 
-                      type="text" 
-                      placeholder="Szukaj produktu na stanach..." 
-                      value={productSearch}
-                      onChange={(e) => setProductSearch(e.target.value)}
-                      className="w-full bg-[#2D231C] border border-[#5C4A3D] rounded-xl py-3 pl-11 pr-4 text-white focus:outline-none focus:border-(--medium-shade) transition-colors placeholder-white/30"
-                  />
-              </div>
+      <div className="mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+          <div className="relative w-full md:w-96">
+              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 text-lg" />
+              <input 
+                  type="text" 
+                  placeholder={viewMode === 'locations' ? "Szukaj produktu na stanach..." : "Szukaj produktu na liście..."}
+                  value={productSearch}
+                  onChange={(e) => setProductSearch(e.target.value)}
+                  className="w-full bg-[#2D231C] border border-[#5C4A3D] rounded-xl py-3 pl-11 pr-10 text-white focus:outline-none focus:border-(--medium-shade) transition-colors placeholder-white/30"
+              />
+              {productSearch && (
+                  <button
+                      onClick={() => setProductSearch("")}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/80 transition-colors cursor-pointer flex items-center justify-center p-1"
+                      title="Wyczyść"
+                  >
+                      <FiX />
+                  </button>
+              )}
           </div>
-      )}
+      </div>
 
       {viewMode === 'locations' && productSearch.trim().length > 0 && !loading && (() => {
           const q = productSearch.toLowerCase();
@@ -336,12 +353,14 @@ export default function Inventory() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                            {globalProducts.map(product => (
+                            {globalProducts
+                                .filter(p => p.name.toLowerCase().includes(productSearch.toLowerCase()))
+                                .map(product => (
                                 <tr key={product.id} className="hover:bg-white/5 transition-colors group">
                                     <td className="p-4 w-16">
                                         <div className="w-12 h-12 rounded-xl border border-white/10 overflow-hidden bg-[#2D231C]">
                                             {product.image ? (
-                                                <img src={`http://localhost:5000/images/products/${product.image}`} alt={product.name} className="w-full h-full object-cover" />
+                                                <img src={`${import.meta.env.VITE_BACKEND_URL}/images/products/${product.image}`} alt={product.name} className="w-full h-full object-cover" />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center text-white/20"><FiImage /></div>
                                             )}

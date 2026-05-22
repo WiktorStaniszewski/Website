@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { FiChevronDown, FiCheck, FiX } from 'react-icons/fi';
+import { FiChevronDown } from 'react-icons/fi';
+import { FiCheck } from 'react-icons/fi';
+import { FiX } from 'react-icons/fi';
 import ReactSlider from 'react-slider';
 
 const Dropdown = React.memo(({ label, children, isOpen, onToggle, isActive }) => {

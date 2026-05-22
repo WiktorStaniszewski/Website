@@ -1,10 +1,17 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import api from "services/api";
-import { FiDollarSign, FiShoppingCart, FiTrendingUp, FiDownload, FiCalendar, FiBarChart2, FiPackage, FiActivity } from "react-icons/fi";
+import { FiDollarSign } from "react-icons/fi";
+import { FiShoppingCart } from "react-icons/fi";
+import { FiTrendingUp } from "react-icons/fi";
+import { FiDownload } from "react-icons/fi";
+import { FiCalendar } from "react-icons/fi";
+import { FiBarChart2 } from "react-icons/fi";
+import { FiPackage } from "react-icons/fi";
+import { FiActivity } from "react-icons/fi";
 import AdminPageLayout, { SkeletonGrid } from './AdminPageLayout';
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function SalesReport() {
   const [searchParams] = useSearchParams();

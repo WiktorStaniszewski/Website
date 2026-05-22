@@ -1,5 +1,6 @@
 import { createPortal } from "react-dom";
-import { FiAlertCircle, FiX } from "react-icons/fi";
+import { FiAlertCircle } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 
 export default function ConfirmModal({ isOpen, onClose, onConfirm, title, description, confirmText = "Potwierdź", cancelText = "Anuluj" }) {
     if (!isOpen) return null;

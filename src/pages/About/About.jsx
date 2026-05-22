@@ -1,6 +1,8 @@
 import React from 'react';
 import Parallax from './Parallax';
-import { FaCoffee, FaHeart, FaLightbulb } from 'react-icons/fa';
+import { FaCoffee } from 'react-icons/fa';
+import { FaHeart } from 'react-icons/fa';
+import { FaLightbulb } from 'react-icons/fa';
 
 const AboutHero = () => (
     <div className='relative w-full min-h-[80vh] flex items-center justify-center overflow-hidden'>

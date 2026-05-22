@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "services/api"; 
-import { FiArrowLeft, FiUser, FiTruck, FiBox, FiCheckCircle, FiLink, FiDownload, FiMessageSquare, FiTag } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
+import { FiUser } from "react-icons/fi";
+import { FiTruck } from "react-icons/fi";
+import { FiBox } from "react-icons/fi";
+import { FiCheckCircle } from "react-icons/fi";
+import { FiLink } from "react-icons/fi";
+import { FiDownload } from "react-icons/fi";
+import { FiMessageSquare } from "react-icons/fi";
+import { FiTag } from "react-icons/fi";
 import PasswordPromptModal from "src/components/PasswordPromptModal";
 import SomniumSelect from "components/ui/SomniumSelect";
 import AdminPageLayout from "./AdminPageLayout";

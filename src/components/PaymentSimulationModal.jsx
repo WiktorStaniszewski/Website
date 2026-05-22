@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { FiCreditCard, FiX, FiCheck } from 'react-icons/fi';
+import { FiCreditCard } from 'react-icons/fi';
+import { FiX } from 'react-icons/fi';
+import { FiCheck } from 'react-icons/fi';
 import { FaSpinner } from 'react-icons/fa';
 import api from 'services/api';
 

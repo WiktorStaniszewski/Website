@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { FaPaperPlane, FaCheckCircle, FaSpinner } from "react-icons/fa";
+import { FaPaperPlane } from "react-icons/fa";
+import { FaCheckCircle } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 // import api from "src/services/api";
 
 export default function Form() {

@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import 'styles/Shop.css';
 import { RxHamburgerMenu } from "react-icons/rx";
-import { FiShoppingCart, FiSearch } from "react-icons/fi";
+import { FiShoppingCart } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
 import { Link } from 'react-router-dom';
 import { useViewport } from 'hooks/useViewport';
 import { useCart } from 'src/context/CartProvider';
@@ -52,6 +53,7 @@ function Navigation({filters, toggleFilterMenu}) {
                           className='w-12 h-12 rounded-xl bg-white/5 hover:bg-(--medium-shade) transition-colors border border-white/10 cursor-pointer flex items-center justify-center group'
                           onClick={() => setIsSearchExpanded(true)}
                           title="Szukaj"
+                          aria-label="Otwórz wyszukiwarkę"
                       >
                           <FiSearch className='text-xl text-white/80 group-hover:text-[#24201d] transition-colors'/>
                       </button>
@@ -60,6 +62,7 @@ function Navigation({filters, toggleFilterMenu}) {
                           to="/cart"
                           className='relative w-12 h-12 rounded-xl bg-white/5 hover:bg-(--medium-shade) transition-colors border border-white/10 cursor-pointer flex items-center justify-center group'
                           title="Koszyk"
+                          aria-label="Przejdź do koszyka"
                       >
                           <FiShoppingCart className='text-xl text-white/80 group-hover:text-[#24201d] transition-colors'/>
                           {cartCount > 0 && (
@@ -73,6 +76,7 @@ function Navigation({filters, toggleFilterMenu}) {
                           className='w-12 h-12 rounded-xl bg-white/5 hover:bg-(--medium-shade) transition-colors border border-white/10 cursor-pointer flex items-center justify-center group'
                           onClick={toggleFilterMenu}
                           title="Filtry"
+                          aria-label="Otwórz menu filtrów"
                       >
                           <RxHamburgerMenu className='text-xl text-white/80 group-hover:text-[#24201d] transition-colors'/>
                       </button>
@@ -84,4 +88,4 @@ function Navigation({filters, toggleFilterMenu}) {
   )
 }
 
-export default React.memo(Navigation);
+export default React.memo(Navigation);

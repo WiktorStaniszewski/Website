@@ -5,7 +5,12 @@ import { useCart } from 'context/CartProvider';
 import { getProductImageUrl } from 'src/utils/imageHelpers';
 import ConfirmModal from 'src/components/ConfirmModal';
 
-import { FiTrash2, FiMinus, FiPlus, FiArrowLeft, FiAlertCircle, FiX } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
+import { FiMinus } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
+import { FiAlertCircle } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 import { FaSpinner } from "react-icons/fa";
 
 export default function Cart() {
@@ -27,7 +32,7 @@ export default function Cart() {
     try {
         const payload = cartItems.map(item => ({ id: item.id, quantity: item.quantity }));
         
-        const res = await fetch('http://localhost:5000/api/reservations/reserve-checkout', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/reservations/reserve-checkout`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -121,6 +126,12 @@ export default function Cart() {
 
                 <div className="flex-1 text-center sm:text-left">
                   <h3 className="font-bold text-lg">{item.name || item.title}</h3>
+                  <div className="flex flex-col gap-0.5 text-xs text-white/50 mt-1 mb-2 font-medium">
+                    <span>Rozmiar: <span className="text-(--medium-shade) font-bold">{item.size || item.options?.weight || 'Standard'}</span></span>
+                    {item.options?.grind && (
+                      <span>Mielenie: <span className="text-(--medium-shade) font-bold">{item.options.grind}</span></span>
+                    )}
+                  </div>
                   <p className="text-gray-500 text-sm">{item.price} PLN</p>
                 </div>
 
@@ -208,7 +219,7 @@ export default function Cart() {
                 <p className="text-white/70 mb-4 text-sm">
                     Ktoś był szybszy! Zanim przeszedłeś do kasy, poniższe produkty uległy wyprzedaniu lub ich stan na magazynie jest mniejszy niż w Twoim koszyku.
                 </p>
-
+ 
                 <div className="space-y-3 mb-6 max-h-60 overflow-y-auto custom-scrollbar">
                     {missingItems.map((item, idx) => (
                         <div key={idx} className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 flex justify-between items-center">

@@ -3,7 +3,13 @@ import { useAuth } from "context/AuthProvider";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import api from "services/api";
 
-import { FaUser, FaBox, FaLock, FaTruck, FaSignOutAlt, FaMapMarkerAlt, FaStar } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
+import { FaBox } from "react-icons/fa";
+import { FaLock } from "react-icons/fa";
+import { FaTruck } from "react-icons/fa";
+import { FaSignOutAlt } from "react-icons/fa";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 
 import ProfileTab from './components/ProfileTab';
 import AddressTab from './components/AddressTab';

@@ -1,5 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { FiClock, FiCopy, FiBox, FiArrowRight, FiCreditCard, FiCheckCircle } from "react-icons/fi";
+import { FiClock } from "react-icons/fi";
+import { FiCopy } from "react-icons/fi";
+import { FiBox } from "react-icons/fi";
+import { FiArrowRight } from "react-icons/fi";
+import { FiCreditCard } from "react-icons/fi";
+import { FiCheckCircle } from "react-icons/fi";
 import { useState } from "react";
 import PaymentSimulationModal from "src/components/PaymentSimulationModal";
 

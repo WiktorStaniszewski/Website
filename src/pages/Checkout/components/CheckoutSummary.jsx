@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiArrowLeft, FiClock, FiAlertTriangle } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
+import { FiClock } from "react-icons/fi";
+import { FiAlertTriangle } from "react-icons/fi";
 
 export const CheckoutSummary = ({ 
     cartItems, cartTotal, currentShippingCost, finalTotal, shippingOptions, shippingMethod, 
@@ -39,6 +41,13 @@ export const CheckoutSummary = ({
                         <div className="flex-1">
                             <p className="font-bold truncate">{item.name || item.title}</p>
                             <p className="opacity-60">{item.quantity} x {item.price} zł</p>
+                            {(item.size || item.options?.weight || item.options?.grind) && (
+                                <p className="text-[10px] opacity-50 mt-0.5 font-medium leading-none">
+                                    {item.size || item.options?.weight ? `Rozmiar: ${item.size || item.options.weight}` : ''}
+                                    {(item.size || item.options?.weight) && item.options?.grind ? ' | ' : ''}
+                                    {item.options?.grind ? `Mielenie: ${item.options.grind}` : ''}
+                                </p>
+                            )}
                         </div>
                         <div className="font-bold text-(--medium-shade)">
                             {(item.price * item.quantity).toFixed(2)} zł

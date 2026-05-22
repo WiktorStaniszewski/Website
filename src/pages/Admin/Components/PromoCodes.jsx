@@ -1,6 +1,15 @@
 import { useState, useEffect } from "react";
 import api from "services/api";
-import { FiTag, FiPlus, FiX, FiTrash2, FiToggleLeft, FiToggleRight, FiClock, FiUsers, FiPercent, FiAlertCircle } from "react-icons/fi";
+import { FiTag } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
+import { FiToggleLeft } from "react-icons/fi";
+import { FiToggleRight } from "react-icons/fi";
+import { FiClock } from "react-icons/fi";
+import { FiUsers } from "react-icons/fi";
+import { FiPercent } from "react-icons/fi";
+import { FiAlertCircle } from "react-icons/fi";
 import AdminPageLayout, { SkeletonRow } from './AdminPageLayout';
 import ConfirmModal from 'src/components/ConfirmModal';
 
@@ -11,7 +20,7 @@ export default function PromoCodes() {
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, codeId: null, codeName: '' });
 
   const [form, setForm] = useState({
-    code: '', discountPercent: '', usageType: 'single', maxUsesPerUser: 1, expiresAt: ''
+    code: '', discountPercent: '', maxUsesPerUser: 1, expiresAt: ''
   });
   const [formError, setFormError] = useState('');
   const [formSubmitting, setFormSubmitting] = useState(false);
@@ -42,15 +51,17 @@ export default function PromoCodes() {
         return;
       }
 
+      const maxUses = parseInt(form.maxUsesPerUser) || 1;
+
       await api.post('promo-codes', {
         code: form.code,
         discountPercent: parseInt(form.discountPercent),
-        usageType: form.usageType,
-        maxUsesPerUser: parseInt(form.maxUsesPerUser) || 1,
+        usageType: maxUses <= 1 ? 'single' : 'multi',
+        maxUsesPerUser: maxUses,
         expiresAt: form.expiresAt || null
       });
 
-      setForm({ code: '', discountPercent: '', usageType: 'single', maxUsesPerUser: 1, expiresAt: '' });
+      setForm({ code: '', discountPercent: '', maxUsesPerUser: 1, expiresAt: '' });
       setIsModalOpen(false);
       fetchCodes();
     } catch (err) {
@@ -138,7 +149,7 @@ export default function PromoCodes() {
                         <FiPercent /> {code.discountPercent}% zniżki
                       </span>
                       <span className="flex items-center gap-1">
-                        <FiUsers /> {code.usageType === 'single' ? `1x/osobę` : `${code.maxUsesPerUser}x/osobę`}
+                        <FiUsers /> {code.maxUsesPerUser}x na osobę
                       </span>
                       <span className="flex items-center gap-1">
                         <FiTag /> Użyto: {usageCount} razy
@@ -218,7 +229,7 @@ export default function PromoCodes() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-white/50 uppercase tracking-widest font-bold mb-1 block">Max użyć / osobę</label>
+                  <label className="text-xs text-white/50 uppercase tracking-widest font-bold mb-1 block">Ile razy na osobę</label>
                   <input
                     type="number"
                     min="1"
@@ -226,30 +237,18 @@ export default function PromoCodes() {
                     onChange={(e) => setForm(f => ({ ...f, maxUsesPerUser: e.target.value }))}
                     className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white placeholder:text-white/30 focus:outline-none focus:border-(--medium-shade) transition-colors"
                   />
+                  <p className="text-[10px] text-white/25 mt-1">1 = jednorazowy, więcej = wielokrotny</p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs text-white/50 uppercase tracking-widest font-bold mb-1 block">Typ użycia</label>
-                  <select
-                    value={form.usageType}
-                    onChange={(e) => setForm(f => ({ ...f, usageType: e.target.value, maxUsesPerUser: e.target.value === 'single' ? 1 : f.maxUsesPerUser }))}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-(--medium-shade) transition-colors cursor-pointer"
-                  >
-                    <option value="single" className="bg-[#24201d]">Jednorazowy</option>
-                    <option value="multi" className="bg-[#24201d]">Wielokrotny</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-xs text-white/50 uppercase tracking-widest font-bold mb-1 block">Data wygaśnięcia</label>
-                  <input
-                    type="date"
-                    value={form.expiresAt}
-                    onChange={(e) => setForm(f => ({ ...f, expiresAt: e.target.value }))}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-(--medium-shade) transition-colors cursor-pointer"
-                  />
-                </div>
+              <div>
+                <label className="text-xs text-white/50 uppercase tracking-widest font-bold mb-1 block">Data wygaśnięcia</label>
+                <input
+                  type="date"
+                  value={form.expiresAt}
+                  onChange={(e) => setForm(f => ({ ...f, expiresAt: e.target.value }))}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-(--medium-shade) transition-colors cursor-pointer"
+                />
               </div>
 
               {formError && (

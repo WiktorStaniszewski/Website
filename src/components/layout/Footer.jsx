@@ -1,6 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiFacebook, FiInstagram, FiMapPin, FiPhone, FiMail, FiArrowRight } from "react-icons/fi";
+import { FiFacebook } from "react-icons/fi";
+import { FiInstagram } from "react-icons/fi";
+import { FiMapPin } from "react-icons/fi";
+import { FiPhone } from "react-icons/fi";
+import { FiMail } from "react-icons/fi";
+import { FiArrowRight } from "react-icons/fi";
 import { FaTiktok } from "react-icons/fa";
 
 export default function Footer() {
@@ -21,7 +26,7 @@ export default function Footer() {
           <div className="flex flex-col gap-6">
             <Link to="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-full bg-white/10 overflow-hidden border border-white/5 group-hover:border-(--80-shade) transition-colors">
-                <img src="images/Somnium/SomniumLogo.jpg" alt="Somnium" className="w-full h-full object-cover" />
+                <img src="images/Somnium/Somnium-Logo.webp" alt="Somnium" className="w-full h-full object-cover" />
               </div>
               <span className="text-2xl font-bold tracking-tighter">Somnium</span>
             </Link>
@@ -95,13 +100,13 @@ export default function Footer() {
 
             {/* Socials */}
             <div className="flex gap-4 mt-2">
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 hover:bg-(--80-shade) flex items-center justify-center transition-all duration-300 border border-white/5 hover:-translate-y-1">
+              <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="w-10 h-10 rounded-full bg-white/5 hover:bg-(--80-shade) flex items-center justify-center transition-all duration-300 border border-white/5 hover:-translate-y-1">
                 <FiInstagram size={18} />
               </a>
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 hover:bg-(--80-shade) flex items-center justify-center transition-all duration-300 border border-white/5 hover:-translate-y-1">
+              <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="w-10 h-10 rounded-full bg-white/5 hover:bg-(--80-shade) flex items-center justify-center transition-all duration-300 border border-white/5 hover:-translate-y-1">
                 <FiFacebook size={18} />
               </a>
-              <a href="https://tiktok.com" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 hover:bg-(--80-shade) flex items-center justify-center transition-all duration-300 border border-white/5 hover:-translate-y-1">
+              <a href="https://tiktok.com" target="_blank" rel="noreferrer" aria-label="TikTok" className="w-10 h-10 rounded-full bg-white/5 hover:bg-(--80-shade) flex items-center justify-center transition-all duration-300 border border-white/5 hover:-translate-y-1">
                 <FaTiktok size={16} />
               </a>
             </div>

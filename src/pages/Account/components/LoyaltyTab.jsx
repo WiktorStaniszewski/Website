@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import api from 'services/api';
-import { FiStar, FiGift, FiTrendingUp, FiTrendingDown, FiClock, FiAward } from 'react-icons/fi';
+import { FiStar } from 'react-icons/fi';
+import { FiGift } from 'react-icons/fi';
+import { FiTrendingUp } from 'react-icons/fi';
+import { FiTrendingDown } from 'react-icons/fi';
+import { FiClock } from 'react-icons/fi';
+import { FiAward } from 'react-icons/fi';
 
 export default function LoyaltyTab() {
   const [loyaltyData, setLoyaltyData] = useState(null);

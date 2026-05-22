@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { FiTag, FiStar, FiMessageSquare, FiCheck, FiX, FiLoader, FiGift, FiAlertCircle } from 'react-icons/fi';
+import { FiTag } from 'react-icons/fi';
+import { FiStar } from 'react-icons/fi';
+import { FiMessageSquare } from 'react-icons/fi';
+import { FiCheck } from 'react-icons/fi';
+import { FiX } from 'react-icons/fi';
+import { FiLoader } from 'react-icons/fi';
+import { FiGift } from 'react-icons/fi';
+import { FiAlertCircle } from 'react-icons/fi';
 import api from 'src/services/api';
 
 export const DiscountSection = ({ 

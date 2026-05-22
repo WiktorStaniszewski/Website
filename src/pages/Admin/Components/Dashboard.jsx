@@ -1,7 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import api from "services/api"; 
-import { FiDollarSign, FiShoppingCart, FiPlusCircle, FiTruck, FiFileText, FiMapPin, FiTag, FiUsers, FiSearch, FiCalendar, FiBox, FiPlus } from "react-icons/fi";
+import { FiDollarSign } from "react-icons/fi";
+import { FiShoppingCart } from "react-icons/fi";
+import { FiPlusCircle } from "react-icons/fi";
+import { FiTruck } from "react-icons/fi";
+import { FiFileText } from "react-icons/fi";
+import { FiTag } from "react-icons/fi";
+import { FiUsers } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
+import { FiCalendar } from "react-icons/fi";
+import { FiBox } from "react-icons/fi";
+import { FiPlus } from "react-icons/fi";
 import { useAuth } from "src/context/AuthProvider";
 
 import DeliveryModal from './DeliveryModal'; 

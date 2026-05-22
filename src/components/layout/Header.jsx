@@ -4,7 +4,13 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from 'src/context/AuthProvider';
 import { useCart } from 'src/context/CartProvider'; 
 
-import { FaBars, FaTimes, FaShoppingBag, FaUser, FaSignInAlt, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { FaBars } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
+import { FaShoppingBag } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
+import { FaSignInAlt } from "react-icons/fa";
+import { FaCog } from "react-icons/fa";
+import { FaSignOutAlt } from "react-icons/fa";
 
 export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -93,7 +99,7 @@ export default function Header() {
                     </nav>
 
                     <div className="hidden lg:flex items-center gap-6">
-                        <NavLink to="/cart" className="relative group p-2">
+                        <NavLink to="/cart" className="relative group p-2" aria-label="Koszyk">
                             <FaShoppingBag className="text-xl text-(--font-color) group-hover:text-(--medium-shade) transition-colors" />
                             {cartCount > 0 && (
                                 <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-(--medium-shade) text-[#24201d] text-xs font-bold rounded-full shadow-lg border border-[#24201d]">
@@ -115,6 +121,7 @@ export default function Header() {
 
                     <button 
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        aria-label={isMobileMenuOpen ? "Zamknij menu" : "Otwórz menu"}
                         className="lg:hidden relative z-50 p-2 text-(--font-color) hover:text-(--medium-shade) transition-colors cursor-pointer"
                     >
                         {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
@@ -148,7 +155,7 @@ export default function Header() {
                 <div className="w-16 h-px bg-white/10 my-4"></div>
 
                 <div className="flex gap-8">
-                    <NavLink to="/cart" className="flex flex-col items-center gap-2 text-(--font-color)">
+                    <NavLink to="/cart" className="flex flex-col items-center gap-2 text-(--font-color)" aria-label="Koszyk">
                         <div className="relative p-4 bg-white/5 rounded-full border border-white/10">
                             <FaShoppingBag size={20} />
                             {cartCount > 0 && (
@@ -160,7 +167,7 @@ export default function Header() {
                         <span className="text-xs uppercase tracking-widest opacity-70">Koszyk</span>
                     </NavLink>
 
-                    <NavLink to={isAuthenticated ? "/account" : "/login"} className="flex flex-col items-center gap-2 text-(--font-color)">
+                    <NavLink to={isAuthenticated ? "/account" : "/login"} className="flex flex-col items-center gap-2 text-(--font-color)" aria-label={isAuthenticated ? "Profil" : "Zaloguj się"}>
                         <div className="p-4 bg-white/5 rounded-full border border-white/10">
                             {isAuthenticated ? <FaUser size={20} /> : <FaSignInAlt size={20} />}
                         </div>

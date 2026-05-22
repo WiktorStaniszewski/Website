@@ -2,7 +2,15 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "services/api";
 import { getProductImageUrl } from 'src/utils/imageHelpers';
-import { FaArrowLeft, FaBox, FaTruck, FaMapMarkerAlt, FaSearchLocation, FaUser, FaCoffee, FaCreditCard, FaSpinner } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
+import { FaBox } from "react-icons/fa";
+import { FaTruck } from "react-icons/fa";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaSearchLocation } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
+import { FaCoffee } from "react-icons/fa";
+import { FaCreditCard } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 import PaymentSimulationModal from "src/components/PaymentSimulationModal";
 import ConfirmModal from "src/components/ConfirmModal";
 

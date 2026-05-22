@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import api from 'src/services/api';
-import { FiTruck, FiBox, FiArrowLeft, FiClock, FiPlusCircle, FiEdit, FiFileText, FiInfo, FiEye, FiMapPin, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiTruck } from 'react-icons/fi';
+import { FiBox } from 'react-icons/fi';
+import { FiArrowLeft } from 'react-icons/fi';
+import { FiClock } from 'react-icons/fi';
+import { FiPlusCircle } from 'react-icons/fi';
+import { FiEdit } from 'react-icons/fi';
+import { FiFileText } from 'react-icons/fi';
+import { FiInfo } from 'react-icons/fi';
+import { FiEye } from 'react-icons/fi';
+import { FiMapPin } from 'react-icons/fi';
+import { FiChevronLeft } from 'react-icons/fi';
+import { FiChevronRight } from 'react-icons/fi';
 import usePagination from 'src/hooks/usePagination';
 import AdminPageLayout, { SkeletonRow } from './AdminPageLayout';
 
@@ -63,7 +74,12 @@ export default function AdminDeliveries() {
     };
 
     const getActionText = (action) => {
-        const pName = action.Product ? action.Product.name : action.details.name;
+        let pName = action.Product ? action.Product.name : action.details.name;
+        const pSize = action.Product ? action.Product.size : action.details.size;
+        if (pSize) {
+            pName = `${pName} - ${pSize}`;
+        }
+
         switch (action.actionType) {
             case 'ADD_STOCK': return `Dodano ${action.details.added} szt. do: ${pName}`;
             case 'CREATE_PRODUCT': return `Zarejestrowano nowy produkt: ${pName}`;

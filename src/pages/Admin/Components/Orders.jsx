@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "services/api"; 
-import { FiChevronRight, FiBox, FiChevronDown, FiCheck, FiMapPin, FiSearch } from "react-icons/fi";
+import { FiChevronRight } from "react-icons/fi";
+import { FiBox } from "react-icons/fi";
+import { FiChevronDown } from "react-icons/fi";
+import { FiCheck } from "react-icons/fi";
+import { FiMapPin } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 import usePagination from "src/hooks/usePagination";
 import PaginationControls from "src/components/ui/PaginationControls";
 import AdminPageLayout, { SkeletonRow } from './AdminPageLayout';
@@ -159,8 +165,17 @@ export default function AdminOrders() {
               placeholder="Szukaj (np. SOM-..., email, kawiarnia)" 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#2D231C] border border-[#5C4A3D] rounded-xl py-3 pl-11 pr-4 text-white focus:outline-none focus:border-(--medium-shade) transition-colors placeholder-white/30"
+              className="w-full bg-[#2D231C] border border-[#5C4A3D] rounded-xl py-3 pl-11 pr-10 text-white focus:outline-none focus:border-(--medium-shade) transition-colors placeholder-white/30"
           />
+          {searchQuery && (
+              <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/80 transition-colors cursor-pointer flex items-center justify-center p-1"
+                  title="Wyczyść"
+              >
+                  <FiX />
+              </button>
+          )}
         </div>
       }
     >

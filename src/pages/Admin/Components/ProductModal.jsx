@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { FiX, FiUploadCloud, FiBox } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
+import { FiUploadCloud } from "react-icons/fi";
+import { FiBox } from "react-icons/fi";
 import api from "services/api";
 import SomniumSelect from "components/ui/SomniumSelect";
 

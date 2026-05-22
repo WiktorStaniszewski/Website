@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import api from "src/services/api"; 
-import { FaLock, FaExclamationTriangle, FaSpinner, FaCheck, FaKey } from "react-icons/fa";
+import { FaLock } from "react-icons/fa";
+import { FaExclamationTriangle } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
+import { FaKey } from "react-icons/fa";
 
 export default function SecurityTab() {
     const [isLoading, setIsLoading] = useState(false);

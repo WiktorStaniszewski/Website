@@ -1,5 +1,6 @@
 import React from 'react';
-import { FiSearch, FiX } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 
 export default function SearchInput({ value, onChange, placeholder = "Szukaj produktów...", className = "", inputRef, onClear }) {
   
@@ -9,6 +10,7 @@ export default function SearchInput({ value, onChange, placeholder = "Szukaj pro
   };
 
   const showX = value || onClear;
+
 
   return (
     <div className={`relative w-full group ${className}`}>
@@ -22,6 +24,7 @@ export default function SearchInput({ value, onChange, placeholder = "Szukaj pro
         value={value}
         onChange={onChange}
         placeholder={placeholder}
+        aria-label="Szukaj produktów"
         className="w-full bg-[#24201d]/30 hover:bg-[#24201d]/50 focus:bg-[#24201d]/50 backdrop-blur-md border border-white/10 focus:border-(--medium-shade) rounded-2xl py-3 text-(--font-color) placeholder-white/30 outline-none transition-all duration-300 shadow-inner group-hover:border-white/20 pl-12! pr-10!"
       />
 
@@ -34,6 +37,7 @@ export default function SearchInput({ value, onChange, placeholder = "Szukaj pro
             onClick={handleClear}
             className="p-1.5 rounded-full bg-white/5 hover:bg-(--medium-shade) text-white/60 hover:text-[#24201d] transition-all cursor-pointer"
             title="Wyczyść / Zamknij"
+            aria-label="Wyczyść wyszukiwanie"
         >
             <FiX size={14} />
         </button>

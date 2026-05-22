@@ -16,9 +16,9 @@ import Footer from './components/layout/Footer';
 import ScrollButton from './components/ui/ScrollButton';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
-import Home from 'pages/Home';
-import LoginPage from './pages/Login/LoginPage';
-import RegisterPage from './pages/Register/RegisterPage';
+const Home = lazy(() => import('pages/Home'));
+const LoginPage = lazy(() => import('./pages/Login/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/Register/RegisterPage'));
 
 const About = lazy(() => import('src/pages/About/About'));
 const Menus = lazy(() => import('pages/Menu/Menus'));
@@ -83,20 +83,7 @@ const SuperAdminRoute = ({ children }) => {
 export default function App() {
   const location = useLocation();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (window.easyPack) {
-        window.easyPack.init({
-          defaultLocale: 'pl',
-          mapType: 'osm',
-          searchType: 'osm',
-          points: { types: ['pop', 'parcel_locker'] },
-          map: { initialTypes: ['pop', 'parcel_locker'] }
-        });
-      }
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+
 
   useEffect(() => {
     if (location.pathname !== '/checkout' && location.pathname !== '/order-success' && location.pathname !== '/order-pending') {
@@ -104,7 +91,7 @@ export default function App() {
       const sessionId = localStorage.getItem('somnium_session_id');
 
       if (expiryString && sessionId) {
-        fetch('http://localhost:5000/api/reservations/release-checkout', {
+        fetch(`${import.meta.env.VITE_API_URL}/reservations/release-checkout`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ sessionId }),
@@ -122,9 +109,9 @@ export default function App() {
         <Routes location={location}>
           <Route path="" element={<LayoutWrapper><Layout /></LayoutWrapper>}>
             
-            <Route index element={<PageWrapper><Home /></PageWrapper>} />
-            <Route path="login" element={<PageWrapper><LoginPage /></PageWrapper>} />
-            <Route path="register" element={<PageWrapper><RegisterPage /></PageWrapper>} />
+            <Route index element={<Suspense fallback={<PageLoader />}><PageWrapper><Home /></PageWrapper></Suspense>} />
+            <Route path="login" element={<Suspense fallback={<PageLoader />}><PageWrapper><LoginPage /></PageWrapper></Suspense>} />
+            <Route path="register" element={<Suspense fallback={<PageLoader />}><PageWrapper><RegisterPage /></PageWrapper></Suspense>} />
 
             <Route path="about" element={<Suspense fallback={<PageLoader />}><PageWrapper><About /></PageWrapper></Suspense>} />
             <Route path="menu" element={<Suspense fallback={<PageLoader />}><PageWrapper><Menus /></PageWrapper></Suspense>} />

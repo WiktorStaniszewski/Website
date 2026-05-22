@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { FaUserCircle, FaEnvelope, FaCoffee, FaPhone, FaSave } from 'react-icons/fa';
+import { FaUserCircle } from 'react-icons/fa';
+import { FaEnvelope } from 'react-icons/fa';
+import { FaCoffee } from 'react-icons/fa';
+import { FaPhone } from 'react-icons/fa';
+import { FaSave } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
 import api from 'services/api';
 import { useAuth } from 'context/AuthProvider';

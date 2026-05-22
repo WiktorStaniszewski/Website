@@ -3,7 +3,11 @@ import { createPortal } from 'react-dom';
 import Menu from './Menu';
 import api from 'src/services/api';
 import { useAuth } from 'src/context/AuthProvider';
-import { FiEdit3, FiSave, FiX, FiPlusCircle, FiAlertTriangle } from "react-icons/fi";
+import { FiEdit3 } from "react-icons/fi";
+import { FiSave } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
+import { FiPlusCircle } from "react-icons/fi";
+import { FiAlertTriangle } from "react-icons/fi";
 import PasswordPromptModal from "src/components/PasswordPromptModal";
 
 function Menus() {

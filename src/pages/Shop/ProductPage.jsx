@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FiArrowLeft, FiAlertTriangle, FiMail, FiCheck, FiCoffee, FiInfo } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
+import { FiAlertTriangle } from "react-icons/fi";
+import { FiMail } from "react-icons/fi";
+import { FiCheck } from "react-icons/fi";
+import { FiCoffee } from "react-icons/fi";
+import { FiInfo } from "react-icons/fi";
 import { AddToCartButton } from "./components/ShopButtons";
+import SomniumSelect from 'src/components/ui/SomniumSelect';
 import { getProductImageUrl } from 'src/utils/imageHelpers';
 import api from 'services/api';
 import { useAuth } from 'context/AuthProvider';
@@ -16,18 +22,28 @@ export default function ProductPage() {
     const [email, setEmail] = useState(user?.email || ''); 
     const [waitlistStatus, setWaitlistStatus] = useState('idle');
 
+    const [variants, setVariants] = useState([]);
+    const [wantsGrinding, setWantsGrinding] = useState(false);
+    const [grindMethod, setGrindMethod] = useState('');
+    const [grindCapacityMl, setGrindCapacityMl] = useState('');
+
     useEffect(() => {
-        const fetchProduct = async () => {
+        const fetchProductAndVariants = async () => {
             try {
                 const res = await api.get(`products/${id}`);
                 setProduct(res);
+                const variantsRes = await api.get(`products/${id}/variants`);
+                setVariants(variantsRes || []);
+                setWantsGrinding(false);
+                setGrindMethod('');
+                setGrindCapacityMl('');
             } catch (err) {
-                console.error("Błąd pobierania produktu", err);
+                console.error("Błąd pobierania produktu i wariantów", err);
             } finally {
                 setLoading(false);
             }
         };
-        fetchProduct();
+        fetchProductAndVariants();
     }, [id]);
 
     const handleWaitlist = async (e) => {
@@ -47,8 +63,8 @@ export default function ProductPage() {
         return (
             <div className="min-h-screen bg-(--80-shade) pt-32 flex items-center justify-center text-(--medium-shade)">
                 <div className="flex flex-col items-center gap-4">
-                    <FiCoffee className="animate-bounce text-4xl" />
-                    <p className="animate-pulse font-serif text-lg text-(--font-color)">Parzenie szczegółów...</p>
+                     <FiCoffee className="animate-bounce text-4xl" />
+                     <p className="animate-pulse font-serif text-lg text-(--font-color)">Parzenie szczegółów...</p>
                 </div>
             </div>
         );
@@ -65,6 +81,7 @@ export default function ProductPage() {
     const available = product.availableStock !== undefined ? product.availableStock : (product.stockQuantity || 0);
     const isSoldOut = available <= 0;
     const isLowStock = available > 0 && available <= 5;
+    const isCoffee = product.category === 'Ziarna';
 
     const getImageUrl = (imageName) => getProductImageUrl(imageName);
 
@@ -79,11 +96,12 @@ export default function ProductPage() {
     };
 
     return (
-        <div className="min-h-screen bg-(--80-shade) pt-32 pb-20">
+        <div className="min-h-screen bg-(--80-shade)/90 pt-32 pb-20">
             
             <div className="max-w-6xl mx-auto px-4 lg:px-12 mb-8 flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
                 <button 
                     onClick={() => navigate(-1)} 
+                    aria-label="Wróć do poprzedniej strony"
                     className="w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl text-(--font-color) transition-all border border-white/20 shadow-lg hover:shadow-xl cursor-pointer"
                 >
                     <FiArrowLeft size={22} />
@@ -157,6 +175,89 @@ export default function ProductPage() {
                     )}
 
                     <div className="mt-8 lg:mt-auto border-t border-white/10 pt-8">
+                        {/* Dynamic Size Variants Selector (for any product category) */}
+                        {variants.length > 1 && (
+                            <div className="mb-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <h3 className="text-[10px] uppercase tracking-[0.2em] text-(--font-color)/40 font-black mb-3">
+                                    {isCoffee ? 'Wybierz Wagę' : 'Wybierz Rozmiar'}
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {variants.map(v => (
+                                        <button
+                                            key={v.id}
+                                            onClick={() => navigate(`/shop/${v.id}`, { replace: true })}
+                                            aria-label={`Wybierz wariant: ${v.size || 'Standard'}`}
+                                            className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all border text-center cursor-pointer ${
+                                                v.id === product.id 
+                                                ? 'bg-(--medium-shade) text-[#24201d] border-(--medium-shade) shadow-lg' 
+                                                : 'bg-white/5 text-(--font-color)/60 border-white/10 hover:bg-white/10'
+                                            }`}
+                                        >
+                                            {v.size || 'Standard'}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Coffee Grinding Options UI */}
+                        {isCoffee && (
+                            <div className="mb-8 flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <div>
+                                    <label className="flex items-center gap-3 cursor-pointer group">
+                                        <div className="relative">
+                                            <input 
+                                                type="checkbox" 
+                                                className="sr-only peer" 
+                                                checked={wantsGrinding} 
+                                                onChange={() => setWantsGrinding(!wantsGrinding)} 
+                                                aria-label="Chcę zmielić kawę"
+                                            />
+                                            <div className="w-10 h-6 bg-white/10 rounded-full border border-white/20 peer-checked:bg-(--medium-shade)/40 transition-colors"></div>
+                                            <div className="absolute top-1 left-1 w-4 h-4 bg-white/40 rounded-full transition-all peer-checked:left-5 peer-checked:bg-(--medium-shade) shadow-md"></div>
+                                        </div>
+                                        <span className="text-sm font-bold text-(--font-color)/80 group-hover:text-(--font-color) transition-colors">Zmielenie kawy (opcjonalnie)</span>
+                                    </label>
+
+                                    {wantsGrinding && (
+                                        <div className="mt-4 p-5 bg-white/5 rounded-2xl border border-white/10 flex flex-col gap-4 animate-in zoom-in-95 duration-300">
+                                            <div>
+                                                <SomniumSelect
+                                                    label="Metoda Parzenia / Przyrząd"
+                                                    value={grindMethod}
+                                                    onChange={setGrindMethod}
+                                                    options={[
+                                                        { value: '', label: 'Wybierz przyrząd (opcjonalnie)' },
+                                                        { value: 'espresso', label: 'Espresso' },
+                                                        { value: 'kawiarka', label: 'Kawiarka' },
+                                                        { value: 'aeropress', label: 'Aeropress' },
+                                                        { value: 'v60', label: 'V60 (250 / 500)' },
+                                                        { value: 'chemex', label: 'Chemex' },
+                                                        { value: 'french press', label: 'French Press' },
+                                                        { value: 'batch-brew', label: 'Batch-brew' }
+                                                    ]}
+                                                />
+                                            </div>
+
+                                            {grindMethod !== '' && (
+                                                <div className="animate-in slide-in-from-top-2">
+                                                    <h4 className="text-[9px] uppercase tracking-widest text-(--font-color)/40 font-bold mb-2">Pojemność (ml)</h4>
+                                                    <input 
+                                                        type="text"
+                                                        placeholder="np. 250"
+                                                        value={grindCapacityMl}
+                                                        onChange={(e) => setGrindCapacityMl(e.target.value)}
+                                                        aria-label="Pojemność przyrządu do kawy w mililitrach"
+                                                        className="w-full bg-[#1a1a1a] border border-white/10 rounded-xl py-3 px-4 text-sm text-(--font-color) focus:outline-none focus:border-(--medium-shade) transition-colors"
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
                         <div className="flex justify-between items-end mb-6">
                             <span className="text-sm uppercase text-(--font-color)/50 tracking-widest font-bold">Cena</span>
                             <div className="text-4xl md:text-5xl font-bold text-(--medium-shade) drop-shadow-sm">
@@ -165,9 +266,23 @@ export default function ProductPage() {
                         </div>
                         {isSoldOut 
                             ? <WaitlistForm email={email} setEmail={setEmail} status={waitlistStatus} onSubmit={handleWaitlist} /> 
-                            : <AddToCartButton product={product} className="w-full py-5 text-lg font-bold shadow-xl" />
+                            : <AddToCartButton 
+                                product={product} 
+                                options={{
+                                    weight: product.size || 'Standard',
+                                    grind: isCoffee 
+                                        ? (wantsGrinding 
+                                            ? (grindMethod 
+                                                ? `${grindMethod}${grindCapacityMl ? ` (${grindCapacityMl}ml)` : ''}` 
+                                                : 'zmielona (brak przyrządu)')
+                                            : 'ziarno')
+                                        : null
+                                }}
+                                className="w-full py-5 text-lg font-bold shadow-xl" 
+                            />
                         }
                     </div>
+
                 </div>
             </div>
         </div>
@@ -187,6 +302,7 @@ const WaitlistForm = ({ email, setEmail, status, onSubmit, isMobile }) => (
                 <div className="relative flex-1">
                     <input 
                         type="email" required placeholder="✉ Twój e-mail" value={email} onChange={(e) => setEmail(e.target.value)}
+                        aria-label="Twój adres e-mail do listy oczekujących"
                         className="w-full bg-white/20 border border-white/20 rounded-xl py-3 px-4 text-(--font-color) placeholder:text-(--font-color)/50 focus:outline-none focus:border-(--medium-shade) text-sm shadow-inner transition-colors"
                     />
                 </div>

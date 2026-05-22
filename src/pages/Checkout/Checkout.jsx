@@ -140,7 +140,7 @@ export default function Checkout() {
       const releaseCartOnLeave = () => {
           if (!orderPlacedRef.current) {
               const token = localStorage.getItem('somnium_token');
-              fetch('http://localhost:5000/api/reservations/release-checkout', {
+              fetch(`${import.meta.env.VITE_API_URL}/reservations/release-checkout`, {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json',

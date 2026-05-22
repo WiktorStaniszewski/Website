@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { FiAlertTriangle, FiX, FiLock } from "react-icons/fi";
+import { FiAlertTriangle } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
+import { FiLock } from "react-icons/fi";
 
 export default function PasswordPromptModal({ isOpen, onClose, onSubmit, title, description }) {
     const [password, setPassword] = useState("");

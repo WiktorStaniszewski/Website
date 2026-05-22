@@ -15,7 +15,7 @@ export const getProductImageUrl = (imageName) => {
 
     // 2. Check for uploaded images from backend (timestamped names like 171456...-image.jpg)
     if (/^\d{10,}-/.test(imageName)) {
-        return `http://localhost:5000/images/products/${imageName}`;
+        return `${import.meta.env.VITE_BACKEND_URL}/images/products/${imageName}`;
     }
 
     // 3. If the image name already contains "images/", ensure it's handled correctly
